@@ -1,0 +1,56 @@
+========================================
+🚀 راهنمای سریع آپلود و دیپلوی
+========================================
+
+📝 مرحله 1: ایجاد Repository در GitHub
+----------------------------------------
+1. به https://github.com/new برو
+2. Repository name: election-bot-system
+3. Description: 🗳️ سیستم مدیریت بات‌های انتخاباتی تلگرام
+4. Public را انتخاب کن
+5. Create repository
+
+📤 مرحله 2: Push کردن کد
+----------------------------------------
+cd C:\Workspace\candidate
+git remote remove origin
+git remote add origin https://github.com/YOUR_USERNAME/election-bot-system.git
+git push -u origin main
+git push origin v1.0.0
+
+🚀 مرحله 3: دیپلوی در Render.com
+----------------------------------------
+1. به https://render.com برو
+2. Sign Up با GitHub
+3. New → PostgreSQL
+   - Name: election-bot-db
+   - Region: Frankfurt
+   - Plan: Free
+   - کپی کن: Internal Database URL
+
+4. New → Web Service
+   - Repository: election-bot-system
+   - Name: election-bot
+   - Build Command: pip install -r requirements.txt
+   - Start Command: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+   - Plan: Free
+
+5. Environment Variables:
+   DATABASE_URI = <database-url>
+   ADMIN_SECRET_KEY = <run: python scripts/generate_secrets.py>
+   CANDIDATE_SECRET_KEY = <run: python scripts/generate_secrets.py>
+
+6. Create Web Service
+
+7. بعد از deploy → Shell:
+   python init_db.py
+
+✅ تمام!
+پنل ادمین: https://YOUR-APP.onrender.com/admin/
+پنل نماینده: https://YOUR-APP.onrender.com/candidate/
+
+ورود ادمین: admin / admin123
+
+📚 مستندات کامل:
+- docs/START_HERE.md
+- docs/GITHUB_DEPLOY_GUIDE.md
