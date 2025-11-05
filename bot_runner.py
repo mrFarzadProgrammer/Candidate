@@ -5,6 +5,8 @@ Bot Runner - اجرای همه بات‌های فعال
 import sys
 import os
 import time
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -16,6 +18,25 @@ from config.settings import DATABASE_URI
 
 print("🤖 Bot Runner Started...")
 print(f"📡 Connecting to database: {DATABASE_URI}")
+
+# HTTP Server برای Render (health check)
+class HealthCheckHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html; charset=utf-8')
+        self.end_headers()
+        active_bots = len(bot_manager.get_active_bots()) if 'bot_manager' in globals() else 0
+        self.wfile.write(f'🤖 Bot Runner is running! Active bots: {active_bots}'.encode('utf-8'))
+    
+    def log_message(self, format, *args):
+        pass  # سکوت کردن لاگ‌های HTTP
+
+def run_http_server():
+    """اجرای HTTP server در background"""
+    port = int(os.getenv('PORT', 10000))
+    server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
+    print(f"🌐 HTTP Server started on port {port}")
+    server.serve_forever()
 
 # اتصال به دیتابیس
 engine = create_engine(DATABASE_URI)
@@ -60,6 +81,10 @@ def start_all_active_bots():
         session.close()
 
 if __name__ == '__main__':
+    # شروع HTTP server در background thread
+    http_thread = threading.Thread(target=run_http_server, daemon=True)
+    http_thread.start()
+    
     # انتظار برای آماده شدن دیتابیس
     max_retries = 30
     retry_count = 0
