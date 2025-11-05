@@ -33,10 +33,15 @@ class HealthCheckHandler(BaseHTTPRequestHandler):
 
 def run_http_server():
     """اجرای HTTP server در background"""
-    port = int(os.getenv('PORT', 10000))
-    server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
-    print(f"🌐 HTTP Server started on port {port}")
-    server.serve_forever()
+    try:
+        port = int(os.getenv('PORT', 10000))
+        server = HTTPServer(('0.0.0.0', port), HealthCheckHandler)
+        print(f"🌐 HTTP Server started on port {port}")
+        server.serve_forever()
+    except Exception as e:
+        print(f"❌ خطا در HTTP Server: {e}")
+        import traceback
+        traceback.print_exc()
 
 # اتصال به دیتابیس
 engine = create_engine(DATABASE_URI)
@@ -81,9 +86,14 @@ def start_all_active_bots():
         session.close()
 
 if __name__ == '__main__':
-    # شروع HTTP server در background thread
+    # شروع HTTP server در background thread اول از همه
+    print("🚀 Starting HTTP server...")
     http_thread = threading.Thread(target=run_http_server, daemon=True)
     http_thread.start()
+    
+    # کمی صبر تا server راه بیفته
+    time.sleep(2)
+    print(f"✅ HTTP server thread started")
     
     # انتظار برای آماده شدن دیتابیس
     max_retries = 30
