@@ -1,56 +1,71 @@
 ========================================
-🚀 راهنمای سریع آپلود و دیپلوی
+✅ کد به GitHub آپلود شد!
+========================================
+� لینک: https://github.com/mrFarzadProgrammer/Candidate
+
+========================================
+�🚀 راهنمای دیپلوی - فقط 10 دقیقه!
 ========================================
 
-📝 مرحله 1: ایجاد Repository در GitHub
+مرحله 1: ورود به Render (2 دقیقه)
 ----------------------------------------
-1. به https://github.com/new برو
-2. Repository name: election-bot-system
-3. Description: 🗳️ سیستم مدیریت بات‌های انتخاباتی تلگرام
-4. Public را انتخاب کن
-5. Create repository
+1. برو به: https://dashboard.render.com/register
+2. روی GitHub کلیک کن (نه Email!)
+3. با حساب mrFarzadProgrammer وارد شو
+4. به Render اجازه دسترسی بده
 
-📤 مرحله 2: Push کردن کد
+مرحله 2: ساخت دیتابیس (2 دقیقه)
 ----------------------------------------
-cd C:\Workspace\candidate
-git remote remove origin
-git remote add origin https://github.com/YOUR_USERNAME/election-bot-system.git
-git push -u origin main
-git push origin v1.0.0
+1. Dashboard → New + → PostgreSQL
+2. فرم:
+   Name: election-bot-db
+   Database: election_bot
+   User: election_user
+   Region: Frankfurt
+   PostgreSQL Version: 15
+   Plan: Free
+3. Create Database
+4. صبر کن تا Available بشه
+5. ⚠️ مهم: Internal Database URL رو کپی کن و ذخیره کن
 
-🚀 مرحله 3: دیپلوی در Render.com
+مرحله 3: ساخت Web Service (3 دقیقه)
 ----------------------------------------
-1. به https://render.com برو
-2. Sign Up با GitHub
-3. New → PostgreSQL
-   - Name: election-bot-db
-   - Region: Frankfurt
-   - Plan: Free
-   - کپی کن: Internal Database URL
+1. Dashboard → New + → Web Service
+2. Repository: mrFarzadProgrammer/Candidate
+3. فرم:
+   Name: candidate-election-bot
+   Region: Frankfurt
+   Branch: main
+   Runtime: Python 3
+   Build Command: pip install -r requirements.txt
+   Start Command: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+   Plan: Free
 
-4. New → Web Service
-   - Repository: election-bot-system
-   - Name: election-bot
-   - Build Command: pip install -r requirements.txt
-   - Start Command: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
-   - Plan: Free
+مرحله 4: Environment Variables (مهم!)
+----------------------------------------
+DATABASE_URI = <internal-database-url-که-کپی-کردی>
+ADMIN_SECRET_KEY = 3b72055e598775190cbeabd66a6c8b1222bc2422f6a2fa3a5e5b9b28b6ff0ac9
+CANDIDATE_SECRET_KEY = f33f8dd3ca0fe35c21fac3dfbfb2e001fe98c6f4e9986ec3beec4c700605ce34
 
-5. Environment Variables:
-   DATABASE_URI = <database-url>
-   ADMIN_SECRET_KEY = <run: python scripts/generate_secrets.py>
-   CANDIDATE_SECRET_KEY = <run: python scripts/generate_secrets.py>
+Create Web Service بزن
 
-6. Create Web Service
+مرحله 5: صبر (3-5 دقیقه)
+----------------------------------------
+منتظر پیام: "Your service is live 🎉"
 
-7. بعد از deploy → Shell:
-   python init_db.py
+مرحله 6: مقداردهی دیتابیس
+----------------------------------------
+بالای صفحه → Shell → بزن:
+python init_db.py
 
-✅ تمام!
-پنل ادمین: https://YOUR-APP.onrender.com/admin/
-پنل نماینده: https://YOUR-APP.onrender.com/candidate/
+========================================
+🎉 تمام!
+========================================
+🌐 سایت شما: https://candidate-election-bot.onrender.com/
+🔧 پنل ادمین: /admin/
+👤 پنل نماینده: /candidate/
 
 ورود ادمین: admin / admin123
+⚠️ حتماً رمز رو عوض کن!
 
-📚 مستندات کامل:
-- docs/START_HERE.md
-- docs/GITHUB_DEPLOY_GUIDE.md
+📚 راهنمای کامل: docs/START_HERE.md

@@ -86,33 +86,40 @@ app = DispatcherMiddleware(main_app, {
 
 def run_bots_in_background():
     """راه‌اندازی بات‌ها در بک‌گراند"""
-    time.sleep(10)  # صبر تا سرور آماده بشه
-    
-    from database.models import BotInstance
-    from sqlalchemy import create_engine
-    from sqlalchemy.orm import sessionmaker
-    from config.settings import DATABASE_URI
-    from bot_engine.telegram_bot import run_bot
-    
-    print("🤖 در حال راه‌اندازی بات‌ها...")
-    
-    engine = create_engine(DATABASE_URI)
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    time.sleep(15)  # صبر تا سرور کاملاً آماده بشه
     
     try:
-        active_bots = session.query(BotInstance).filter_by(is_active=True).all()
+        from database.models import BotInstance
+        from sqlalchemy import create_engine
+        from sqlalchemy.orm import sessionmaker
+        from config.settings import DATABASE_URI
+        from bot_engine.telegram_bot import run_bot
         
-        for bot in active_bots:
-            print(f"🚀 راه‌اندازی بات @{bot.bot_username}...")
-            bot_thread = Thread(target=run_bot, args=(bot.id,), daemon=True)
-            bot_thread.start()
-            time.sleep(2)
+        print("🤖 در حال راه‌اندازی بات‌ها...")
         
-        if active_bots:
-            print(f"✅ {len(active_bots)} بات راه‌اندازی شد")
-    finally:
-        session.close()
+        engine = create_engine(DATABASE_URI, pool_pre_ping=True, pool_recycle=3600)
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        
+        try:
+            active_bots = session.query(BotInstance).filter_by(is_active=True).all()
+            
+            for bot in active_bots:
+                print(f"🚀 راه‌اندازی بات @{bot.bot_username}...")
+                bot_thread = Thread(target=run_bot, args=(bot.id,), daemon=True)
+                bot_thread.start()
+                time.sleep(3)
+            
+            if active_bots:
+                print(f"✅ {len(active_bots)} بات راه‌اندازی شد")
+            else:
+                print("ℹ️  هیچ بات فعالی برای راه‌اندازی وجود ندارد")
+        finally:
+            session.close()
+    except Exception as e:
+        print(f"❌ خطا در راه‌اندازی بات‌ها: {e}")
+        import traceback
+        traceback.print_exc()
 
 # Start bots in background
 bots_thread = Thread(target=run_bots_in_background, daemon=True)

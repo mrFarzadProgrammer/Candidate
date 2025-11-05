@@ -1,0 +1,15 @@
+*.md
+*.txt
+.git
+.github
+.venv
+docs/
+scripts/
+uploads/*.jpg
+uploads/*.png
+uploads/*.jpeg
+*.db
+*.sqlite
+*.bat
+راهنمای_دیپلوی.html
+UPLOAD_ME.bat

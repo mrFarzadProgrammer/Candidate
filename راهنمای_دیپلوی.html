@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>راهنمای دیپلوی - گام به گام</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.8;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .step {
+            background: #f8f9fa;
+            border-right: 5px solid #667eea;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        .step h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .code {
+            background: #2d3748;
+            color: #48bb78;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+        }
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin: 10px 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .important {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        ul {
+            margin: 15px 0;
+            padding-right: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .final {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .final h2 {
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        .link-box {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 راهنمای دیپلوی</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 30px;">فقط 10 دقیقه وقت می‌خواد!</p>
+
+        <div class="success">
+            ✅ کد شما با موفقیت به GitHub آپلود شد!<br>
+            <a href="https://github.com/mrFarzadProgrammer/Candidate" target="_blank" style="color: #155724;">
+                🔗 مشاهده Repository
+            </a>
+        </div>
+
+        <!-- مرحله 1 -->
+        <div class="step">
+            <h2><span class="step-number">1</span> ورود به Render</h2>
+            <p><strong>⏱ زمان: 2 دقیقه</strong></p>
+            <ul>
+                <li>به این لینک برو:</li>
+            </ul>
+            <a href="https://dashboard.render.com/register" target="_blank" class="btn">🔗 ورود به Render</a>
+            <ul>
+                <li>روی دکمه <strong>GitHub</strong> کلیک کن (نه Email!)</li>
+                <li>با حساب GitHub خودت (mrFarzadProgrammer) وارد شو</li>
+                <li>به Render اجازه دسترسی بده</li>
+            </ul>
+        </div>
+
+        <!-- مرحله 2 -->
+        <div class="step">
+            <h2><span class="step-number">2</span> ساخت دیتابیس PostgreSQL</h2>
+            <p><strong>⏱ زمان: 2 دقیقه</strong></p>
+            <ul>
+                <li>از Dashboard بالا سمت راست: <strong>New +</strong> → <strong>PostgreSQL</strong></li>
+                <li>فرم رو پر کن:</li>
+            </ul>
+            <div class="code">
+Name: election-bot-db
+Database: election_bot
+User: election_user
+Region: Frankfurt
+PostgreSQL Version: 15
+Plan: Free
+            </div>
+            <ul>
+                <li><strong>Create Database</strong> بزن</li>
+                <li>صبر کن تا وضعیت "Available" بشه (30 ثانیه)</li>
+            </ul>
+            <div class="important">
+                ⚠️ بعد از ساخت، وارد صفحه دیتابیس شو و <strong>Internal Database URL</strong> رو کپی کن و تو Notepad ذخیره کن!
+            </div>
+        </div>
+
+        <!-- مرحله 3 -->
+        <div class="step">
+            <h2><span class="step-number">3</span> ساخت Web Service</h2>
+            <p><strong>⏱ زمان: 3 دقیقه</strong></p>
+            <ul>
+                <li>از Dashboard: <strong>New +</strong> → <strong>Web Service</strong></li>
+                <li>Connect repository → <code>mrFarzadProgrammer/Candidate</code> رو پیدا کن</li>
+                <li>اگر نبود روی <strong>Configure account</strong> بزن و اجازه بده</li>
+                <li><strong>Connect</strong> بزن</li>
+                <li>فرم رو پر کن:</li>
+            </ul>
+            <div class="code">
+Name: candidate-election-bot
+Region: Frankfurt
+Branch: main
+Root Directory: (خالی بذار)
+Runtime: Python 3
+Build Command: pip install -r requirements.txt
+Start Command: gunicorn wsgi:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+Instance Type: Free
+            </div>
+        </div>
+
+        <!-- مرحله 4 -->
+        <div class="step">
+            <h2><span class="step-number">4</span> تنظیم Environment Variables</h2>
+            <p><strong>⏱ زمان: 2 دقیقه</strong></p>
+            <div class="important">
+                ⚠️ خیلی مهم! این متغیرها رو دقیق وارد کن:
+            </div>
+            <p><strong>Variable 1:</strong></p>
+            <div class="code">
+Key: DATABASE_URI
+Value: &lt;اون-Internal-Database-URL-که-کپی-کردی&gt;
+            </div>
+            <p><strong>Variable 2:</strong></p>
+            <div class="code">
+Key: ADMIN_SECRET_KEY
+Value: 3b72055e598775190cbeabd66a6c8b1222bc2422f6a2fa3a5e5b9b28b6ff0ac9
+            </div>
+            <p><strong>Variable 3:</strong></p>
+            <div class="code">
+Key: CANDIDATE_SECRET_KEY
+Value: f33f8dd3ca0fe35c21fac3dfbfb2e001fe98c6f4e9986ec3beec4c700605ce34
+            </div>
+            <p>بعد از وارد کردن همه، <strong>Create Web Service</strong> بزن</p>
+        </div>
+
+        <!-- مرحله 5 -->
+        <div class="step">
+            <h2><span class="step-number">5</span> صبر برای Build</h2>
+            <p><strong>⏱ زمان: 3-5 دقیقه</strong></p>
+            <ul>
+                <li>در صفحه Logs، خطوط سبز رنگ build رو نشون میده</li>
+                <li>منتظر این پیام باش:</li>
+            </ul>
+            <div class="code">
+==> Your service is live 🎉
+            </div>
+            <div class="warning">
+                ⚠️ اگر خطای قرمز دیدی، بهم بگو تا رفعش کنم
+            </div>
+        </div>
+
+        <!-- مرحله 6 -->
+        <div class="step">
+            <h2><span class="step-number">6</span> مقداردهی دیتابیس</h2>
+            <p><strong>⏱ زمان: 1 دقیقه</strong></p>
+            <ul>
+                <li>بالای صفحه کنار Logs → <strong>Shell</strong> رو پیدا کن</li>
+                <li>روش کلیک کن تا ترمینال باز بشه</li>
+                <li>این دستور رو بزن:</li>
+            </ul>
+            <div class="code">
+python init_db.py
+            </div>
+            <ul>
+                <li>باید این پیام رو ببینی:</li>
+            </ul>
+            <div class="code">
+✅ مقداردهی اولیه با موفقیت انجام شد!
+            </div>
+        </div>
+
+        <!-- نتیجه نهایی -->
+        <div class="final">
+            <h2>🎉 تبریک! سایت شما آماده است!</h2>
+            
+            <div class="link-box">
+                <p><strong>🌐 صفحه اصلی:</strong></p>
+                <p><a href="https://candidate-election-bot.onrender.com/" target="_blank" style="color: white;">
+                    https://candidate-election-bot.onrender.com/
+                </a></p>
+            </div>
+
+            <div class="link-box">
+                <p><strong>🔧 پنل ادمین:</strong></p>
+                <p><a href="https://candidate-election-bot.onrender.com/admin/" target="_blank" style="color: white;">
+                    https://candidate-election-bot.onrender.com/admin/
+                </a></p>
+            </div>
+
+            <div class="link-box">
+                <p><strong>👤 پنل نماینده:</strong></p>
+                <p><a href="https://candidate-election-bot.onrender.com/candidate/" target="_blank" style="color: white;">
+                    https://candidate-election-bot.onrender.com/candidate/
+                </a></p>
+            </div>
+
+            <div class="important" style="margin-top: 20px; background: rgba(255,255,255,0.9); color: #721c24;">
+                <p><strong>ورود به پنل ادمین:</strong></p>
+                <p>👤 نام کاربری: <code>admin</code></p>
+                <p>🔑 رمز عبور: <code>admin123</code></p>
+                <p style="margin-top: 10px;">⚠️ حتماً بعد از ورود رمز عبور رو عوض کن!</p>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px; color: #666;">
+            <p>💡 اگر در هر مرحله مشکلی داشتی، بهم بگو تا کمکت کنم</p>
+            <p style="margin-top: 20px;">ساخته شده با ❤️ برای فرزاد</p>
+        </div>
+    </div>
+</body>
+</html>
