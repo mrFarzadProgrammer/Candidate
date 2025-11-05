@@ -8,11 +8,10 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # تنظیمات دیتابیس
-# برای SQLite (Development):
-DATABASE_URI = os.getenv('DATABASE_URI', f'sqlite:///{BASE_DIR}/election_bot.db')
-
-# برای PostgreSQL (Production/Docker):
-# DATABASE_URI = os.getenv('DATABASE_URI', 'postgresql://election_user:dev_password@localhost:5433/election_bot')
+# اول DATABASE_URL رو چک می‌کنیم (استاندارد Heroku/Render/PythonAnywhere)
+# بعد DATABASE_URI رو چک می‌کنیم (برای سازگاری با کدهای قدیمی)
+# و در آخر SQLite به عنوان fallback برای Development
+DATABASE_URI = os.getenv('DATABASE_URL') or os.getenv('DATABASE_URI') or f'sqlite:///{BASE_DIR}/election_bot.db'
 
 # کلیدهای امنیتی
 ADMIN_SECRET_KEY = os.getenv('ADMIN_SECRET_KEY', 'admin-secret-key-change-in-production')
