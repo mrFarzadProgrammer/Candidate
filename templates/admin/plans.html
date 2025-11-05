@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت پلن‌ها</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="sidebar">
+            <h2>پنل مدیریت</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
+                <li><a href="{{ url_for('candidates') }}">👥 نماینده‌ها</a></li>
+                <li><a href="{{ url_for('plans') }}" class="active">💰 پلن‌ها</a></li>
+                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <h1>مدیریت پلن‌ها</h1>
+            </header>
+            
+            <div class="section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نام پلن</th>
+                            <th>کد</th>
+                            <th>قیمت (تومان)</th>
+                            <th>مدت (روز)</th>
+                            <th>توضیحات</th>
+                            <th>وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for plan in plans %}
+                        <tr>
+                            <td>{{ plan.name }}</td>
+                            <td><code>{{ plan.code }}</code></td>
+                            <td>{{ "{:,}".format(plan.price) }}</td>
+                            <td>{{ plan.duration_days }}</td>
+                            <td>{{ plan.description }}</td>
+                            <td>
+                                {% if plan.is_active %}
+                                    <span class="badge badge-success">فعال</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">غیرفعال</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

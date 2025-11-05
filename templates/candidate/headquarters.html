@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت ستادها</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="sidebar">
+            <h2>پنل نماینده</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
+                <li><a href="{{ url_for('profile') }}">👤 اطلاعات شخصی</a></li>
+                <li><a href="{{ url_for('resume') }}">📋 رزومه</a></li>
+                <li><a href="{{ url_for('programs') }}">📢 برنامه‌ها</a></li>
+                <li><a href="{{ url_for('headquarters') }}" class="active">📍 ستادها</a></li>
+                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <h1>مدیریت ستادهای انتخاباتی</h1>
+            </header>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="section">
+                <h2>افزودن ستاد جدید</h2>
+                <form method="POST">
+                    <div class="form-group">
+                        <label>نام ستاد *</label>
+                        <input type="text" name="name" required placeholder="مثال: ستاد مرکزی">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>آدرس کامل *</label>
+                        <textarea name="address" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>شماره تماس</label>
+                        <input type="text" name="phone" placeholder="021-12345678">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>موقعیت جغرافیایی (اختیاری)</label>
+                        <input type="text" name="latitude" placeholder="Latitude (عرض جغرافیایی)">
+                        <input type="text" name="longitude" placeholder="Longitude (طول جغرافیایی)" style="margin-top: 10px;">
+                        <small>برای نمایش روی نقشه</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">افزودن</button>
+                </form>
+            </div>
+            
+            <div class="section">
+                <h2>ستادهای ثبت شده</h2>
+                {% if headquarters %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نام</th>
+                            <th>آدرس</th>
+                            <th>تلفن</th>
+                            <th>موقعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for hq in headquarters %}
+                        <tr>
+                            <td>{{ hq.name }}</td>
+                            <td>{{ hq.address }}</td>
+                            <td>{{ hq.phone or '-' }}</td>
+                            <td>
+                                {% if hq.latitude and hq.longitude %}
+                                    ✅ ثبت شده
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>هنوز ستادی ثبت نشده است.</p>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

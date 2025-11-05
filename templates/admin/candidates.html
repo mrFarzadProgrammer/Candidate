@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لیست نماینده‌ها</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="sidebar">
+            <h2>پنل مدیریت</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
+                <li><a href="{{ url_for('candidates') }}" class="active">👥 نماینده‌ها</a></li>
+                <li><a href="{{ url_for('plans') }}">💰 پلن‌ها</a></li>
+                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <h1>مدیریت نماینده‌ها</h1>
+                <a href="{{ url_for('create_candidate') }}" class="btn btn-primary">+ نماینده جدید</a>
+            </header>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نام کامل</th>
+                            <th>نام کاربری</th>
+                            <th>شهر</th>
+                            <th>حوزه</th>
+                            <th>بات</th>
+                            <th>پلن‌ها</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidate in candidates %}
+                        <tr>
+                            <td>{{ candidate.full_name }}</td>
+                            <td>{{ candidate.username }}</td>
+                            <td>{{ candidate.city or '-' }}</td>
+                            <td>{{ candidate.district or '-' }}</td>
+                            <td>
+                                {% if candidate.bot_instance %}
+                                    {% if candidate.bot_instance.is_active %}
+                                        <span class="badge badge-success">فعال</span>
+                                        <br>@{{ candidate.bot_instance.bot_username }}
+                                    {% else %}
+                                        <span class="badge badge-secondary">غیرفعال</span>
+                                    {% endif %}
+                                {% else %}
+                                    <a href="{{ url_for('setup_bot', candidate_id=candidate.id) }}" class="btn btn-sm">راه‌اندازی</a>
+                                {% endif %}
+                            </td>
+                            <td>{{ candidate.plans|length }} پلن</td>
+                            <td>
+                                <a href="{{ url_for('setup_bot', candidate_id=candidate.id) }}" class="btn btn-sm">مدیریت</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>راه‌اندازی بات</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="sidebar">
+            <h2>پنل مدیریت</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
+                <li><a href="{{ url_for('candidates') }}" class="active">👥 نماینده‌ها</a></li>
+                <li><a href="{{ url_for('plans') }}">💰 پلن‌ها</a></li>
+                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <h1>راه‌اندازی بات برای {{ candidate.full_name }}</h1>
+            </header>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="alert alert-info">
+                <h3>📝 راهنما:</h3>
+                <ol>
+                    <li>در تلگرام به <a href="https://t.me/BotFather" target="_blank">@BotFather</a> بروید</li>
+                    <li>دستور <code>/newbot</code> را ارسال کنید</li>
+                    <li>نام و username بات را وارد کنید</li>
+                    <li>توکن دریافتی را در فرم زیر وارد کنید</li>
+                </ol>
+                <p><a href="{{ url_for('static', filename='docs/BOTFATHER_GUIDE.md') }}" target="_blank">راهنمای تصویری مشاهده شود</a></p>
+            </div>
+            
+            <div class="section">
+                <form method="POST">
+                    <div class="form-group">
+                        <label>توکن بات *</label>
+                        <input type="text" name="bot_token" required placeholder="1234567890:ABCdefGHIjklMNOpqrs">
+                        <small>مثال: 1234567890:ABCdefGHIjklMNOpqrsTUVwxyz</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Username بات *</label>
+                        <input type="text" name="bot_username" required placeholder="candidate_bot">
+                        <small>بدون @ - مثال: ahmad_election_bot</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">🚀 راه‌اندازی بات</button>
+                    <a href="{{ url_for('candidates') }}" class="btn btn-secondary">انصراف</a>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

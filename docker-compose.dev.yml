@@ -1,0 +1,47 @@
+# Docker Compose برای محیط Development
+# استفاده: docker-compose -f docker-compose.dev.yml up
+version: '3.8'
+
+services:
+  # فقط PostgreSQL برای توسعه
+  postgres:
+    image: postgres:15-alpine
+    container_name: election_db_dev
+    environment:
+      POSTGRES_USER: election_user
+      POSTGRES_PASSWORD: dev_password
+      POSTGRES_DB: election_bot
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    networks:
+      - election_network
+
+  # Redis برای Cache (اختیاری)
+  redis:
+    image: redis:7-alpine
+    container_name: election_redis_dev
+    ports:
+      - "6379:6379"
+    networks:
+      - election_network
+
+  # Adminer برای مدیریت دیتابیس
+  adminer:
+    image: adminer
+    container_name: election_adminer
+    ports:
+      - "8080:8080"
+    networks:
+      - election_network
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_dev_data:
+    driver: local
+
+networks:
+  election_network:
+    driver: bridge

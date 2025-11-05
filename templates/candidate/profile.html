@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اطلاعات شخصی</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="sidebar">
+            <h2>پنل نماینده</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
+                <li><a href="{{ url_for('profile') }}" class="active">👤 اطلاعات شخصی</a></li>
+                <li><a href="{{ url_for('resume') }}">📋 رزومه</a></li>
+                <li><a href="{{ url_for('programs') }}">📢 برنامه‌ها</a></li>
+                <li><a href="{{ url_for('headquarters') }}">📍 ستادها</a></li>
+                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <h1>ویرایش اطلاعات شخصی</h1>
+            </header>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="section">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>نام کامل *</label>
+                        <input type="text" name="full_name" value="{{ candidate.full_name }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>شهر</label>
+                        <input type="text" name="city" value="{{ candidate.city or '' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>حوزه انتخابیه</label>
+                        <input type="text" name="district" value="{{ candidate.district or '' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>شماره تماس</label>
+                        <input type="text" name="phone" value="{{ candidate.phone or '' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>ایمیل</label>
+                        <input type="email" name="email" value="{{ candidate.email or '' }}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>بیوگرافی</label>
+                        <textarea name="bio" rows="6">{{ candidate.bio or '' }}</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>تصویر پروفایل</label>
+                        {% if candidate.photo %}
+                        <img src="{{ url_for('static', filename='uploads/' + candidate.photo) }}" 
+                             style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;">
+                        {% endif %}
+                        <input type="file" name="photo" accept="image/*">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

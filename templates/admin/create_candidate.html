@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ایجاد نماینده جدید</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="sidebar">
+            <h2>پنل مدیریت</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
+                <li><a href="{{ url_for('candidates') }}" class="active">👥 نماینده‌ها</a></li>
+                <li><a href="{{ url_for('plans') }}">💰 پلن‌ها</a></li>
+                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <h1>ایجاد نماینده جدید</h1>
+            </header>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="section">
+                <form method="POST">
+                    <div class="form-group">
+                        <label>نام کامل *</label>
+                        <input type="text" name="full_name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>نام کاربری *</label>
+                        <input type="text" name="username" required>
+                        <small>فقط حروف انگلیسی، اعداد و underscore</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>رمز عبور *</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>شماره تماس</label>
+                        <input type="text" name="phone">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">ایجاد نماینده</button>
+                    <a href="{{ url_for('candidates') }}" class="btn btn-secondary">انصراف</a>
+                </form>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

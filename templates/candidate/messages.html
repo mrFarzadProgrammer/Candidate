@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پیام‌های مردم</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="dashboard">
+        <nav class="sidebar">
+            <h2>پنل نماینده</h2>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
+                <li><a href="{{ url_for('profile') }}">👤 اطلاعات شخصی</a></li>
+                <li><a href="{{ url_for('resume') }}">📋 رزومه</a></li>
+                <li><a href="{{ url_for('programs') }}">📢 برنامه‌ها</a></li>
+                <li><a href="{{ url_for('headquarters') }}">📍 ستادها</a></li>
+                <li><a href="{{ url_for('messages') }}" class="active">💬 پیام‌ها</a></li>
+                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <header>
+                <h1>پیام‌های دریافتی از مردم</h1>
+            </header>
+            
+            <div class="section">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="message-card {% if not message.is_read %}unread{% endif %}">
+                    <div class="message-header">
+                        <strong>{{ message.user_name }}</strong>
+                        <span class="message-date">{{ message.created_at.strftime('%Y/%m/%d %H:%M') }}</span>
+                    </div>
+                    <div class="message-body">
+                        {{ message.message_text }}
+                    </div>
+                    {% if not message.is_read %}
+                    <button class="btn btn-sm" onclick="markAsRead({{ message.id }})">علامت به‌عنوان خوانده‌شده</button>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% else %}
+                <p>پیامی وجود ندارد.</p>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+    
+    <style>
+    .message-card {
+        background: white;
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        border-right: 4px solid #ddd;
+    }
+    .message-card.unread {
+        background: #e8f5e9;
+        border-right-color: #4caf50;
+    }
+    .message-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+    .message-date {
+        color: #999;
+        font-size: 12px;
+    }
+    .message-body {
+        margin-bottom: 10px;
+    }
+    </style>
+    
+    <script>
+    function markAsRead(messageId) {
+        fetch(`/message/${messageId}/read`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+    </script>
+</body>
+</html>
