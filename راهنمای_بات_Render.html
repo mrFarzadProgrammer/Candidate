@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>راهنمای دیپلوی بات روی Render</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        h2 {
+            color: #764ba2;
+            margin: 30px 0 15px 0;
+            padding-right: 15px;
+            border-right: 5px solid #667eea;
+            font-size: 1.8em;
+        }
+        .step {
+            background: #f8f9ff;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-right: 4px solid #667eea;
+        }
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+            text-align: left;
+        }
+        .success {
+            background: #d4edda;
+            border-right: 4px solid #28a745;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        .warning {
+            background: #fff3cd;
+            border-right: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        .info {
+            background: #d1ecf1;
+            border-right: 4px solid #17a2b8;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        ul {
+            margin: 10px 0 10px 30px;
+        }
+        li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 راهنمای دیپلوی بات روی Render</h1>
+        
+        <div class="info">
+            <strong>💡 استراتژی:</strong>
+            <ul>
+                <li>✅ Panel‌ها: PythonAnywhere (فعلی - کار می‌کنه)</li>
+                <li>✅ Bot‌ها: Render.com (جدید - می‌سازیم)</li>
+                <li>✅ دیتابیس: MySQL PythonAnywhere (مشترک)</li>
+            </ul>
+        </div>
+
+        <h2>📋 مرحله 1: ساخت Web Service جدید در Render</h2>
+        
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>برو به:</strong>
+            <div class="code">https://dashboard.render.com</div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>لاگین کن با همون اکانت قبلی</strong>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>روی "New +" کلیک کن و "Web Service" رو انتخاب کن</strong>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <strong>Connect repository:</strong>
+            <ul>
+                <li>Repository: <strong>mrFarzadProgrammer/Candidate</strong></li>
+                <li>اگه نمیاد، "Configure Account" رو بزن</li>
+            </ul>
+        </div>
+
+        <h2>⚙️ مرحله 2: تنظیمات Web Service</h2>
+
+        <div class="step">
+            <strong>Name:</strong>
+            <div class="code">candidate-bots</div>
+        </div>
+
+        <div class="step">
+            <strong>Region:</strong>
+            <div class="code">Frankfurt (EU Central)</div>
+        </div>
+
+        <div class="step">
+            <strong>Branch:</strong>
+            <div class="code">main</div>
+        </div>
+
+        <div class="step">
+            <strong>Runtime:</strong>
+            <div class="code">Python 3</div>
+        </div>
+
+        <div class="step">
+            <strong>Build Command:</strong>
+            <div class="code">pip install --upgrade pip setuptools wheel && pip install -r requirements.txt</div>
+        </div>
+
+        <div class="step">
+            <strong>Start Command:</strong>
+            <div class="code">python bot_runner.py</div>
+        </div>
+
+        <div class="step">
+            <strong>Instance Type:</strong>
+            <div class="code">Free</div>
+        </div>
+
+        <h2>🔐 مرحله 3: Environment Variables</h2>
+
+        <div class="warning">
+            <strong>⚠️ مهم:</strong> این متغیرها رو دقیق وارد کن!
+        </div>
+
+        <div class="step">
+            <strong>DATABASE_URL:</strong>
+            <div class="code">mysql://farzad93:myDream220321!@farzad93.mysql.pythonanywhere-services.com/farzad93$candidate_db</div>
+        </div>
+
+        <div class="step">
+            <strong>ADMIN_SECRET_KEY:</strong>
+            <div class="code">3b72055e598775190cbeabd66a6c8b1222bc2422f6a2fa3a5e5b9b28b6ff0ac9</div>
+        </div>
+
+        <div class="step">
+            <strong>CANDIDATE_SECRET_KEY:</strong>
+            <div class="code">f33f8dd3ca0fe35c21fac3dfbfb2e001fe98c6f4e9986ec3beec4c700605ce34</div>
+        </div>
+
+        <div class="step">
+            <strong>PYTHON_VERSION:</strong>
+            <div class="code">3.10.11</div>
+        </div>
+
+        <h2>🚀 مرحله 4: Deploy</h2>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <strong>روی "Create Web Service" کلیک کن</strong>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <strong>منتظر build بمون (3-5 دقیقه)</strong>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <strong>وقتی "Live" شد، بات‌ها راه میفتن!</strong>
+        </div>
+
+        <h2>✅ تست بات</h2>
+
+        <div class="step">
+            <p><strong>1. برو به Telegram</strong></p>
+            <p><strong>2. بات رو پیدا کن (مثلاً @saman_rahjou_test_bot)</strong></p>
+            <p><strong>3. دستور /start رو بزن</strong></p>
+            <p><strong>4. باید منوی بات رو ببینی! 🎉</strong></p>
+        </div>
+
+        <h2>🔍 عیب‌یابی</h2>
+
+        <div class="warning">
+            <strong>اگه بات کار نکرد:</strong>
+            <ol>
+                <li>برو به Render Dashboard → Logs</li>
+                <li>ببین چه خطایی میده</li>
+                <li>خطا رو بفرست</li>
+            </ol>
+        </div>
+
+        <div class="info">
+            <strong>💡 نکته:</strong>
+            <ul>
+                <li>Render رایگان 750 ساعت در ماه میده (کافیه!)</li>
+                <li>بعد از 15 دقیقه بی‌فعالیت، sleep می‌کنه</li>
+                <li>اولین پیام 30 ثانیه طول می‌کشه (wake up)</li>
+            </ul>
+        </div>
+
+        <div class="success" style="text-align: center; margin-top: 30px;">
+            <h3>🎯 همه چیز آماده‌ست!</h3>
+            <p>Panel‌ها روی PythonAnywhere + Bot‌ها روی Render = عالی! 💪</p>
+        </div>
+    </div>
+</body>
+</html>

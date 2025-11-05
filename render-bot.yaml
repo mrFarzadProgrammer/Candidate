@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: candidate-bots
+    runtime: python
+    env: python
+    plan: free
+    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
+    startCommand: python bot_runner.py
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_SECRET_KEY
+        value: 3b72055e598775190cbeabd66a6c8b1222bc2422f6a2fa3a5e5b9b28b6ff0ac9
+      - key: CANDIDATE_SECRET_KEY
+        value: f33f8dd3ca0fe35c21fac3dfbfb2e001fe98c6f4e9986ec3beec4c700605ce34
+      - key: PYTHON_VERSION
+        value: 3.10.11
