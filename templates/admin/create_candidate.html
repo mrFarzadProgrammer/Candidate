@@ -1,66 +1,227 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ایجاد نماینده جدید</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="dashboard">
-        <nav class="sidebar">
-            <h2>پنل مدیریت</h2>
-            <ul>
-                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
-                <li><a href="{{ url_for('candidates') }}" class="active">👥 نماینده‌ها</a></li>
-                <li><a href="{{ url_for('plans') }}">💰 پلن‌ها</a></li>
-                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
-            </ul>
-        </nav>
-        
-        <main class="content">
-            <header>
-                <h1>ایجاد نماینده جدید</h1>
-            </header>
-            
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            
-            <div class="section">
-                <form method="POST">
-                    <div class="form-group">
-                        <label>نام کامل *</label>
-                        <input type="text" name="full_name" required>
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="fa" dir="rtl"><html lang="fa" dir="rtl">
+
+<head><head>
+
+    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ایجاد نماینده جدید - پنل مدیریت</title>    <title>ایجاد نماینده جدید</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
+
+</head><body>
+
+<body>    <div class="dashboard">
+
+    <div class="dashboard-wrapper">        <nav class="sidebar">
+
+        <!-- Sidebar -->            <h2>پنل مدیریت</h2>
+
+        <aside class="sidebar">            <ul>
+
+            <div class="sidebar-header">                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
+
+                <div class="logo">                <li><a href="{{ url_for('candidates') }}" class="active">👥 نماینده‌ها</a></li>
+
+                    <i class="fas fa-vote-yea" style="font-size: 40px;"></i>                <li><a href="{{ url_for('plans') }}">💰 پلن‌ها</a></li>
+
+                </div>                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+
+                <h2>پنل مدیریت</h2>            </ul>
+
+                <p>سامانه بات‌های انتخاباتی</p>        </nav>
+
+            </div>        
+
+                    <main class="content">
+
+            <nav class="sidebar-menu">            <header>
+
+                <a href="{{ url_for('dashboard') }}" class="menu-item">                <h1>ایجاد نماینده جدید</h1>
+
+                    <i class="fas fa-chart-line"></i>            </header>
+
+                    <span>داشبورد</span>            
+
+                </a>            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                <a href="{{ url_for('candidates') }}" class="menu-item active">                {% if messages %}
+
+                    <i class="fas fa-users"></i>                    {% for category, message in messages %}
+
+                    <span>نماینده‌ها</span>                        <div class="alert alert-{{ category }}">
+
+                </a>                            {{ message }}
+
+                <a href="{{ url_for('plans') }}" class="menu-item">                        </div>
+
+                    <i class="fas fa-money-bill-wave"></i>                    {% endfor %}
+
+                    <span>پلن‌ها و قیمت‌گذاری</span>                {% endif %}
+
+                </a>            {% endwith %}
+
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">            
+
+                    <i class="fas fa-sign-out-alt"></i>            <div class="section">
+
+                    <span>خروج</span>                <form method="POST">
+
+                </a>                    <div class="form-group">
+
+            </nav>                        <label>نام کامل *</label>
+
+        </aside>                        <input type="text" name="full_name" required>
+
+                            </div>
+
+        <!-- Main Content -->                    
+
+        <div class="main-content">                    <div class="form-group">
+
+            <!-- Topbar -->                        <label>نام کاربری *</label>
+
+            <div class="topbar">                        <input type="text" name="username" required>
+
+                <div class="topbar-left">                        <small>فقط حروف انگلیسی، اعداد و underscore</small>
+
+                    <h1>ایجاد نماینده جدید</h1>                    </div>
+
+                </div>                    
+
+                <div class="topbar-right">                    <div class="form-group">
+
+                    <div class="user-profile">                        <label>رمز عبور *</label>
+
+                        <div class="user-avatar">                        <input type="password" name="password" required>
+
+                            {{ session.admin_username[0]|upper }}                    </div>
+
+                        </div>                    
+
+                        <div class="user-info">                    <div class="form-group">
+
+                            <h4>{{ session.admin_username }}</h4>                        <label>شماره تماس</label>
+
+                            <p>مدیر سیستم</p>                        <input type="text" name="phone">
+
+                        </div>                    </div>
+
+                    </div>                    
+
+                </div>                    <button type="submit" class="btn btn-primary">ایجاد نماینده</button>
+
+            </div>                    <a href="{{ url_for('candidates') }}" class="btn btn-secondary">انصراف</a>
+
+                            </form>
+
+            <!-- Content Area -->            </div>
+
+            <div class="content-area">        </main>
+
+                <!-- Flash Messages -->    </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}</body>
+
+                    {% if messages %}</html>
+
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; background: {% if category == 'success' %}#10b981{% elif category == 'error' or category == 'danger' %}#ef4444{% else %}#3b82f6{% endif %}; color: white;">
+                                <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' or category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- Form Card -->
+                <div class="card" style="max-width: 800px; margin: 0 auto;">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user-plus"></i> اطلاعات نماینده</h3>
                     </div>
-                    
-                    <div class="form-group">
-                        <label>نام کاربری *</label>
-                        <input type="text" name="username" required>
-                        <small>فقط حروف انگلیسی، اعداد و underscore</small>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> نام کامل *</label>
+                                <input type="text" name="full_name" required placeholder="نام و نام خانوادگی نماینده">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-at"></i> نام کاربری *</label>
+                                <input type="text" name="username" required placeholder="username">
+                                <small>فقط حروف انگلیسی، اعداد و underscore</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-lock"></i> رمز عبور *</label>
+                                <input type="password" name="password" required placeholder="رمز عبور">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-envelope"></i> ایمیل</label>
+                                <input type="email" name="email" placeholder="email@example.com">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-phone"></i> شماره تماس *</label>
+                                <input type="text" name="phone" required placeholder="09123456789">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-city"></i> شهر</label>
+                                <input type="text" name="city" placeholder="نام شهر">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-map-marker-alt"></i> حوزه انتخابیه</label>
+                                <input type="text" name="constituency" placeholder="مثال: تهران - حوزه 2">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> سن</label>
+                                <input type="number" name="age" placeholder="سن">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-graduation-cap"></i> تحصیلات</label>
+                                <input type="text" name="education" placeholder="مقطع و رشته تحصیلی">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-briefcase"></i> شغل</label>
+                                <input type="text" name="occupation" placeholder="شغل فعلی">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-money-bill-wave"></i> انتخاب پلن</label>
+                                <select name="plan_id" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; width: 100%; font-size: 15px;">
+                                    <option value="">بدون پلن</option>
+                                    {% for plan in plans %}
+                                        <option value="{{ plan.id }}">{{ plan.name }} - {% if plan.price == 0 %}رایگان{% else %}{{ "{:,}".format(plan.price) }} تومان{% endif %}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div style="display: flex; gap: 10px; margin-top: 30px;">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    ذخیره نماینده
+                                </button>
+                                <a href="{{ url_for('candidates') }}" class="btn btn-secondary" style="background: #6b7280;">
+                                    <i class="fas fa-times"></i>
+                                    انصراف
+                                </a>
+                            </div>
+                        </form>
                     </div>
-                    
-                    <div class="form-group">
-                        <label>رمز عبور *</label>
-                        <input type="password" name="password" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>شماره تماس</label>
-                        <input type="text" name="phone">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">ایجاد نماینده</button>
-                    <a href="{{ url_for('candidates') }}" class="btn btn-secondary">انصراف</a>
-                </form>
+                </div>
             </div>
-        </main>
+        </div>
     </div>
 </body>
 </html>

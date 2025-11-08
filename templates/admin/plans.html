@@ -1,61 +1,199 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مدیریت پلن‌ها</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="dashboard">
-        <nav class="sidebar">
-            <h2>پنل مدیریت</h2>
-            <ul>
-                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
-                <li><a href="{{ url_for('candidates') }}">👥 نماینده‌ها</a></li>
-                <li><a href="{{ url_for('plans') }}" class="active">💰 پلن‌ها</a></li>
-                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
-            </ul>
-        </nav>
-        
-        <main class="content">
-            <header>
-                <h1>مدیریت پلن‌ها</h1>
-            </header>
-            
-            <div class="section">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>نام پلن</th>
-                            <th>کد</th>
-                            <th>قیمت (تومان)</th>
-                            <th>مدت (روز)</th>
-                            <th>توضیحات</th>
-                            <th>وضعیت</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for plan in plans %}
-                        <tr>
-                            <td>{{ plan.name }}</td>
-                            <td><code>{{ plan.code }}</code></td>
-                            <td>{{ "{:,}".format(plan.price) }}</td>
-                            <td>{{ plan.duration_days }}</td>
-                            <td>{{ plan.description }}</td>
-                            <td>
-                                {% if plan.is_active %}
-                                    <span class="badge badge-success">فعال</span>
-                                {% else %}
-                                    <span class="badge badge-secondary">غیرفعال</span>
-                                {% endif %}
-                            </td>
-                        </tr>
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="fa" dir="rtl"><html lang="fa" dir="rtl">
+
+<head><head>
+
+    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>مدیریت پلن‌ها - پنل مدیریت</title>    <title>مدیریت پلن‌ها</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
+
+</head><body>
+
+<body>    <div class="dashboard">
+
+    <div class="dashboard-wrapper">        <nav class="sidebar">
+
+        <!-- Sidebar -->            <h2>پنل مدیریت</h2>
+
+        <aside class="sidebar">            <ul>
+
+            <div class="sidebar-header">                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
+
+                <div class="logo">                <li><a href="{{ url_for('candidates') }}">👥 نماینده‌ها</a></li>
+
+                    <i class="fas fa-vote-yea" style="font-size: 40px;"></i>                <li><a href="{{ url_for('plans') }}" class="active">💰 پلن‌ها</a></li>
+
+                </div>                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+
+                <h2>پنل مدیریت</h2>            </ul>
+
+                <p>سامانه بات‌های انتخاباتی</p>        </nav>
+
+            </div>        
+
+                    <main class="content">
+
+            <nav class="sidebar-menu">            <header>
+
+                <a href="{{ url_for('dashboard') }}" class="menu-item">                <h1>مدیریت پلن‌ها</h1>
+
+                    <i class="fas fa-chart-line"></i>            </header>
+
+                    <span>داشبورد</span>            
+
+                </a>            <div class="section">
+
+                <a href="{{ url_for('candidates') }}" class="menu-item">                <table>
+
+                    <i class="fas fa-users"></i>                    <thead>
+
+                    <span>نماینده‌ها</span>                        <tr>
+
+                </a>                            <th>نام پلن</th>
+
+                <a href="{{ url_for('plans') }}" class="menu-item active">                            <th>کد</th>
+
+                    <i class="fas fa-money-bill-wave"></i>                            <th>قیمت (تومان)</th>
+
+                    <span>پلن‌ها و قیمت‌گذاری</span>                            <th>مدت (روز)</th>
+
+                </a>                            <th>توضیحات</th>
+
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">                            <th>وضعیت</th>
+
+                    <i class="fas fa-sign-out-alt"></i>                        </tr>
+
+                    <span>خروج</span>                    </thead>
+
+                </a>                    <tbody>
+
+            </nav>                        {% for plan in plans %}
+
+        </aside>                        <tr>
+
+                                    <td>{{ plan.name }}</td>
+
+        <!-- Main Content -->                            <td><code>{{ plan.code }}</code></td>
+
+        <div class="main-content">                            <td>{{ "{:,}".format(plan.price) }}</td>
+
+            <!-- Topbar -->                            <td>{{ plan.duration_days }}</td>
+
+            <div class="topbar">                            <td>{{ plan.description }}</td>
+
+                <div class="topbar-left">                            <td>
+
+                    <h1>مدیریت پلن‌ها و قیمت‌گذاری</h1>                                {% if plan.is_active %}
+
+                </div>                                    <span class="badge badge-success">فعال</span>
+
+                <div class="topbar-right">                                {% else %}
+
+                    <div class="user-profile">                                    <span class="badge badge-secondary">غیرفعال</span>
+
+                        <div class="user-avatar">                                {% endif %}
+
+                            {{ session.admin_username[0]|upper }}                            </td>
+
+                        </div>                        </tr>
+
+                        <div class="user-info">                        {% endfor %}
+
+                            <h4>{{ session.admin_username }}</h4>                    </tbody>
+
+                            <p>مدیر سیستم</p>                </table>
+
+                        </div>            </div>
+
+                    </div>        </main>
+
+                </div>    </div>
+
+            </div></body>
+
+            </html>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; background: {% if category == 'success' %}#10b981{% elif category == 'error' or category == 'danger' %}#ef4444{% else %}#3b82f6{% endif %}; color: white;">
+                                <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' or category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
                         {% endfor %}
-                    </tbody>
-                </table>
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h2>پلن‌های اشتراک</h2>
+                </div>
+                
+                <!-- Plans Grid -->
+                <div class="stats-grid">
+                    {% for plan in plans %}
+                    <div class="stat-card" style="background: white; border: 2px solid {% if plan.price == 0 %}#10b981{% elif plan.price < 1000000 %}#3b82f6{% else %}#f59e0b{% endif %}; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                        <div style="text-align: center; padding: 10px 0;">
+                            <div style="width: 70px; height: 70px; margin: 0 auto 15px; background: linear-gradient(135deg, {% if plan.price == 0 %}#10b981, #059669{% elif plan.price < 1000000 %}#667eea, #764ba2{% else %}#f59e0b, #d97706{% endif %}); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 32px;">
+                                <i class="fas {% if plan.price == 0 %}fa-gift{% elif plan.price < 1000000 %}fa-star{% else %}fa-crown{% endif %}"></i>
+                            </div>
+                            <h3 style="font-size: 24px; margin-bottom: 10px; color: #1f2937;">{{ plan.name }}</h3>
+                            <div style="font-size: 32px; font-weight: bold; color: {% if plan.price == 0 %}#10b981{% elif plan.price < 1000000 %}#3b82f6{% else %}#f59e0b{% endif %}; margin-bottom: 5px;">
+                                {% if plan.price == 0 %}
+                                    رایگان
+                                {% else %}
+                                    {{ "{:,}".format(plan.price) }} تومان
+                                {% endif %}
+                            </div>
+                            <p style="color: #6b7280; font-size: 14px; margin-bottom: 20px;">ماهانه</p>
+                            
+                            <div style="border-top: 2px solid #e5e7eb; padding-top: 20px; text-align: right;">
+                                <div style="margin-bottom: 12px;">
+                                    <i class="fas fa-check" style="color: #10b981; margin-left: 8px;"></i>
+                                    <span style="color: #4b5563;">{{ plan.features.max_bots }} بات</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <i class="fas fa-check" style="color: #10b981; margin-left: 8px;"></i>
+                                    <span style="color: #4b5563;">{{ plan.features.max_channels }} کانال</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <i class="fas fa-check" style="color: #10b981; margin-left: 8px;"></i>
+                                    <span style="color: #4b5563;">{{ plan.features.max_groups }} گروه</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <i class="fas {% if plan.features.auto_response %}fa-check{% else %}fa-times{% endif %}" style="color: {% if plan.features.auto_response %}#10b981{% else %}#ef4444{% endif %}; margin-left: 8px;"></i>
+                                    <span style="color: #4b5563;">پاسخگویی خودکار</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <i class="fas {% if plan.features.analytics %}fa-check{% else %}fa-times{% endif %}" style="color: {% if plan.features.analytics %}#10b981{% else %}#ef4444{% endif %}; margin-left: 8px;"></i>
+                                    <span style="color: #4b5563;">آمار و گزارشات</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <i class="fas {% if plan.features.priority_support %}fa-check{% else %}fa-times{% endif %}" style="color: {% if plan.features.priority_support %}#10b981{% else %}#ef4444{% endif %}; margin-left: 8px;"></i>
+                                    <span style="color: #4b5563;">پشتیبانی VIP</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary" style="margin-top: 20px; width: 100%;">
+                                <i class="fas fa-edit"></i>
+                                ویرایش پلن
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-        </main>
+        </div>
     </div>
 </body>
 </html>

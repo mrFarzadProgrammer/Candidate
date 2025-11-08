@@ -70,13 +70,18 @@ def login():
 def dashboard():
     """داشبورد اصلی ادمین"""
     candidates = Candidate.query.all()
-    total_candidates = len(candidates)
-    active_bots = BotInstance.query.filter_by(is_active=True).count()
+    
+    # جمع‌آوری آمار
+    stats = {
+        'total_candidates': len(candidates),
+        'total_bots': BotInstance.query.count(),
+        'total_plans': Plan.query.count(),
+        'active_plans': Plan.query.filter(Plan.price > 0).count()
+    }
     
     return render_template('dashboard.html',
                          candidates=candidates,
-                         total_candidates=total_candidates,
-                         active_bots=active_bots)
+                         stats=stats)
 
 
 @app.route('/candidates')
