@@ -138,6 +138,28 @@ body {
     object-fit: contain;
 }
 
+.login-logo {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.login-logo i {
+    font-size: 60px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
 .login-box h1 {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
@@ -151,7 +173,7 @@ body {
 .login-box p {
     text-align: center;
     color: var(--gray-500);
-    margin-bottom: 35px;
+    margin-bottom: 20px;
     font-size: 14px;
 }
 
@@ -171,6 +193,33 @@ body {
     font-weight: 500;
     font-size: 14px;
     transition: var(--transition-fast);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--gray-200);
+    border-radius: var(--border-radius-sm);
+    font-size: 15px;
+    transition: var(--transition-base);
+    background: var(--white);
+    color: var(--gray-800);
+    font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+input:hover, select:hover, textarea:hover {
+    border-color: var(--gray-300);
+}
+
+input::placeholder {
+    color: var(--gray-400);
 }
 
 .form-control {
