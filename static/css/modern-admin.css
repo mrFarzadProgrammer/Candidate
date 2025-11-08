@@ -8,12 +8,21 @@
    ─────────────────────────────────────────────────────────────── */
 
 :root {
-    /* Primary Colors */
-    --primary: #667eea;
-    --primary-dark: #5568d3;
-    --primary-light: #7e92f7;
-    --secondary: #764ba2;
-    --accent: #f093fb;
+    /* Iran Flag Colors - رنگ‌های پرچم ایران */
+    --iran-green: #239f40;
+    --iran-green-dark: #1a7a31;
+    --iran-green-light: #2db34f;
+    --iran-white: #ffffff;
+    --iran-red: #da0000;
+    --iran-red-dark: #b30000;
+    --iran-red-light: #ff1a1a;
+    
+    /* Primary Colors - Based on Iran Green */
+    --primary: #239f40;
+    --primary-dark: #1a7a31;
+    --primary-light: #2db34f;
+    --secondary: #da0000;
+    --accent: #f0f0f0;
     
     /* Neutral Colors */
     --white: #ffffff;
