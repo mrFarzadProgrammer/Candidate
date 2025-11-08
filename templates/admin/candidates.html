@@ -1,4 +1,4 @@
-<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
 
 <html lang="fa" dir="rtl">
 
@@ -30,7 +30,7 @@
 
                 </div>
 
-                <h2>پنل مدیریت</h2></head>    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><html lang="fa" dir="rtl"><html lang="fa" dir="rtl">
+                <h2>پنل مدیریت</h2></head>    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><html lang="fa" dir="rtl">
 
                 <p>سامانه بات‌های انتخاباتی</p>
 
@@ -62,7 +62,7 @@
 
                     <span>پلن‌ها و قیمت‌گذاری</span>
 
-                </a>                <h2>پنل مدیریت</h2></head>    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
+                </a>                <h2>پنل مدیریت</h2></head>    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><html lang="fa" dir="rtl"><html lang="fa" dir="rtl">
 
                 <a href="{{ url_for('logout') }}" class="menu-item">
 
@@ -74,83 +74,237 @@
 
             </nav>
 
-        </aside>            <nav class="sidebar-menu">
+        </aside>
 
 
 
-        <main class="main-content">                <a href="{{ url_for('dashboard') }}" class="menu-item">    <div class="dashboard-wrapper">    <title>لیست نماینده‌ها - پنل مدیریت</title>
+        <main class="main-content">            <nav class="sidebar-menu">    <div class="dashboard-wrapper">    <title>لیست نماینده‌ها - پنل مدیریت</title>
 
             <header class="topbar">
 
-                <div class="topbar-left">                    <i class="fas fa-chart-line"></i>
+                <div class="topbar-left">                <a href="{{ url_for('dashboard') }}" class="menu-item">
 
                     <button class="sidebar-toggle">
 
-                        <i class="fas fa-bars"></i>                    <span>داشبورد</span>        <!-- Sidebar -->
+                        <i class="fas fa-bars"></i>                    <i class="fas fa-chart-line"></i>        <aside class="sidebar">
 
                     </button>
 
-                    <h1>لیست نماینده‌ها</h1>                </a>
+                    <h1>لیست نماینده‌ها</h1>                    <span>داشبورد</span>
 
                 </div>
 
-                <div class="topbar-right">                <a href="{{ url_for('candidates') }}" class="menu-item active">        <aside class="sidebar">    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">    <meta charset="UTF-8">    <meta charset="UTF-8">
+                <div class="topbar-right">                </a>            <div class="sidebar-header">    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">    <meta charset="UTF-8">
 
                     <div class="user-profile">
 
-                        <i class="fas fa-user-circle"></i>                    <i class="fas fa-users"></i>
+                        <i class="fas fa-user-circle"></i>                <a href="{{ url_for('candidates') }}" class="menu-item active">
 
                         <span>مدیر سیستم</span>
 
-                    </div>                    <span>نماینده‌ها</span>            <div class="sidebar-header">
+                    </div>                    <i class="fas fa-users"></i>                <div class="logo">
 
                 </div>
 
-            </header>                </a>
+            </header>                    <span>نماینده‌ها</span>
 
 
 
-            <div class="content-area">                <a href="{{ url_for('plans') }}" class="menu-item">                <div class="logo">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+            <div class="content-area">                </a>                    <i class="fas fa-vote-yea" style="font-size: 40px;"></i>    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
                 <div class="page-header">
 
-                    <h2><i class="fas fa-users"></i> مدیریت نماینده‌ها</h2>                    <i class="fas fa-money-bill-wave"></i>
+                    <h2><i class="fas fa-users"></i> مدیریت نماینده‌ها</h2>                <a href="{{ url_for('plans') }}" class="menu-item">
 
                     <a href="{{ url_for('create_candidate') }}" class="btn btn-primary">
 
-                        <i class="fas fa-plus"></i> افزودن نماینده جدید                    <span>پلن‌ها و قیمت‌گذاری</span>                    <i class="fas fa-vote-yea" style="font-size: 40px;"></i>
+                        <i class="fas fa-plus"></i> افزودن نماینده جدید                    <i class="fas fa-tags"></i>                </div>
 
                     </a>
 
-                </div>                </a>
+                </div>                    <span>پلن‌ها و قیمت‌گذاری</span>
 
 
 
-                <div class="candidates-container">                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">                </div></head>    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <div class="candidates-container">                </a>                <h2>پنل مدیریت</h2></head>    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
 
                     {% if candidates %}
 
-                    <div class="table-responsive">                    <i class="fas fa-sign-out-alt"></i>
+                    <div class="table-responsive">                <a href="{{ url_for('logout') }}" class="menu-item">
 
                         <table class="data-table">
 
-                            <thead>                    <span>خروج</span>                <h2>پنل مدیریت</h2>
+                            <thead>                    <i class="fas fa-sign-out-alt"></i>                <p>سامانه بات‌های انتخاباتی</p>
 
                                 <tr>
 
-                                    <th>شناسه</th>                </a>
+                                    <th>شناسه</th>                    <span>خروج</span>
 
                                     <th>نام کامل</th>
 
-                                    <th>نام کاربری</th>            </nav>                <p>سامانه بات‌های انتخاباتی</p><body>
+                                    <th>نام کاربری</th>                </a>            </div><body>
 
                                     <th>شماره تماس</th>
 
-                                    <th>پلن فعال</th>        </aside>
+                                    <th>پلن فعال</th>            </nav>
 
                                     <th>وضعیت بات</th>
 
-                                    <th>عملیات</th>        <div class="main-content">            </div>
+                                    <th>عملیات</th>        </aside>            <nav class="sidebar-menu">
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for candidate in candidates %}        <main class="main-content">                <a href="{{ url_for('dashboard') }}" class="menu-item">    <div class="dashboard-wrapper">    <title>لیست نماینده‌ها - پنل مدیریت</title>
+
+                                <tr>
+
+                                    <td>{{ candidate.id }}</td>            <header class="topbar">
+
+                                    <td>
+
+                                        <div class="user-info">                <div class="topbar-left">                    <i class="fas fa-chart-line"></i>
+
+                                            <div class="avatar-gradient" style="background: linear-gradient(135deg, rgb(35, 159, 64), rgb(218, 0, 0));">
+
+                                                {{ candidate.full_name[0] }}                    <button class="sidebar-toggle">
+
+                                            </div>
+
+                                            <span>{{ candidate.full_name }}</span>                        <i class="fas fa-bars"></i>                    <span>داشبورد</span>        <!-- Sidebar -->
+
+                                        </div>
+
+                                    </td>                    </button>
+
+                                    <td>{{ candidate.username }}</td>
+
+                                    <td>{{ candidate.phone }}</td>                    <h1>لیست نماینده‌ها</h1>                </a>
+
+                                    <td>
+
+                                        {% if candidate.plan %}                </div>
+
+                                        <span class="badge badge-info">{{ candidate.plan.name }}</span>
+
+                                        {% else %}                <div class="topbar-right">                <a href="{{ url_for('candidates') }}" class="menu-item active">        <aside class="sidebar">    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+                                        <span class="badge badge-secondary">بدون پلن</span>
+
+                                        {% endif %}                    <div class="user-profile">
+
+                                    </td>
+
+                                    <td>                        <i class="fas fa-user-circle"></i>                    <i class="fas fa-users"></i>
+
+                                        {% if candidate.bot_token %}
+
+                                        <span class="badge badge-success">                        <span>مدیر سیستم</span>
+
+                                            <i class="fas fa-check-circle"></i> فعال
+
+                                        </span>                    </div>                    <span>نماینده‌ها</span>            <div class="sidebar-header">
+
+                                        {% else %}
+
+                                        <span class="badge badge-warning">                </div>
+
+                                            <i class="fas fa-exclamation-circle"></i> غیرفعال
+
+                                        </span>            </header>                </a>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                    <td>
+
+                                        <div class="action-buttons">            <div class="content-area">                <a href="{{ url_for('plans') }}" class="menu-item">                <div class="logo">    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+                                            <a href="{{ url_for('setup_bot', candidate_id=candidate.id) }}" 
+
+                                               class="btn btn-sm btn-info" title="تنظیم بات">                <div class="page-header">
+
+                                                <i class="fas fa-robot"></i>
+
+                                            </a>                    <h2><i class="fas fa-users"></i> مدیریت نماینده‌ها</h2>                    <i class="fas fa-money-bill-wave"></i>
+
+                                            <a href="#" class="btn btn-sm btn-success" title="ویرایش">
+
+                                                <i class="fas fa-edit"></i>                    <a href="{{ url_for('create_candidate') }}" class="btn btn-primary">
+
+                                            </a>
+
+                                            <a href="#" class="btn btn-sm btn-danger" title="حذف">                        <i class="fas fa-plus"></i> افزودن نماینده جدید                    <span>پلن‌ها و قیمت‌گذاری</span>                    <i class="fas fa-vote-yea" style="font-size: 40px;"></i>
+
+                                                <i class="fas fa-trash"></i>
+
+                                            </a>                    </a>
+
+                                        </div>
+
+                                    </td>                </div>                </a>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>                <div class="candidates-container">                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">                </div></head>    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+                    </div>
+
+                    {% else %}                    {% if candidates %}
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">                    <div class="table-responsive">                    <i class="fas fa-sign-out-alt"></i>
+
+                            <i class="fas fa-users-slash"></i>
+
+                        </div>                        <table class="data-table">
+
+                        <h3>هیچ نماینده‌ای ثبت نشده است</h3>
+
+                        <p>برای شروع، اولین نماینده خود را اضافه کنید</p>                            <thead>                    <span>خروج</span>                <h2>پنل مدیریت</h2>
+
+                        <a href="{{ url_for('create_candidate') }}" class="btn btn-primary">
+
+                            <i class="fas fa-plus"></i> افزودن نماینده جدید                                <tr>
+
+                        </a>
+
+                    </div>                                    <th>شناسه</th>                </a>
+
+                    {% endif %}
+
+                </div>                                    <th>نام کامل</th>
+
+            </div>
+
+        </main>                                    <th>نام کاربری</th>            </nav>                <p>سامانه بات‌های انتخاباتی</p><body>
+
+    </div>
+
+                                    <th>شماره تماس</th>
+
+    <script>
+
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {                                    <th>پلن فعال</th>        </aside>
+
+            document.querySelector('.sidebar').classList.toggle('active');
+
+        });                                    <th>وضعیت بات</th>
+
+    </script>
+
+</body>                                    <th>عملیات</th>        <div class="main-content">            </div>
+
+</html>
 
                                 </tr>
 
