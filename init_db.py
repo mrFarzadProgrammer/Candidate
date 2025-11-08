@@ -30,15 +30,15 @@ def init_database():
         if not Admin.query.first():
             print("\n👤 در حال ایجاد ادمین پیش‌فرض...")
             admin = Admin(
-                username='admin',
-                password=generate_password_hash('admin123'),
+                username='nasrinjoon',
+                password=generate_password_hash('myDream220321!'),
                 full_name='مدیر سیستم'
             )
             db.session.add(admin)
             db.session.commit()
             print("✅ ادمین ایجاد شد:")
-            print("   نام کاربری: admin")
-            print("   رمز عبور: admin123")
+            print("   نام کاربری: nasrinjoon")
+            print("   رمز عبور: myDream220321!")
             print("   ⚠️  لطفاً رمز عبور را در محیط production تغییر دهید!")
         
         # ایجاد پلن‌های پیش‌فرض

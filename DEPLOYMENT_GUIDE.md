@@ -156,5 +156,5 @@ tail -f /var/log/nginx/access.log
 ## آدرس‌های دسترسی
 - پنل ادمین: http://78.39.57.188/
 - پنل نماینده: http://78.39.57.188/candidate
-- نام کاربری: admin
-- رمز عبور: admin123
+- نام کاربری: nasrinjoon
+- رمز عبور: myDream220321!

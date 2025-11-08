@@ -182,33 +182,44 @@ chown -R root:www-data /var/www/candidate
 chmod -R 755 /var/www/candidate
 chmod -R 775 /var/www/candidate/uploads
 
-# Step 16: Enable and start services
-echo -e "${YELLOW}🚀 Starting services...${NC}"
+# Step 15: Enable and start services
+echo -e "${YELLOW}🚀 Starting all services...${NC}"
 systemctl daemon-reload
-systemctl enable election-admin
-systemctl enable election-candidate
-systemctl start election-admin
-systemctl start election-candidate
-systemctl restart nginx
+systemctl enable election-admin election-candidate nginx
+systemctl restart election-admin election-candidate nginx
 
-# Step 17: Configure firewall
-echo -e "${YELLOW}🔥 Configuring firewall...${NC}"
+# Step 16: Configure firewall
+echo -e "${YELLOW}� Configuring firewall...${NC}"
 ufw allow 22/tcp
 ufw allow 80/tcp
 ufw allow 443/tcp
 ufw --force enable
 
-# Step 18: Check service status
-echo -e "${GREEN}✅ Checking service status...${NC}"
-echo ""
-echo "Admin Panel:"
-systemctl status election-admin --no-pager | head -n 10
-echo ""
-echo "Candidate Panel:"
-systemctl status election-candidate --no-pager | head -n 10
-echo ""
-echo "Nginx:"
-systemctl status nginx --no-pager | head -n 5
+# Step 17: Check service status
+echo -e "${GREEN}📊 Service Status:${NC}"
+systemctl status election-admin --no-pager -l || true
+systemctl status election-candidate --no-pager -l || true
+systemctl status nginx --no-pager -l || true
+
+# Final message
+echo -e "${GREEN}========================================${NC}"
+echo -e "${GREEN}✅ Deployment Complete!${NC}"
+echo -e "${GREEN}========================================${NC}"
+echo -e ""
+echo -e "📍 Access URLs:"
+echo -e "   Admin Panel: http://78.39.57.188/"
+echo -e "   Candidate Panel: http://78.39.57.188/candidate/"
+echo -e ""
+echo -e "🔐 Admin Login:"
+echo -e "   Username: nasrinjoon"
+echo -e "   Password: myDream220321!"
+echo -e ""
+echo -e "⚠️  Don't forget to:"
+echo -e "   1. Configure domain name and SSL certificate"
+echo -e "   2. Set up database backups"
+echo -e "   3. Monitor logs: journalctl -u election-admin -f"
+echo -e ""
+echo -e "${GREEN}========================================${NC}"
 
 # Final message
 echo ""
