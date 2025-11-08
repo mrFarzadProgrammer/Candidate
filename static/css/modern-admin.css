@@ -772,6 +772,369 @@ table tbody tr:hover {
     background: var(--gray-50);
 }
 
+/* User Info Cell */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-gradient {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgb(35, 159, 64), rgb(218, 0, 0));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(35, 159, 64, 0.3);
+    transition: var(--transition-base);
+}
+
+.avatar-gradient:hover {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(35, 159, 64, 0.4);
+}
+
+/* Badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.badge-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-info {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--info);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badge-secondary {
+    background: rgba(107, 114, 128, 0.1);
+    color: var(--gray-600);
+    border: 1px solid rgba(107, 114, 128, 0.3);
+}
+
+.badge-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.btn-sm {
+    padding: 8px 12px;
+    font-size: 13px;
+    border-radius: 6px;
+}
+
+.btn-sm i {
+    font-size: 14px;
+}
+
+.btn-info {
+    background: linear-gradient(135deg, var(--info), #2563eb);
+    color: white;
+}
+
+.btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success), #059669);
+    color: white;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, var(--danger), #dc2626);
+    color: white;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning), #d97706);
+    color: white;
+}
+
+.btn-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 30px;
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.empty-icon {
+    font-size: 80px;
+    color: var(--gray-300);
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    font-size: 22px;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    font-size: 15px;
+    color: var(--gray-500);
+    margin-bottom: 25px;
+}
+
+/* Data Table Card */
+.table-responsive {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.data-table {
+    width: 100%;
+}
+
+.data-table thead {
+    background: linear-gradient(135deg, rgba(35, 159, 64, 0.1), rgba(218, 0, 0, 0.1));
+}
+
+.data-table th {
+    color: var(--gray-800);
+    font-weight: 700;
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.data-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.data-table tbody tr:hover {
+    background: linear-gradient(90deg, rgba(35, 159, 64, 0.02), transparent);
+}
+
+/* Page Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 25px 30px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.page-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 26px;
+    color: var(--gray-800);
+    margin: 0;
+}
+
+.page-header h2 i {
+    font-size: 30px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-header .btn {
+    gap: 8px;
+}
+
+.page-header .btn i {
+    font-size: 16px;
+}
+
+/* Plans Grid */
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.plan-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 30px;
+    transition: var(--transition-base);
+    border-top: 4px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.plan-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.plan-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+.plan-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.plan-icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 15px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 32px;
+    box-shadow: 0 8px 20px rgba(35, 159, 64, 0.3);
+}
+
+.plan-header h3 {
+    font-size: 22px;
+    color: var(--gray-800);
+    margin: 0;
+}
+
+.plan-price {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.price-amount {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--primary);
+    display: block;
+}
+
+.price-currency {
+    font-size: 16px;
+    color: var(--gray-500);
+    margin-right: 5px;
+}
+
+.plan-duration {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    background: var(--gray-50);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: 20px;
+    color: var(--gray-700);
+    font-weight: 500;
+}
+
+.plan-description {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: rgba(35, 159, 64, 0.05);
+    border-radius: var(--border-radius-sm);
+    border-right: 3px solid var(--primary);
+}
+
+.plan-description p {
+    color: var(--gray-700);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.plan-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.plan-actions .btn {
+    flex: 1;
+}
+
+/* Sidebar Toggle */
+.sidebar-toggle {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--gray-600);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-base);
+    display: none;
+}
+
+.sidebar-toggle:hover {
+    background: var(--gray-100);
+    color: var(--primary);
+}
+
+/* Logo in Sidebar */
+.sidebar .logo {
+    font-size: 48px;
+    margin-bottom: 15px;
+    animation: pulse 3s ease-in-out infinite;
+}
+
 /* ─────────────────────────────────────────────────────────────── 
    9. Responsive Design
    ─────────────────────────────────────────────────────────────── */
@@ -781,7 +1144,7 @@ table tbody tr:hover {
         transform: translateX(100%);
     }
     
-    .sidebar.open {
+    .sidebar.active {
         transform: translateX(0);
     }
     
@@ -792,11 +1155,23 @@ table tbody tr:hover {
     .stats-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
+    
+    .sidebar-toggle {
+        display: block;
+    }
+    
+    .plans-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
 }
 
 @media (max-width: 768px) {
     .topbar {
         padding: 0 20px;
+    }
+    
+    .topbar-left h1 {
+        font-size: 18px;
     }
     
     .content-area {
@@ -813,6 +1188,28 @@ table tbody tr:hover {
     
     .quote-text {
         font-size: 18px;
+    }
+    
+    .page-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .page-header h2 {
+        font-size: 22px;
+    }
+    
+    .plans-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .table-responsive {
+        overflow-x: auto;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
     }
 }
 
