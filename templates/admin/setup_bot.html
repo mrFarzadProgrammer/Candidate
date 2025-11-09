@@ -1,68 +1,79 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>راه‌اندازی بات</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>راه‌اندازی بات - پنل مدیریت</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
 </head>
 <body>
-    <div class="dashboard">
-        <nav class="sidebar">
-            <h2>پنل مدیریت</h2>
-            <ul>
-                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
-                <li><a href="{{ url_for('candidates') }}" class="active">👥 نماینده‌ها</a></li>
-                <li><a href="{{ url_for('plans') }}">💰 پلن‌ها</a></li>
-                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
-            </ul>
-        </nav>
-        
-        <main class="content">
-            <header>
-                <h1>راه‌اندازی بات برای {{ candidate.full_name }}</h1>
-            </header>
-            
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            
-            <div class="alert alert-info">
-                <h3>📝 راهنما:</h3>
-                <ol>
-                    <li>در تلگرام به <a href="https://t.me/BotFather" target="_blank">@BotFather</a> بروید</li>
-                    <li>دستور <code>/newbot</code> را ارسال کنید</li>
-                    <li>نام و username بات را وارد کنید</li>
-                    <li>توکن دریافتی را در فرم زیر وارد کنید</li>
-                </ol>
-                <p><a href="{{ url_for('static', filename='docs/BOTFATHER_GUIDE.md') }}" target="_blank">راهنمای تصویری مشاهده شود</a></p>
-            </div>
-            
-            <div class="section">
-                <form method="POST">
-                    <div class="form-group">
-                        <label>توکن بات *</label>
-                        <input type="text" name="bot_token" required placeholder="1234567890:ABCdefGHIjklMNOpqrs" dir="ltr" style="text-align: left; font-family: monospace;">
-                        <small>مثال: 1234567890:ABCdefGHIjklMNOpqrsTUVwxyz</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Username بات *</label>
-                        <input type="text" name="bot_username" required placeholder="candidate_bot" dir="ltr" style="text-align: left;">
-                        <small>بدون @ - مثال: ahmad_election_bot</small>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">🚀 راه‌اندازی بات</button>
-                    <a href="{{ url_for('candidates') }}" class="btn btn-secondary">انصراف</a>
-                </form>
-            </div>
-        </main>
-    </div>
+<div class="dashboard-wrapper">
+<aside class="sidebar">
+<div class="sidebar-header">
+<div class="logo"><i class="fas fa-vote-yea" style="font-size:40px;"></i></div>
+<h2>پنل مدیریت</h2>
+<p>سامانه بات‌های انتخاباتی</p>
+</div>
+<nav class="sidebar-menu">
+<a href="{{ url_for('dashboard') }}" class="menu-item"><i class="fas fa-chart-line"></i><span>داشبورد</span></a>
+<a href="{{ url_for('candidates') }}" class="menu-item active"><i class="fas fa-users"></i><span>نماینده‌ها</span></a>
+<a href="{{ url_for('plans') }}" class="menu-item"><i class="fas fa-money-bill-wave"></i><span>پلن‌ها</span></a>
+<a href="{{ url_for('logout') }}" class="menu-item" style="margin-top:auto;"><i class="fas fa-sign-out-alt"></i><span>خروج</span></a>
+</nav>
+</aside>
+<div class="main-content">
+<div class="topbar">
+<div class="topbar-left"><h1>راه‌اندازی بات: {{ candidate.full_name }}</h1></div>
+<div class="topbar-right"><div class="user-profile"><i class="fas fa-user-circle"></i><span>{{ session.admin_username }}</span></div></div>
+</div>
+<div class="content-area">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<div class="card">
+<div class="card-header" style="background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;">
+<h2><i class="fas fa-robot"></i> راهنمای BotFather</h2>
+</div>
+<div class="card-body">
+<div style="background:#eff6ff;border-right:4px solid #3b82f6;padding:20px;margin-bottom:25px;border-radius:8px;">
+<h3 style="margin-top:0;color:#1e40af;"><i class="fas fa-info-circle"></i> مراحل ایجاد بات:</h3>
+<ol style="line-height:2;margin-right:20px;color:#1e3a8a;">
+<li>در تلگرام به <a href="https://t.me/BotFather" target="_blank" style="color:#2563eb;font-weight:bold;">@BotFather</a> بروید</li>
+<li>دستور <code style="background:#dbeafe;padding:3px 8px;border-radius:4px;color:#1e40af;">/newbot</code> را ارسال کنید</li>
+<li>نام بات را وارد کنید (مثال: بات علی احمدی)</li>
+<li>Username بات (باید به bot_ ختم شود)</li>
+<li>توکن دریافتی را کپی کنید</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="card-header"><h2><i class="fas fa-cog"></i> اطلاعات بات</h2></div>
+<div class="card-body">
+<form method="POST" class="form-modern">
+<div class="form-group">
+<label for="bot_token"><i class="fas fa-key"></i> توکن بات *</label>
+<input type="text" id="bot_token" name="bot_token" class="form-control" placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz" required style="font-family:monospace;">
+<small class="form-hint">توکن دریافتی از BotFather</small>
+</div>
+<div class="form-group">
+<label for="bot_username"><i class="fas fa-at"></i> نام کاربری بات *</label>
+<input type="text" id="bot_username" name="bot_username" class="form-control" placeholder="ali_ahmadi_bot" required>
+<small class="form-hint">باید به _bot ختم شود</small>
+</div>
+<div class="form-actions">
+<button type="submit" class="btn btn-success"><i class="fas fa-rocket"></i> راه‌اندازی بات</button>
+<a href="{{ url_for('candidates') }}" class="btn btn-secondary"><i class="fas fa-arrow-right"></i> بازگشت</a>
+</div>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
 </body>
 </html>
