@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ویرایش نماینده</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo"><i class="fas fa-vote-yea"></i></div>
+                <h2>پنل مدیریت</h2>
+                <p>سامانه باتهای انتخاباتی</p>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item"><i class="fas fa-chart-line"></i><span>داشبورد</span></a>
+                <a href="{{ url_for('candidates') }}" class="menu-item active"><i class="fas fa-users"></i><span>نمایندهها</span></a>
+                <a href="{{ url_for('plans') }}" class="menu-item"><i class="fas fa-tags"></i><span>پلنها</span></a>
+                <a href="{{ url_for('logout') }}" class="menu-item"><i class="fas fa-sign-out-alt"></i><span>خروج</span></a>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+                    <h1>ویرایش نماینده</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile"><i class="fas fa-user-circle"></i><span>مدیر سیستم</span></div>
+                </div>
+            </header>
+            <div class="content-area">
+                <div class="page-header">
+                    <h2><i class="fas fa-edit"></i> ویرایش اطلاعات نماینده</h2>
+                    <a href="{{ url_for('candidates') }}" class="btn btn-secondary"><i class="fas fa-arrow-right"></i> بازگشت</a>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3>اطلاعات نماینده: {{ candidate.full_name }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="form-group">
+                                <label><i class="fas fa-user"></i> نام و نام خانوادگی</label>
+                                <input type="text" name="full_name" class="form-control" value="{{ candidate.full_name }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-id-badge"></i> نام کاربری (غیرقابل تغییر)</label>
+                                <input type="text" class="form-control" value="{{ candidate.username }}" disabled>
+                                <small class="form-text">نام کاربری پس از ایجاد قابل تغییر نیست</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-phone"></i> شماره تلفن</label>
+                                <input type="text" name="phone" class="form-control" value="{{ candidate.phone }}" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-lock"></i> رمز عبور جدید (اختیاری)</label>
+                                <input type="password" name="password" class="form-control" placeholder="فقط در صورت تغییر رمز عبور پر کنید" style="direction:ltr;text-align:left;">
+                                <small class="form-text">اگر می‌خواهید رمز عبور تغییر نکند، این فیلد را خالی بگذارید</small>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> ذخیره تغییرات
+                                </button>
+                                <a href="{{ url_for('candidates') }}" class="btn btn-secondary">
+                                    <i class="fas fa-times"></i> انصراف
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-robot"></i> اطلاعات بات</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if candidate.bot_token %}
+                            <div class="info-group">
+                                <p><strong>نام کاربری بات:</strong> @{{ candidate.bot_username }}</p>
+                                <p><strong>وضعیت:</strong> <span class="badge badge-success"><i class="fas fa-check-circle"></i> فعال</span></p>
+                            </div>
+                            <a href="{{ url_for('setup_bot', candidate_id=candidate.id) }}" class="btn btn-info">
+                                <i class="fas fa-cog"></i> تنظیمات بات
+                            </a>
+                        {% else %}
+                            <p class="text-muted">هنوز بات برای این نماینده راه‌اندازی نشده است.</p>
+                            <a href="{{ url_for('setup_bot', candidate_id=candidate.id) }}" class="btn btn-primary">
+                                <i class="fas fa-robot"></i> راه‌اندازی بات
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.querySelector('.sidebar-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

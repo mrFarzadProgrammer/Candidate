@@ -54,7 +54,7 @@
                                 <td>{{candidate.phone}}</td>
                                 <td>{%if candidate.plan%}<span class="badge badge-info">{{candidate.plan.name}}</span>{%else%}<span class="badge badge-secondary">بدون پلن</span>{%endif%}</td>
                                 <td>{%if candidate.bot_token%}<span class="badge badge-success"><i class="fas fa-check-circle"></i> فعال</span>{%else%}<span class="badge badge-warning"><i class="fas fa-times-circle"></i> غیرفعال</span>{%endif%}</td>
-                                <td><div class="action-buttons"><a href="{{url_for('setup_bot',candidate_id=candidate.id)}}" class="btn btn-sm btn-info"><i class="fas fa-robot"></i></a><a href="#" class="btn btn-sm btn-success"><i class="fas fa-edit"></i></a><a href="#" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a></div></td>
+                                <td><div class="action-buttons"><a href="{{url_for('setup_bot',candidate_id=candidate.id)}}" class="btn btn-sm btn-info" title="تنظیمات بات"><i class="fas fa-robot"></i></a><a href="{{url_for('edit_candidate',candidate_id=candidate.id)}}" class="btn btn-sm btn-success" title="ویرایش"><i class="fas fa-edit"></i></a><form method="POST" action="{{url_for('delete_candidate',candidate_id=candidate.id)}}" style="display:inline;" onsubmit="return confirm('آیا از حذف این نماینده مطمئن هستید؟');"><button type="submit" class="btn btn-sm btn-danger" title="حذف"><i class="fas fa-trash"></i></button></form></div></td>
                             </tr>
                             {%endfor%}
                         </tbody>

@@ -135,15 +135,25 @@ def setup_bot(candidate_id):
         bot_token = request.form.get('bot_token')
         bot_username = request.form.get('bot_username')
         
-        # ایجاد نمونه بات
-        bot_instance = BotInstance(
-            candidate_id=candidate.id,
-            bot_token=bot_token,
-            bot_username=bot_username,
-            is_active=True
-        )
+        # بروزرسانی توکن بات در نماینده
+        candidate.bot_token = bot_token
+        candidate.bot_username = bot_username
         
-        db.session.add(bot_instance)
+        # ایجاد نمونه بات
+        bot_instance = BotInstance.query.filter_by(candidate_id=candidate.id).first()
+        if not bot_instance:
+            bot_instance = BotInstance(
+                candidate_id=candidate.id,
+                bot_token=bot_token,
+                bot_username=bot_username,
+                is_active=True
+            )
+            db.session.add(bot_instance)
+        else:
+            bot_instance.bot_token = bot_token
+            bot_instance.bot_username = bot_username
+            bot_instance.is_active = True
+        
         db.session.commit()
         
         # راه‌اندازی بات
@@ -156,6 +166,50 @@ def setup_bot(candidate_id):
         return redirect(url_for('candidates'))
     
     return render_template('setup_bot.html', candidate=candidate)
+
+
+@app.route('/candidate/<int:candidate_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_candidate(candidate_id):
+    """ویرایش اطلاعات نماینده"""
+    candidate = Candidate.query.get_or_404(candidate_id)
+    
+    if request.method == 'POST':
+        full_name = request.form.get('full_name')
+        phone = request.form.get('phone')
+        password = request.form.get('password')
+        
+        candidate.full_name = full_name
+        candidate.phone = phone
+        
+        # اگر رمز عبور جدید وارد شده، آن را بروز کن
+        if password:
+            candidate.password = generate_password_hash(password)
+        
+        db.session.commit()
+        flash(f'اطلاعات {full_name} با موفقیت بروزرسانی شد', 'success')
+        return redirect(url_for('candidates'))
+    
+    plans = Plan.query.all()
+    return render_template('edit_candidate.html', candidate=candidate, plans=plans)
+
+
+@app.route('/candidate/<int:candidate_id>/delete', methods=['POST'])
+@login_required
+def delete_candidate(candidate_id):
+    """حذف نماینده"""
+    candidate = Candidate.query.get_or_404(candidate_id)
+    full_name = candidate.full_name
+    
+    # حذف بات‌های مرتبط
+    BotInstance.query.filter_by(candidate_id=candidate_id).delete()
+    
+    # حذف نماینده
+    db.session.delete(candidate)
+    db.session.commit()
+    
+    flash(f'نماینده {full_name} با موفقیت حذف شد', 'success')
+    return redirect(url_for('candidates'))
 
 
 @app.route('/plans')
