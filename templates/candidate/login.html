@@ -4,18 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ورود - پنل نماینده</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="login-page">
     <div class="login-container">
         <div class="login-box">
-            <h1>👤 پنل نماینده</h1>
-            <p>مدیریت اطلاعات و محتوای بات انتخاباتی</p>
+            <div class="login-header">
+                <div class="logo-circle">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h2>پنل اختصاصی نماینده</h2>
+                <p>مدیریت رزومه، برنامه‌ها و ارتباط با رای‌دهندگان</p>
+            </div>
             
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
+                        <div class="alert alert-{{ category }}" style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: {% if category == 'success' %}#10b981{% elif category == 'error' or category == 'danger' %}#ef4444{% else %}#3b82f6{% endif %}; color: white; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' or category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
                             {{ message }}
                         </div>
                     {% endfor %}
@@ -24,17 +31,24 @@
             
             <form method="POST" action="{{ url_for('login') }}">
                 <div class="form-group">
-                    <label>نام کاربری</label>
-                    <input type="text" name="username" required autofocus>
+                    <label><i class="fas fa-user"></i> نام کاربری</label>
+                    <input type="text" name="username" required autofocus placeholder="نام کاربری خود را وارد کنید" dir="ltr">
                 </div>
                 
                 <div class="form-group">
-                    <label>رمز عبور</label>
-                    <input type="password" name="password" required>
+                    <label><i class="fas fa-lock"></i> رمز عبور</label>
+                    <input type="password" name="password" required placeholder="رمز عبور خود را وارد کنید" dir="ltr">
                 </div>
                 
-                <button type="submit" class="btn btn-primary">ورود</button>
+                <button type="submit" class="btn btn-primary btn-login">
+                    <i class="fas fa-sign-in-alt"></i>
+                    ورود به پنل
+                </button>
             </form>
+            
+            <div class="login-footer">
+                <p><i class="fas fa-shield-alt"></i> ورود امن با رمزنگاری SSL</p>
+            </div>
         </div>
     </div>
 </body>

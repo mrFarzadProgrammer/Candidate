@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}پنل نماینده{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>پنل نماینده</h2>
+                <p>{{ candidate.full_name }}</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('profile') }}" class="menu-item {% if request.endpoint == 'profile' %}active{% endif %}">
+                    <i class="fas fa-user-circle"></i>
+                    <span>اطلاعات شخصی</span>
+                </a>
+                <a href="{{ url_for('resume') }}" class="menu-item {% if request.endpoint == 'resume' %}active{% endif %}">
+                    <i class="fas fa-file-alt"></i>
+                    <span>رزومه</span>
+                </a>
+                <a href="{{ url_for('programs') }}" class="menu-item {% if request.endpoint == 'programs' %}active{% endif %}">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>برنامه‌های انتخاباتی</span>
+                </a>
+                <a href="{{ url_for('headquarters') }}" class="menu-item {% if request.endpoint == 'headquarters' %}active{% endif %}">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ستادها و دفاتر</span>
+                </a>
+                <a href="{{ url_for('messages') }}" class="menu-item {% if request.endpoint == 'messages' %}active{% endif %}">
+                    <i class="fas fa-envelope"></i>
+                    <span>پیام‌های کاربران</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>{% block page_title %}پنل نماینده{% endblock %}</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            {{ candidate.full_name[0]|upper }}
+                        </div>
+                        <div class="user-info">
+                            <h4>{{ candidate.full_name }}</h4>
+                            <p>نماینده انتخاباتی</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: {% if category == 'success' %}#10b981{% elif category == 'error' or category == 'danger' %}#ef4444{% else %}#3b82f6{% endif %}; color: white; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' or category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sidebar Toggle for Mobile
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Close sidebar when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+        
+        {% block extra_js %}{% endblock %}
+    </script>
+</body>
+</html>

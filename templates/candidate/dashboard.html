@@ -1,89 +1,419 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>داشبورد - پنل نماینده</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="dashboard">
-        <nav class="sidebar">
-            <h2>پنل نماینده</h2>
-            <ul>
-                <li><a href="{{ url_for('dashboard') }}" class="active">📊 داشبورد</a></li>
-                <li><a href="{{ url_for('profile') }}">👤 اطلاعات شخصی</a></li>
-                <li><a href="{{ url_for('resume') }}">📋 رزومه</a></li>
-                <li><a href="{{ url_for('programs') }}">📢 برنامه‌ها</a></li>
-                <li><a href="{{ url_for('headquarters') }}">📍 ستادها</a></li>
-                <li><a href="{{ url_for('messages') }}">💬 پیام‌ها</a></li>
-                <li><a href="{{ url_for('analytics') }}">📈 آمار</a></li>
-                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
-            </ul>
-        </nav>
-        
-        <main class="content">
-            <header>
-                <h1>داشبورد</h1>
-                <p>سلام {{ candidate.full_name }} عزیز</p>
-            </header>
-            
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            
-            <div class="stats">
-                <div class="stat-card">
-                    <h3>{{ total_messages }}</h3>
-                    <p>کل پیام‌ها</p>
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="fa" dir="rtl"><html lang="fa" dir="rtl">
+
+<head><head>
+
+    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>داشبورد - پنل نماینده</title>    <title>داشبورد - پنل نماینده</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
+
+</head><body>
+
+<body>    <div class="dashboard">
+
+    <div class="dashboard-wrapper">        <nav class="sidebar">
+
+        <!-- Sidebar -->            <h2>پنل نماینده</h2>
+
+        <aside class="sidebar">            <ul>
+
+            <div class="sidebar-header">                <li><a href="{{ url_for('dashboard') }}" class="active">📊 داشبورد</a></li>
+
+                <div class="logo">                <li><a href="{{ url_for('profile') }}">👤 اطلاعات شخصی</a></li>
+
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>                <li><a href="{{ url_for('resume') }}">📋 رزومه</a></li>
+
+                </div>                <li><a href="{{ url_for('programs') }}">📢 برنامه‌ها</a></li>
+
+                <h2>پنل نماینده</h2>                <li><a href="{{ url_for('headquarters') }}">📍 ستادها</a></li>
+
+                <p>{{ candidate.full_name }}</p>                <li><a href="{{ url_for('messages') }}">💬 پیام‌ها</a></li>
+
+            </div>                <li><a href="{{ url_for('analytics') }}">📈 آمار</a></li>
+
+                            <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+
+            <nav class="sidebar-menu">            </ul>
+
+                <a href="{{ url_for('dashboard') }}" class="menu-item active">        </nav>
+
+                    <i class="fas fa-home"></i>        
+
+                    <span>داشبورد</span>        <main class="content">
+
+                </a>            <header>
+
+                <a href="{{ url_for('profile') }}" class="menu-item">                <h1>داشبورد</h1>
+
+                    <i class="fas fa-user-circle"></i>                <p>سلام {{ candidate.full_name }} عزیز</p>
+
+                    <span>اطلاعات شخصی</span>            </header>
+
+                </a>            
+
+                <a href="{{ url_for('resume') }}" class="menu-item">            {% with messages = get_flashed_messages(with_categories=true) %}
+
+                    <i class="fas fa-file-alt"></i>                {% if messages %}
+
+                    <span>رزومه</span>                    {% for category, message in messages %}
+
+                </a>                        <div class="alert alert-{{ category }}">
+
+                <a href="{{ url_for('programs') }}" class="menu-item">                            {{ message }}
+
+                    <i class="fas fa-bullhorn"></i>                        </div>
+
+                    <span>برنامه‌های انتخاباتی</span>                    {% endfor %}
+
+                </a>                {% endif %}
+
+                <a href="{{ url_for('headquarters') }}" class="menu-item">            {% endwith %}
+
+                    <i class="fas fa-map-marker-alt"></i>            
+
+                    <span>ستادها و دفاتر</span>            <div class="stats">
+
+                </a>                <div class="stat-card">
+
+                <a href="{{ url_for('messages') }}" class="menu-item">                    <h3>{{ total_messages }}</h3>
+
+                    <i class="fas fa-envelope"></i>                    <p>کل پیام‌ها</p>
+
+                    <span>پیام‌های کاربران</span>                </div>
+
+                    {% if unread_messages > 0 %}                
+
+                    <span class="badge badge-danger">{{ unread_messages }}</span>                <div class="stat-card highlight">
+
+                    {% endif %}                    <h3>{{ unread_messages }}</h3>
+
+                </a>                    <p>پیام‌های جدید</p>
+
+                <a href="{{ url_for('logout') }}" class="menu-item">                </div>
+
+                    <i class="fas fa-sign-out-alt"></i>            </div>
+
+                    <span>خروج</span>            
+
+                </a>            {% if candidate.bot_instance %}
+
+            </nav>            <div class="bot-info">
+
+        </aside>                <h2>🤖 اطلاعات بات شما</h2>
+
+                        <p><strong>نام کاربری:</strong> @{{ candidate.bot_instance.bot_username }}</p>
+
+        <!-- Main Content -->                <p><strong>وضعیت:</strong> 
+
+        <div class="main-content">                    {% if candidate.bot_instance.is_active %}
+
+            <!-- Topbar -->                        <span class="badge badge-success">فعال</span>
+
+            <div class="topbar">                    {% else %}
+
+                <div class="topbar-left">                        <span class="badge badge-danger">غیرفعال</span>
+
+                    <button class="sidebar-toggle" id="sidebarToggle">                    {% endif %}
+
+                        <i class="fas fa-bars"></i>                </p>
+
+                    </button>                <a href="https://t.me/{{ candidate.bot_instance.bot_username }}" target="_blank" class="btn btn-primary">
+
+                    <h1>داشبورد</h1>                    مشاهده بات در تلگرام
+
+                </div>                </a>
+
+                <div class="topbar-right">            </div>
+
+                    <div class="user-profile">            {% else %}
+
+                        <div class="user-avatar">            <div class="alert alert-warning">
+
+                            {{ candidate.full_name[0]|upper }}                <p>هنوز بات برای شما راه‌اندازی نشده است. با مدیر سیستم تماس بگیرید.</p>
+
+                        </div>            </div>
+
+                        <div class="user-info">            {% endif %}
+
+                            <h4>{{ candidate.full_name }}</h4>            
+
+                            <p>نماینده انتخاباتی</p>            <div class="section">
+
+                        </div>                <h2>پلن‌های فعال</h2>
+
+                    </div>                {% if candidate.plans %}
+
+                </div>                <ul class="plans-list">
+
+            </div>                    {% for plan in candidate.plans %}
+
+                                <li>✅ {{ plan.name }}</li>
+
+            <!-- Content Area -->                    {% endfor %}
+
+            <div class="content-area">                </ul>
+
+                <!-- Flash Messages -->                {% else %}
+
+                {% with messages = get_flashed_messages(with_categories=true) %}                <p>هیچ پلن اضافی فعال نیست.</p>
+
+                    {% if messages %}                {% endif %}
+
+                        {% for category, message in messages %}            </div>
+
+                            <div class="alert alert-{{ category }}" style="margin-bottom: 20px; padding: 15px; border-radius: 12px; background: {% if category == 'success' %}#10b981{% elif category == 'error' or category == 'danger' %}#ef4444{% else %}#3b82f6{% endif %}; color: white; display: flex; align-items: center; gap: 10px;">        </main>
+
+                                <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' or category == 'danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>    </div>
+
+                                {{ message }}</body>
+
+                            </div></html>
+
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h2>خوش آمدید {{ candidate.full_name }} عزیز</h2>
+                    <div class="breadcrumb">
+                        <span>داشبورد</span>
+                    </div>
                 </div>
                 
-                <div class="stat-card highlight">
-                    <h3>{{ unread_messages }}</h3>
-                    <p>پیام‌های جدید</p>
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="stat-card-body">
+                            <h3>{{ total_messages }}</h3>
+                            <p>کل پیام‌ها</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card highlight">
+                        <div class="stat-card-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="stat-card-body">
+                            <h3>{{ unread_messages }}</h3>
+                            <p>پیام‌های جدید</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-card-body">
+                            <h3>0</h3>
+                            <p>کاربران بات</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="stat-card-body">
+                            <h3>
+                                {% if candidate.bot_token %}
+                                <span style="color: #10b981;">فعال</span>
+                                {% else %}
+                                <span style="color: #ef4444;">غیرفعال</span>
+                                {% endif %}
+                            </h3>
+                            <p>وضعیت بات</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bot Info Section -->
+                <div class="row" style="margin-top: 30px;">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-robot"></i> اطلاعات بات تلگرام</h3>
+                            </div>
+                            <div class="card-body">
+                                {% if candidate.bot_token %}
+                                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                                        <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-size: 28px;">
+                                            <i class="fab fa-telegram-plane"></i>
+                                        </div>
+                                        <div>
+                                            <h4 style="margin: 0; color: #333; font-size: 18px;">@{{ candidate.bot_username }}</h4>
+                                            <p style="margin: 5px 0 0 0; color: #666;">بات اختصاصی شما</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="background: #f8f9fa; border-radius: 12px; padding: 15px; margin-bottom: 15px;">
+                                        <p style="margin: 0; color: #666; font-size: 14px;">
+                                            <i class="fas fa-circle" style="color: #10b981; font-size: 10px;"></i>
+                                            بات شما فعال و آماده دریافت پیام از کاربران است
+                                        </p>
+                                    </div>
+                                    
+                                    <a href="https://t.me/{{ candidate.bot_username }}" target="_blank" class="btn btn-primary" style="width: 100%;">
+                                        <i class="fab fa-telegram-plane"></i>
+                                        مشاهده بات در تلگرام
+                                    </a>
+                                {% else %}
+                                    <div class="alert alert-warning" style="background: #fff3cd; border: 1px solid #ffc107; border-radius: 12px; padding: 20px; color: #856404;">
+                                        <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
+                                        <p style="margin: 0; font-size: 14px;">هنوز بات برای شما راه‌اندازی نشده است. لطفاً با مدیر سیستم تماس بگیرید.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-tags"></i> پلن فعال</h3>
+                            </div>
+                            <div class="card-body">
+                                {% if candidate.plan %}
+                                    <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 20px; color: white; margin-bottom: 15px;">
+                                        <h4 style="margin: 0 0 10px 0; font-size: 20px;">
+                                            <i class="fas fa-crown"></i> {{ candidate.plan.name }}
+                                        </h4>
+                                        <p style="margin: 0; opacity: 0.9; font-size: 14px;">{{ candidate.plan.description }}</p>
+                                    </div>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                        <div style="background: #f8f9fa; border-radius: 8px; padding: 12px; text-align: center;">
+                                            <p style="margin: 0; color: #666; font-size: 12px;">قیمت ماهانه</p>
+                                            <h4 style="margin: 5px 0 0 0; color: #333;">{{ "{:,}".format(candidate.plan.price) }} تومان</h4>
+                                        </div>
+                                        <div style="background: #f8f9fa; border-radius: 8px; padding: 12px; text-align: center;">
+                                            <p style="margin: 0; color: #666; font-size: 12px;">ویژگی‌ها</p>
+                                            <h4 style="margin: 5px 0 0 0; color: #333;">کامل</h4>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <p style="color: #666; text-align: center; padding: 40px 20px;">
+                                        <i class="fas fa-box-open" style="font-size: 48px; color: #ddd; margin-bottom: 15px; display: block;"></i>
+                                        هیچ پلن اضافی فعال نیست
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="card" style="margin-top: 30px;">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bolt"></i> دسترسی سریع</h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                            <a href="{{ url_for('resume') }}" class="quick-action-btn">
+                                <i class="fas fa-file-alt"></i>
+                                <span>ویرایش رزومه</span>
+                            </a>
+                            <a href="{{ url_for('programs') }}" class="quick-action-btn">
+                                <i class="fas fa-bullhorn"></i>
+                                <span>برنامه‌های انتخاباتی</span>
+                            </a>
+                            <a href="{{ url_for('headquarters') }}" class="quick-action-btn">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>مدیریت ستادها</span>
+                            </a>
+                            <a href="{{ url_for('messages') }}" class="quick-action-btn">
+                                <i class="fas fa-envelope"></i>
+                                <span>مشاهده پیام‌ها</span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            
-            {% if candidate.bot_instance %}
-            <div class="bot-info">
-                <h2>🤖 اطلاعات بات شما</h2>
-                <p><strong>نام کاربری:</strong> @{{ candidate.bot_instance.bot_username }}</p>
-                <p><strong>وضعیت:</strong> 
-                    {% if candidate.bot_instance.is_active %}
-                        <span class="badge badge-success">فعال</span>
-                    {% else %}
-                        <span class="badge badge-danger">غیرفعال</span>
-                    {% endif %}
-                </p>
-                <a href="https://t.me/{{ candidate.bot_instance.bot_username }}" target="_blank" class="btn btn-primary">
-                    مشاهده بات در تلگرام
-                </a>
-            </div>
-            {% else %}
-            <div class="alert alert-warning">
-                <p>هنوز بات برای شما راه‌اندازی نشده است. با مدیر سیستم تماس بگیرید.</p>
-            </div>
-            {% endif %}
-            
-            <div class="section">
-                <h2>پلن‌های فعال</h2>
-                {% if candidate.plans %}
-                <ul class="plans-list">
-                    {% for plan in candidate.plans %}
-                    <li>✅ {{ plan.name }}</li>
-                    {% endfor %}
-                </ul>
-                {% else %}
-                <p>هیچ پلن اضافی فعال نیست.</p>
-                {% endif %}
-            </div>
-        </main>
+        </div>
     </div>
+    
+    <style>
+        .quick-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--gray-50), white);
+            border: 2px solid var(--gray-200);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--gray-700);
+            transition: all 0.3s ease;
+            gap: 12px;
+        }
+        
+        .quick-action-btn:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+        
+        .quick-action-btn i {
+            font-size: 32px;
+        }
+        
+        .quick-action-btn span {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .row {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .col-lg-6 {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            
+            .col-lg-6 {
+                width: 100%;
+            }
+        }
+    </style>
+    
+    <script>
+        // Sidebar Toggle for Mobile
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Close sidebar when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
