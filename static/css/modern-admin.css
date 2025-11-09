@@ -565,6 +565,12 @@ input::placeholder {
     z-index: 999;
 }
 
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .topbar-left h1 {
     font-size: 24px;
     color: var(--gray-800);
@@ -1250,20 +1256,22 @@ table tbody tr:hover {
 
 /* Sidebar Toggle */
 .sidebar-toggle {
-    background: none;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
     border: none;
-    font-size: 24px;
-    color: var(--gray-600);
+    font-size: 20px;
+    color: white;
     cursor: pointer;
-    padding: 8px;
+    padding: 10px 14px;
     border-radius: var(--border-radius-sm);
     transition: var(--transition-base);
-    display: none;
+    display: none; /* Hidden on desktop */
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    margin-left: 15px;
 }
 
 .sidebar-toggle:hover {
-    background: var(--gray-100);
-    color: var(--primary);
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
 }
 
 /* Logo in Sidebar */
@@ -1439,7 +1447,9 @@ table tbody tr:hover {
     }
     
     .sidebar-toggle {
-        display: block;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -1461,14 +1471,14 @@ table tbody tr:hover {
     }
     
     .sidebar-toggle {
-        display: flex;
+        display: flex !important;
         align-items: center;
         justify-content: center;
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         background: linear-gradient(135deg, #6366f1, #ec4899);
         border: none;
-        border-radius: 10px;
+        border-radius: 12px;
         color: white;
         cursor: pointer;
         font-size: 20px;

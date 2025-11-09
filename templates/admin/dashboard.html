@@ -44,6 +44,9 @@
             <!-- Topbar -->
             <div class="topbar">
                 <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <h1>داشبورد</h1>
                 </div>
                 <div class="topbar-right">
@@ -301,6 +304,23 @@
                 showQuote(currentQuote);
             });
         });
+        
+        // Sidebar Toggle for Mobile
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Close sidebar when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
     </script>
 </body>
 </html>
