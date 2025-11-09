@@ -34,20 +34,51 @@
 {% endfor %}
 {% endif %}
 {% endwith %}
-<div class="card">
-<div class="card-header" style="background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;">
-<h2><i class="fas fa-robot"></i> راهنمای BotFather</h2>
+<div class="card" style="border:none;overflow:hidden;">
+<div class="card-header" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:30px;border:none;">
+<h2 style="margin:0;font-size:24px;"><i class="fas fa-robot" style="font-size:28px;margin-left:10px;"></i> راهنمای راه‌اندازی بات تلگرام</h2>
+<p style="margin:10px 0 0 0;opacity:0.9;font-size:14px;">مراحل ساده برای ایجاد بات اختصاصی شما</p>
 </div>
-<div class="card-body">
-<div style="background:#eff6ff;border-right:4px solid #3b82f6;padding:20px;margin-bottom:25px;border-radius:8px;">
-<h3 style="margin-top:0;color:#1e40af;"><i class="fas fa-info-circle"></i> مراحل ایجاد بات:</h3>
-<ol style="line-height:2;margin-right:20px;color:#1e3a8a;">
-<li>در تلگرام به <a href="https://t.me/BotFather" target="_blank" style="color:#2563eb;font-weight:bold;">@BotFather</a> بروید</li>
-<li>دستور <code style="background:#dbeafe;padding:3px 8px;border-radius:4px;color:#1e40af;">/newbot</code> را ارسال کنید</li>
-<li>نام بات را وارد کنید (مثال: بات علی احمدی)</li>
-<li>Username بات (باید به bot_ ختم شود)</li>
-<li>توکن دریافتی را کپی کنید</li>
-</ol>
+<div class="card-body" style="padding:0;">
+<div style="padding:30px;background:#f8fafc;">
+<div style="display:grid;gap:20px;">
+<div style="background:white;padding:25px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-right:4px solid #667eea;transition:transform 0.3s,box-shadow 0.3s;" onmouseover="this.style.transform='translateX(-5px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+<div style="display:flex;align-items:center;margin-bottom:15px;">
+<div style="width:40px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:18px;flex-shrink:0;">1</div>
+<h3 style="margin:0 15px;color:#1e293b;font-size:18px;font-weight:600;">وارد تلگرام شوید</h3>
+</div>
+<p style="margin:0 0 0 55px;color:#64748b;line-height:1.8;font-size:15px;">در تلگرام به <a href="https://t.me/BotFather" target="_blank" style="color:#667eea;font-weight:600;text-decoration:none;border-bottom:2px solid #667eea;transition:color 0.3s;">@BotFather</a> بروید و گفتگو را شروع کنید.</p>
+</div>
+<div style="background:white;padding:25px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-right:4px solid #764ba2;transition:transform 0.3s,box-shadow 0.3s;" onmouseover="this.style.transform='translateX(-5px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+<div style="display:flex;align-items:center;margin-bottom:15px;">
+<div style="width:40px;height:40px;background:linear-gradient(135deg,#764ba2,#667eea);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:18px;flex-shrink:0;">2</div>
+<h3 style="margin:0 15px;color:#1e293b;font-size:18px;font-weight:600;">ارسال دستور ایجاد</h3>
+</div>
+<p style="margin:0 0 10px 55px;color:#64748b;line-height:1.8;font-size:15px;">دستور زیر را ارسال کنید:</p>
+<div style="margin:0 0 0 55px;background:#f1f5f9;padding:12px 16px;border-radius:8px;border:1px solid #e2e8f0;font-family:monospace;font-size:16px;color:#475569;display:inline-block;">/newbot</div>
+</div>
+<div style="background:white;padding:25px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-right:4px solid #667eea;transition:transform 0.3s,box-shadow 0.3s;" onmouseover="this.style.transform='translateX(-5px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+<div style="display:flex;align-items:center;margin-bottom:15px;">
+<div style="width:40px;height:40px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:18px;flex-shrink:0;">3</div>
+<h3 style="margin:0 15px;color:#1e293b;font-size:18px;font-weight:600;">انتخاب نام بات</h3>
+</div>
+<p style="margin:0 0 0 55px;color:#64748b;line-height:1.8;font-size:15px;">نام فارسی بات را وارد کنید <span style="background:#dbeafe;padding:3px 8px;border-radius:4px;font-size:13px;color:#0369a1;font-weight:500;">مثال: بات علی احمدی</span></p>
+</div>
+<div style="background:white;padding:25px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-right:4px solid #764ba2;transition:transform 0.3s,box-shadow 0.3s;" onmouseover="this.style.transform='translateX(-5px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+<div style="display:flex;align-items:center;margin-bottom:15px;">
+<div style="width:40px;height:40px;background:linear-gradient(135deg,#764ba2,#667eea);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:18px;flex-shrink:0;">4</div>
+<h3 style="margin:0 15px;color:#1e293b;font-size:18px;font-weight:600;">تعیین نام کاربری</h3>
+</div>
+<p style="margin:0 0 0 55px;color:#64748b;line-height:1.8;font-size:15px;">Username انگلیسی که باید به <span style="background:#fef3c7;padding:3px 8px;border-radius:4px;font-size:13px;color:#92400e;font-weight:600;">bot_</span> ختم شود <span style="background:#dbeafe;padding:3px 8px;border-radius:4px;font-size:13px;color:#0369a1;font-weight:500;">مثال: ali_ahmadi_bot</span></p>
+</div>
+<div style="background:white;padding:25px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-right:4px solid #10b981;transition:transform 0.3s,box-shadow 0.3s;" onmouseover="this.style.transform='translateX(-5px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.12)';" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)';">
+<div style="display:flex;align-items:center;margin-bottom:15px;">
+<div style="width:40px;height:40px;background:linear-gradient(135deg,#10b981,#059669);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:bold;font-size:18px;flex-shrink:0;">✓</div>
+<h3 style="margin:0 15px;color:#1e293b;font-size:18px;font-weight:600;">دریافت توکن</h3>
+</div>
+<p style="margin:0 0 0 55px;color:#64748b;line-height:1.8;font-size:15px;">توکن دریافتی را کپی کرده و در فرم زیر وارد کنید. این توکن کلید دسترسی به بات شماست 🔑</p>
+</div>
+</div>
 </div>
 </div>
 </div>
