@@ -1,88 +1,150 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مدیریت رزومه</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>رزومه - پنل نماینده</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="dashboard">
-        <nav class="sidebar">
-            <h2>پنل نماینده</h2>
-            <ul>
-                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
-                <li><a href="{{ url_for('profile') }}">👤 اطلاعات شخصی</a></li>
-                <li><a href="{{ url_for('resume') }}" class="active">📋 رزومه</a></li>
-                <li><a href="{{ url_for('programs') }}">📢 برنامه‌ها</a></li>
-                <li><a href="{{ url_for('headquarters') }}">📍 ستادها</a></li>
-                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
-            </ul>
-        </nav>
-        
-        <main class="content">
-            <header>
-                <h1>مدیریت رزومه</h1>
-            </header>
-            
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>پنل نماینده</h2>
+                <p>{{ candidate.full_name }}</p>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('profile') }}" class="menu-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>اطلاعات شخصی</span>
+                </a>
+                <a href="{{ url_for('resume') }}" class="menu-item active">
+                    <i class="fas fa-file-alt"></i>
+                    <span>رزومه</span>
+                </a>
+                <a href="{{ url_for('programs') }}" class="menu-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>برنامه‌های انتخاباتی</span>
+                </a>
+                <a href="{{ url_for('headquarters') }}" class="menu-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ستادها و دفاتر</span>
+                </a>
+                <a href="{{ url_for('messages') }}" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>پیام‌های کاربران</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        <div class="main-content">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>رزومه</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            {{ candidate.full_name[0]|upper }}
                         </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            
-            <div class="section">
-                <h2>افزودن آیتم جدید</h2>
-                <form method="POST">
-                    <div class="form-group">
-                        <label>عنوان *</label>
-                        <input type="text" name="title" required placeholder="مثال: مدیرعامل شرکت...">
+                        <div class="user-info">
+                            <h4>{{ candidate.full_name }}</h4>
+                            <p>نماینده انتخاباتی</p>
+                        </div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label>سال</label>
-                        <input type="text" name="year" placeholder="مثال: 1390-1395">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>توضیحات</label>
-                        <textarea name="description" rows="4"></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">افزودن</button>
-                </form>
+                </div>
             </div>
-            
-            <div class="section">
-                <h2>رزومه فعلی</h2>
-                {% if resumes %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>عنوان</th>
-                            <th>سال</th>
-                            <th>توضیحات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for resume in resumes %}
-                        <tr>
-                            <td>{{ resume.title }}</td>
-                            <td>{{ resume.year }}</td>
-                            <td>{{ resume.description }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% else %}
-                <p>هنوز آیتمی ثبت نشده است.</p>
-                {% endif %}
+            <div class="content-area">
+                <div class="page-header">
+                    <h2>مدیریت رزومه</h2>
+                    <div class="breadcrumb">
+                        <a href="{{ url_for('dashboard') }}">داشبورد</a>
+                        <span>/</span>
+                        <span>رزومه</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-plus-circle"></i> افزودن رزومه جدید</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" style="max-width: 800px;">
+                            <div class="form-group">
+                                <label><i class="fas fa-briefcase"></i> عنوان *</label>
+                                <input type="text" name="title" required class="form-control" placeholder="مثال: دکترای مدیریت">
+                            </div>
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label><i class="fas fa-align-right"></i> توضیحات *</label>
+                                <textarea name="description" required rows="4" class="form-control" placeholder="جزئیات"></textarea>
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> ذخیره
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 30px;">
+                    <div class="card-header">
+                        <h3><i class="fas fa-list"></i> لیست رزومه‌ها</h3>
+                    </div>
+                    <div class="card-body">
+                        {% if resumes %}
+                        <div style="display: grid; gap: 20px;">
+                            {% for resume in resumes %}
+                            <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 25px;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <div style="flex: 1;">
+                                        <h4>{{ resume.title }}</h4>
+                                        <p>{{ resume.description }}</p>
+                                    </div>
+                                    <div>
+                                        <form method="POST" action="{{ url_for('resume') }}">
+                                            <input type="hidden" name="resume_id" value="{{ resume.id }}">
+                                            <input type="hidden" name="action" value="delete">
+                                            <button type="submit" onclick="return confirm('حذف شود؟')" class="btn" style="background: #ef4444; color: white;">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div style="text-align: center; padding: 60px 20px;">
+                            <i class="fas fa-file-alt" style="font-size: 80px; opacity: 0.3;"></i>
+                            <h3>رزومه‌ای ثبت نشده</h3>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-        </main>
+        </div>
     </div>
+    <script>
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+    </script>
 </body>
 </html>

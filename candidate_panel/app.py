@@ -18,7 +18,7 @@ from database.models import (db, Candidate, Resume, Program, Slogan,
 from config.settings import CANDIDATE_SECRET_KEY, DATABASE_URI, UPLOAD_FOLDER
 
 app = Flask(__name__, 
-            template_folder='../templates/candidate',
+            template_folder='../templates',
             static_folder='../static')
 app.config['SECRET_KEY'] = CANDIDATE_SECRET_KEY
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
@@ -99,7 +99,7 @@ def login():
             else:
                 flash('نام کاربری یا رمز عبور اشتباه است', 'danger')
     
-    return render_template('login.html')
+    return render_template('candidate/login.html')
 
 
 @app.route('/dashboard')
@@ -117,7 +117,7 @@ def dashboard():
     if any(plan.code == 'ANALYTICS' for plan in candidate.plans):
         analytics_data = Analytics.query.filter_by(candidate_id=candidate.id).order_by(Analytics.date.desc()).limit(7).all()
     
-    return render_template('dashboard.html',
+    return render_template('candidate/dashboard.html',
                          candidate=candidate,
                          total_messages=total_messages,
                          unread_messages=unread_messages,
@@ -150,7 +150,7 @@ def profile():
         flash('اطلاعات با موفقیت به‌روزرسانی شد', 'success')
         return redirect(url_for('profile'))
     
-    return render_template('profile.html', candidate=candidate)
+    return render_template('candidate/profile.html', candidate=candidate)
 
 
 @app.route('/resume', methods=['GET', 'POST'])
@@ -178,7 +178,7 @@ def resume():
         flash('آیتم رزومه اضافه شد', 'success')
         return redirect(url_for('resume'))
     
-    return render_template('resume.html', candidate=candidate, resumes=resumes)
+    return render_template('candidate/resume.html', candidate=candidate, resumes=resumes)
 
 
 @app.route('/programs', methods=['GET', 'POST'])
@@ -205,7 +205,7 @@ def programs():
         flash('برنامه جدید اضافه شد', 'success')
         return redirect(url_for('programs'))
     
-    return render_template('programs.html', candidate=candidate, programs=programs)
+    return render_template('candidate/programs.html', candidate=candidate, programs=programs)
 
 
 @app.route('/headquarters', methods=['GET', 'POST'])
@@ -236,7 +236,7 @@ def headquarters():
         flash('ستاد جدید اضافه شد', 'success')
         return redirect(url_for('headquarters'))
     
-    return render_template('headquarters.html', candidate=candidate, headquarters=hqs)
+    return render_template('candidate/headquarters.html', candidate=candidate, headquarters=hqs)
 
 
 @app.route('/messages')
@@ -247,7 +247,7 @@ def messages():
     candidate = Candidate.query.get(session['candidate_id'])
     messages = Message.query.filter_by(candidate_id=candidate.id).order_by(Message.created_at.desc()).all()
     
-    return render_template('messages.html', candidate=candidate, messages=messages)
+    return render_template('candidate/messages.html', candidate=candidate, messages=messages)
 
 
 @app.route('/message/<int:message_id>/read', methods=['POST'])

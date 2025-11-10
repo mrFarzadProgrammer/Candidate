@@ -3,83 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اطلاعات شخصی</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>اطلاعات شخصی - پنل نماینده</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="dashboard">
-        <nav class="sidebar">
-            <h2>پنل نماینده</h2>
-            <ul>
-                <li><a href="{{ url_for('dashboard') }}">📊 داشبورد</a></li>
-                <li><a href="{{ url_for('profile') }}" class="active">👤 اطلاعات شخصی</a></li>
-                <li><a href="{{ url_for('resume') }}">📋 رزومه</a></li>
-                <li><a href="{{ url_for('programs') }}">📢 برنامه‌ها</a></li>
-                <li><a href="{{ url_for('headquarters') }}">📍 ستادها</a></li>
-                <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
-            </ul>
-        </nav>
-        
-        <main class="content">
-            <header>
-                <h1>ویرایش اطلاعات شخصی</h1>
-            </header>
-            
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="alert alert-{{ category }}">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            
-            <div class="section">
-                <form method="POST" enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label>نام کامل *</label>
-                        <input type="text" name="full_name" value="{{ candidate.full_name }}" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>شهر</label>
-                        <input type="text" name="city" value="{{ candidate.city or '' }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>حوزه انتخابیه</label>
-                        <input type="text" name="district" value="{{ candidate.district or '' }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>شماره تماس</label>
-                        <input type="text" name="phone" value="{{ candidate.phone or '' }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>ایمیل</label>
-                        <input type="email" name="email" value="{{ candidate.email or '' }}">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>بیوگرافی</label>
-                        <textarea name="bio" rows="6">{{ candidate.bio or '' }}</textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>تصویر پروفایل</label>
-                        {% if candidate.photo %}
-                        <img src="{{ url_for('static', filename='uploads/' + candidate.photo) }}" 
-                             style="width: 150px; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;">
-                        {% endif %}
-                        <input type="file" name="photo" accept="image/*">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
-                </form>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>پنل نماینده</h2>
+                <p>{{ candidate.full_name }}</p>
             </div>
-        </main>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('profile') }}" class="menu-item active">
+                    <i class="fas fa-user-circle"></i>
+                    <span>اطلاعات شخصی</span>
+                </a>
+                <a href="{{ url_for('resume') }}" class="menu-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>رزومه</span>
+                </a>
+                <a href="{{ url_for('programs') }}" class="menu-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>برنامه‌های انتخاباتی</span>
+                </a>
+                <a href="{{ url_for('headquarters') }}" class="menu-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ستادها و دفاتر</span>
+                </a>
+                <a href="{{ url_for('messages') }}" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>پیام‌های کاربران</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>اطلاعات شخصی</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            {{ candidate.full_name[0]|upper }}
+                        </div>
+                        <div class="user-info">
+                            <h4>{{ candidate.full_name }}</h4>
+                            <p>نماینده انتخاباتی</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; background: {% if category == 'success' %}#10b981{% elif category == 'error' %}#ef4444{% else %}#3b82f6{% endif %}; color: white;">
+                                <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h2>ویرایش اطلاعات شخصی</h2>
+                    <div class="breadcrumb">
+                        <a href="{{ url_for('dashboard') }}">داشبورد</a>
+                        <span>/</span>
+                        <span>اطلاعات شخصی</span>
+                    </div>
+                </div>
+                
+                <!-- Profile Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user-edit"></i> اطلاعات حساب کاربری</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" style="max-width: 800px;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                                <div class="form-group">
+                                    <label><i class="fas fa-user"></i> نام کامل *</label>
+                                    <input type="text" name="full_name" value="{{ candidate.full_name }}" required class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-id-card"></i> نام کاربری</label>
+                                    <input type="text" value="{{ candidate.username }}" disabled class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: #f9fafb; color: #6b7280;">
+                                    <small style="color: #6b7280; font-size: 12px; margin-top: 5px; display: block;">نام کاربری قابل تغییر نیست</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-envelope"></i> ایمیل</label>
+                                    <input type="email" name="email" value="{{ candidate.email or '' }}" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-phone"></i> شماره تماس</label>
+                                    <input type="tel" name="phone" value="{{ candidate.phone or '' }}" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb; display: flex; gap: 15px;">
+                                <button type="submit" class="btn btn-primary" style="padding: 12px 30px;">
+                                    <i class="fas fa-save"></i> ذخیره تغییرات
+                                </button>
+                                <a href="{{ url_for('dashboard') }}" class="btn" style="padding: 12px 30px; background: #f3f4f6; color: #374151; border: none;">
+                                    <i class="fas fa-times"></i> انصراف
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Change Password -->
+                <div class="card" style="margin-top: 30px;">
+                    <div class="card-header">
+                        <h3><i class="fas fa-lock"></i> تغییر رمز عبور</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" action="{{ url_for('profile') }}" style="max-width: 600px;">
+                            <input type="hidden" name="change_password" value="1">
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-key"></i> رمز عبور فعلی *</label>
+                                <input type="password" name="current_password" required class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                            </div>
+                            
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label><i class="fas fa-lock"></i> رمز عبور جدید *</label>
+                                <input type="password" name="new_password" required minlength="6" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                                <small style="color: #6b7280; font-size: 12px; margin-top: 5px; display: block;">حداقل 6 کاراکتر</small>
+                            </div>
+                            
+                            <div class="form-group" style="margin-top: 15px;">
+                                <label><i class="fas fa-lock"></i> تکرار رمز عبور جدید *</label>
+                                <input type="password" name="confirm_password" required minlength="6" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                            </div>
+                            
+                            <div style="margin-top: 20px;">
+                                <button type="submit" class="btn btn-primary" style="padding: 12px 30px;">
+                                    <i class="fas fa-check"></i> تغییر رمز عبور
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // Sidebar Toggle for Mobile
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+            
+            // Close sidebar when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
