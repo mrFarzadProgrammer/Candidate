@@ -1,64 +1,125 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html><!DOCTYPE html>
 
-<html lang="fa" dir="rtl"><html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl">
 
-<head><head>
+<head><html lang="fa" dir="rtl"><html lang="fa" dir="rtl">
 
-    <meta charset="UTF-8">    <meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><head><head>
 
-    <title>داشبورد - پنل نماینده</title>    <title>داشبورد - پنل نماینده</title>
+    <title>داشبورد - پنل نماینده</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">    <meta charset="UTF-8">    <meta charset="UTF-8">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-</head><body>
+</head>    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<body>    <div class="dashboard">
+<body>
 
-    <div class="dashboard-wrapper">        <nav class="sidebar">
+    <div class="dashboard-wrapper">    <title>داشبورد - پنل نماینده</title>    <title>داشبورد - پنل نماینده</title>
 
-        <!-- Sidebar -->            <h2>پنل نماینده</h2>
+        <aside class="sidebar">
 
-        <aside class="sidebar">            <ul>
+            <div class="sidebar-header">    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-            <div class="sidebar-header">                <li><a href="{{ url_for('dashboard') }}" class="active">📊 داشبورد</a></li>
+                <div class="logo"><i class="fas fa-user-tie" style="font-size: 40px;"></i></div>
 
-                <div class="logo">                <li><a href="{{ url_for('profile') }}">👤 اطلاعات شخصی</a></li>
+                <h2>پنل نماینده</h2>    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></head>
 
-                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>                <li><a href="{{ url_for('resume') }}">📋 رزومه</a></li>
+                <p>{{ candidate.full_name }}</p>
 
-                </div>                <li><a href="{{ url_for('programs') }}">📢 برنامه‌ها</a></li>
+            </div></head><body>
 
-                <h2>پنل نماینده</h2>                <li><a href="{{ url_for('headquarters') }}">📍 ستادها</a></li>
+            <nav class="sidebar-menu">
 
-                <p>{{ candidate.full_name }}</p>                <li><a href="{{ url_for('messages') }}">💬 پیام‌ها</a></li>
+                <a href="{{ url_for('dashboard') }}" class="menu-item active"><i class="fas fa-home"></i><span>داشبورد</span></a><body>    <div class="dashboard">
 
-            </div>                <li><a href="{{ url_for('analytics') }}">📈 آمار</a></li>
+                <a href="{{ url_for('profile') }}" class="menu-item"><i class="fas fa-user-circle"></i><span>اطلاعات شخصی</span></a>
 
-                            <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+                <a href="{{ url_for('resume') }}" class="menu-item"><i class="fas fa-file-alt"></i><span>رزومه</span></a>    <div class="dashboard-wrapper">        <nav class="sidebar">
 
-            <nav class="sidebar-menu">            </ul>
+                <a href="{{ url_for('programs') }}" class="menu-item"><i class="fas fa-bullhorn"></i><span>برنامه‌های انتخاباتی</span></a>
 
-                <a href="{{ url_for('dashboard') }}" class="menu-item active">        </nav>
+                <a href="{{ url_for('headquarters') }}" class="menu-item"><i class="fas fa-map-marker-alt"></i><span>ستادها و دفاتر</span></a>        <!-- Sidebar -->            <h2>پنل نماینده</h2>
 
-                    <i class="fas fa-home"></i>        
+                <a href="{{ url_for('messages') }}" class="menu-item"><i class="fas fa-envelope"></i><span>پیام‌ها</span>{% if unread_messages > 0 %}<span class="badge badge-danger">{{ unread_messages }}</span>{% endif %}</a>
 
-                    <span>داشبورد</span>        <main class="content">
+                <a href="{{ url_for('logout') }}" class="menu-item"><i class="fas fa-sign-out-alt"></i><span>خروج</span></a>        <aside class="sidebar">            <ul>
 
-                </a>            <header>
+            </nav>
 
-                <a href="{{ url_for('profile') }}" class="menu-item">                <h1>داشبورد</h1>
+        </aside>            <div class="sidebar-header">                <li><a href="{{ url_for('dashboard') }}" class="active">📊 داشبورد</a></li>
 
-                    <i class="fas fa-user-circle"></i>                <p>سلام {{ candidate.full_name }} عزیز</p>
+        <div class="main-content">
 
-                    <span>اطلاعات شخصی</span>            </header>
+            <div class="topbar">                <div class="logo">                <li><a href="{{ url_for('profile') }}">👤 اطلاعات شخصی</a></li>
 
-                </a>            
+                <div class="topbar-left">
 
-                <a href="{{ url_for('resume') }}" class="menu-item">            {% with messages = get_flashed_messages(with_categories=true) %}
+                    <button class="sidebar-toggle" id="sidebarToggle"><i class="fas fa-bars"></i></button>                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>                <li><a href="{{ url_for('resume') }}">📋 رزومه</a></li>
+
+                    <h1>داشبورد</h1>
+
+                </div>                </div>                <li><a href="{{ url_for('programs') }}">📢 برنامه‌ها</a></li>
+
+                <div class="topbar-right">
+
+                    <div class="user-profile">                <h2>پنل نماینده</h2>                <li><a href="{{ url_for('headquarters') }}">📍 ستادها</a></li>
+
+                        <div class="user-avatar">{{ candidate.full_name[0]|upper }}</div>
+
+                        <div class="user-info"><h4>{{ candidate.full_name }}</h4><p>نماینده انتخاباتی</p></div>                <p>{{ candidate.full_name }}</p>                <li><a href="{{ url_for('messages') }}">💬 پیام‌ها</a></li>
+
+                    </div>
+
+                </div>            </div>                <li><a href="{{ url_for('analytics') }}">📈 آمار</a></li>
+
+            </div>
+
+            <div class="content-area">                            <li><a href="{{ url_for('logout') }}">🚪 خروج</a></li>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="alert alert-{{ category }}" style="margin-bottom:20px;padding:15px;border-radius:12px;background:{% if category=='success' %}#10b981{% elif category=='error' or category=='danger' %}#ef4444{% else %}#3b82f6{% endif %};color:white;display:flex;align-items:center;gap:10px;"><i class="fas {% if category=='success' %}fa-check-circle{% elif category=='error' or category=='danger' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+
+                <div class="page-header"><h2>خوش آمدید {{ candidate.full_name }} عزیز</h2><div class="breadcrumb"><span>داشبورد</span></div></div>            <nav class="sidebar-menu">            </ul>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card"><div class="stat-card-icon" style="background:linear-gradient(135deg,#667eea,#764ba2);"><i class="fas fa-envelope"></i></div><div class="stat-card-body"><h3>{{ total_messages }}</h3><p>کل پیام‌ها</p></div></div>                <a href="{{ url_for('dashboard') }}" class="menu-item active">        </nav>
+
+                    <div class="stat-card highlight"><div class="stat-card-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c);"><i class="fas fa-bell"></i></div><div class="stat-card-body"><h3>{{ unread_messages }}</h3><p>پیام‌های جدید</p></div></div>
+
+                    <div class="stat-card"><div class="stat-card-icon" style="background:linear-gradient(135deg,#4facfe,#00f2fe);"><i class="fas fa-users"></i></div><div class="stat-card-body"><h3>0</h3><p>کاربران بات</p></div></div>                    <i class="fas fa-home"></i>        
+
+                    <div class="stat-card"><div class="stat-card-icon" style="background:linear-gradient(135deg,#43e97b,#38f9d7);"><i class="fas fa-robot"></i></div><div class="stat-card-body"><h3>{% if candidate.bot_token %}<span style="color:#10b981;">فعال</span>{% else %}<span style="color:#ef4444;">غیرفعال</span>{% endif %}</h3><p>وضعیت بات</p></div></div>
+
+                </div>                    <span>داشبورد</span>        <main class="content">
+
+                <div style="display:flex;gap:30px;flex-wrap:wrap;margin-top:30px;">
+
+                    <div style="flex:1;min-width:300px;"><div class="card"><div class="card-header"><h3><i class="fas fa-robot"></i> بات تلگرام</h3></div><div class="card-body">{% if candidate.bot_token %}<div style="display:flex;align-items:center;gap:15px;margin-bottom:20px;"><div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:white;font-size:28px;"><i class="fab fa-telegram-plane"></i></div><div><h4 style="margin:0;color:#333;font-size:18px;">@{{ candidate.bot_username }}</h4><p style="margin:5px 0 0 0;color:#666;">بات اختصاصی شما</p></div></div><div style="background:#f8f9fa;border-radius:12px;padding:15px;margin-bottom:15px;"><p style="margin:0;color:#666;font-size:14px;"><i class="fas fa-circle" style="color:#10b981;font-size:10px;"></i> بات فعال و آماده است</p></div><a href="https://t.me/{{ candidate.bot_username }}" target="_blank" class="btn btn-primary" style="width:100%;"><i class="fab fa-telegram-plane"></i> مشاهده بات</a>{% else %}<div style="background:#fff3cd;border:1px solid #ffc107;border-radius:12px;padding:20px;color:#856404;"><i class="fas fa-exclamation-triangle" style="font-size:24px;margin-bottom:10px;"></i><p style="margin:0;font-size:14px;">بات راه‌اندازی نشده. با مدیر تماس بگیرید.</p></div>{% endif %}</div></div></div>                </a>            <header>
+
+                    <div style="flex:1;min-width:300px;"><div class="card"><div class="card-header"><h3><i class="fas fa-tags"></i> پلن فعال</h3></div><div class="card-body">{% if candidate.plan %}<div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:12px;padding:20px;color:white;margin-bottom:15px;"><h4 style="margin:0 0 10px 0;font-size:20px;"><i class="fas fa-crown"></i> {{ candidate.plan.name }}</h4><p style="margin:0;opacity:0.9;font-size:14px;">{{ candidate.plan.description }}</p></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div style="background:#f8f9fa;border-radius:8px;padding:12px;text-align:center;"><p style="margin:0;color:#666;font-size:12px;">قیمت ماهانه</p><h4 style="margin:5px 0 0 0;color:#333;">{{ "{:,}".format(candidate.plan.price) }} تومان</h4></div><div style="background:#f8f9fa;border-radius:8px;padding:12px;text-align:center;"><p style="margin:0;color:#666;font-size:12px;">ویژگی‌ها</p><h4 style="margin:5px 0 0 0;color:#333;">کامل</h4></div></div>{% else %}<p style="color:#666;text-align:center;padding:40px 20px;"><i class="fas fa-box-open" style="font-size:48px;color:#ddd;margin-bottom:15px;display:block;"></i>هیچ پلن فعال نیست</p>{% endif %}</div></div></div>
+
+                </div>                <a href="{{ url_for('profile') }}" class="menu-item">                <h1>داشبورد</h1>
+
+                <div class="card" style="margin-top:30px;"><div class="card-header"><h3><i class="fas fa-bolt"></i> دسترسی سریع</h3></div><div class="card-body"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;"><a href="{{ url_for('resume') }}" class="quick-action-btn"><i class="fas fa-file-alt"></i><span>ویرایش رزومه</span></a><a href="{{ url_for('programs') }}" class="quick-action-btn"><i class="fas fa-bullhorn"></i><span>برنامه‌های انتخاباتی</span></a><a href="{{ url_for('headquarters') }}" class="quick-action-btn"><i class="fas fa-map-marker-alt"></i><span>مدیریت ستادها</span></a><a href="{{ url_for('messages') }}" class="quick-action-btn"><i class="fas fa-envelope"></i><span>مشاهده پیام‌ها</span></a></div></div></div>
+
+            </div>                    <i class="fas fa-user-circle"></i>                <p>سلام {{ candidate.full_name }} عزیز</p>
+
+        </div>
+
+    </div>                    <span>اطلاعات شخصی</span>            </header>
+
+    <style>.quick-action-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;background:linear-gradient(135deg,var(--gray-50),white);border:2px solid var(--gray-200);border-radius:16px;text-decoration:none;color:var(--gray-700);transition:all .3s ease;gap:12px}.quick-action-btn:hover{border-color:var(--primary);background:linear-gradient(135deg,var(--primary-light),var(--primary));color:white;transform:translateY(-5px);box-shadow:0 10px 30px rgba(99,102,241,.3)}.quick-action-btn i{font-size:32px}.quick-action-btn span{font-weight:600;font-size:14px}@media(max-width:768px){.row{flex-direction:column}}</style>
+
+    <script>const sidebarToggle=document.getElementById('sidebarToggle');const sidebar=document.querySelector('.sidebar');if(sidebarToggle){sidebarToggle.addEventListener('click',()=>{sidebar.classList.toggle('active')});document.addEventListener('click',(e)=>{if(!sidebar.contains(e.target)&&!sidebarToggle.contains(e.target)){sidebar.classList.remove('active')}})}</script>                </a>            
+
+</body>
+
+</html>                <a href="{{ url_for('resume') }}" class="menu-item">            {% with messages = get_flashed_messages(with_categories=true) %}
+
 
                     <i class="fas fa-file-alt"></i>                {% if messages %}
 
