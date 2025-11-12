@@ -67,6 +67,90 @@
     box-sizing: border-box;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   GLOBAL FIXES - Numbers & Borders
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Force English numbers everywhere */
+* {
+    font-variant-numeric: lining-nums;
+}
+
+input, textarea, select, .number, .price, .phone, [type="number"], [type="tel"] {
+    font-variant-numeric: lining-nums !important;
+    -webkit-font-feature-settings: 'lnum' 1 !important;
+    font-feature-settings: 'lnum' 1 !important;
+}
+
+/* Stronger borders for all cards and inputs */
+.card {
+    border: 3px solid #cbd5e1 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card:hover {
+    border-color: #94a3b8 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important;
+}
+
+.form-control, input[type="text"], input[type="email"], input[type="tel"], 
+input[type="password"], input[type="number"], textarea, select {
+    border: 2.5px solid #cbd5e1 !important;
+    transition: all 0.3s ease !important;
+}
+
+.form-control:focus, input:focus, textarea:focus, select:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+    outline: none !important;
+}
+
+.form-control:hover, input:hover, textarea:hover, select:hover {
+    border-color: #94a3b8 !important;
+}
+
+/* Table borders */
+.data-table, table {
+    border: 3px solid #cbd5e1 !important;
+}
+
+.data-table th, .data-table td, table th, table td {
+    border: 2px solid #e2e8f0 !important;
+}
+
+.data-table thead th {
+    border-bottom: 3px solid #94a3b8 !important;
+}
+
+/* Button borders */
+.btn {
+    border: 2px solid transparent !important;
+}
+
+.btn-primary {
+    border-color: #4f46e5 !important;
+}
+
+.btn-secondary {
+    border-color: #94a3b8 !important;
+}
+
+.btn-success {
+    border-color: #059669 !important;
+}
+
+.btn-danger {
+    border-color: #dc2626 !important;
+}
+
+.btn-info {
+    border-color: #0284c7 !important;
+}
+
+.btn-warning {
+    border-color: #d97706 !important;
+}
+
 body {
     font-family: 'Vazir', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
     background: linear-gradient(135deg, #f0f4ff 0%, #e8f0fe 50%, #f3e8ff 100%);
