@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اعطای رایگان - پنل ادمین</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-shield" style="font-size: 40px;"></i>
+                </div>
+                <h2>پنل ادمین</h2>
+                <p>مدیریت سیستم</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('candidates') }}" class="menu-item active">
+                    <i class="fas fa-users"></i>
+                    <span>نمایندگان</span>
+                </a>
+                <a href="{{ url_for('plans') }}" class="menu-item">
+                    <i class="fas fa-tags"></i>
+                    <span>پلن‌ها</span>
+                </a>
+                <a href="{{ url_for('subscriptions') }}" class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>اشتراک‌ها</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>اعطای رایگان پلن</h1>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <div class="page-header">
+                    <h2>اعطای رایگان به {{ candidate.full_name }}</h2>
+                    <div class="breadcrumb">
+                        <a href="{{ url_for('dashboard') }}">داشبورد</a>
+                        <i class="fas fa-chevron-left"></i>
+                        <a href="{{ url_for('candidates') }}">نمایندگان</a>
+                        <i class="fas fa-chevron-left"></i>
+                        <span>اعطای رایگان</span>
+                    </div>
+                </div>
+                
+                <!-- اطلاعات کاندیدا -->
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 12px; margin-bottom: 30px;">
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 36px;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h2 style="margin: 0 0 10px 0;">{{ candidate.full_name }}</h2>
+                            <p style="margin: 0; opacity: 0.9;">
+                                <i class="fas fa-id-card"></i> {{ candidate.username }}
+                                {% if candidate.phone %}
+                                &nbsp;&nbsp;|&nbsp;&nbsp;
+                                <i class="fas fa-phone"></i> {{ candidate.phone }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- فرم اعطای رایگان -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-gift"></i> تنظیمات اعطای رایگان</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" style="max-width: 600px;">
+                            <div class="form-group">
+                                <label><i class="fas fa-tags"></i> انتخاب پلن *</label>
+                                <select name="plan_id" class="form-control" required>
+                                    <option value="">-- انتخاب کنید --</option>
+                                    {% for plan in plans %}
+                                    <option value="{{ plan.id }}" 
+                                            data-price="{{ plan.price }}"
+                                            data-duration="{{ plan.duration_days }}">
+                                        {{ plan.name }} - 
+                                        {% if plan.price > 0 %}
+                                        {{ "{:,}".format(plan.price) }} تومان
+                                        {% else %}
+                                        رایگان
+                                        {% endif %}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-calendar"></i> مدت اشتراک (روز) *</label>
+                                <input type="number" name="duration_days" class="form-control" 
+                                       value="30" min="1" max="365" required>
+                                <small style="color: #64748b;">می‌توانید هر مدت دلخواهی را وارد کنید</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label><i class="fas fa-sticky-note"></i> یادداشت ادمین</label>
+                                <textarea name="admin_note" class="form-control" rows="4" 
+                                          placeholder="دلیل اعطای رایگان را بنویسید...&#10;مثال: تبلیغات، جایزه، کمپین موفق، تست، و غیره"></textarea>
+                            </div>
+                            
+                            <!-- نمایش خلاصه -->
+                            <div style="background: #f0fdf4; border: 2px solid #10b981; border-radius: 8px; padding: 20px; margin: 25px 0;">
+                                <h4 style="margin: 0 0 15px 0; color: #065f46;">
+                                    <i class="fas fa-check-circle"></i> خلاصه اعطا
+                                </h4>
+                                <div style="display: grid; gap: 10px;">
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>کاندیدا:</span>
+                                        <strong>{{ candidate.full_name }}</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>مبلغ:</span>
+                                        <strong style="color: #10b981;">0 تومان (رایگان)</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>روش پرداخت:</span>
+                                        <strong>اعطای رایگان ادمین</strong>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <span>وضعیت:</span>
+                                        <strong style="color: #10b981;">فوراً فعال می‌شود</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                                <button type="submit" class="btn btn-success" style="flex: 1;">
+                                    <i class="fas fa-gift"></i> اعطای رایگان
+                                </button>
+                                <a href="{{ url_for('candidates') }}" class="btn btn-secondary" style="flex: 1;">
+                                    <i class="fas fa-times"></i> انصراف
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- راهنما -->
+                <div style="background: #eff6ff; border: 2px solid #3b82f6; border-radius: 8px; padding: 20px; margin-top: 30px;">
+                    <h4 style="margin: 0 0 15px 0; color: #1e40af;">
+                        <i class="fas fa-info-circle"></i> راهنما
+                    </h4>
+                    <ul style="margin: 0; padding-right: 20px; color: #1e40af;">
+                        <li>این قابلیت برای اعطای رایگان پلن به کاندیداهای ویژه است</li>
+                        <li>می‌توانید هر پلن و هر مدتی را انتخاب کنید</li>
+                        <li>مبلغ به صورت خودکار صفر تومان ثبت می‌شود</li>
+                        <li>یادداشت ادمین در تاریخچه نمایش داده می‌شود</li>
+                        <li>پلن فوراً فعال شده و کاندیدا می‌تواند استفاده کند</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sidebar toggle
+        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

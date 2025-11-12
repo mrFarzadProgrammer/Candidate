@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ایجاد Export جدید | پنل ادمین</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #667eea;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            color: #2d3748;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .export-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .export-type-option {
+            position: relative;
+        }
+        
+        .export-type-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .export-type-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .export-type-option input[type="radio"]:checked + .export-type-label {
+            background: linear-gradient(135deg, #e0e7ff 0%, #ddd6fe 100%);
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .export-type-label:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .export-type-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .export-type-name {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .export-type-desc {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .format-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .format-option {
+            flex: 1;
+        }
+        
+        .format-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .format-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .format-option input[type="radio"]:checked + .format-label {
+            background: #d4edda;
+            border-color: #10b981;
+            color: #155724;
+        }
+        
+        .format-label:hover {
+            border-color: #667eea;
+        }
+        
+        .filters-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .filters-section.active {
+            display: block;
+        }
+        
+        .btn-custom {
+            padding: 12px 35px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        .btn-create {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .btn-create:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .back-btn {
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .info-box {
+            background: #e0e7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box i {
+            color: #667eea;
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="bi bi-file-earmark-plus"></i> ایجاد Export جدید</h1>
+                    <p class="mb-0 text-muted">خروجی امن داده‌های نماینده</p>
+                </div>
+                <a href="{{ url_for('exports_dashboard') }}" class="back-btn">
+                    <i class="bi bi-arrow-right"></i> بازگشت
+                </a>
+            </div>
+        </div>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Form -->
+        <div class="form-card">
+            <form method="POST" action="{{ url_for('create_export') }}" id="exportForm">
+                <!-- Section 1: انتخاب نماینده -->
+                <div class="section-title">
+                    <i class="bi bi-person-check"></i> انتخاب نماینده
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">نماینده:</label>
+                    <select name="candidate_id" class="form-select" required>
+                        <option value="">-- انتخاب کنید --</option>
+                        {% for candidate in candidates %}
+                            <option value="{{ candidate.id }}">
+                                {{ candidate.full_name }} ({{ candidate.username }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Section 2: نوع Export -->
+                <div class="section-title">
+                    <i class="bi bi-box-seam"></i> نوع Export
+                </div>
+                
+                <div class="export-type-grid">
+                    <div class="export-type-option">
+                        <input type="radio" name="export_type" value="complete" id="type_complete" required>
+                        <label for="type_complete" class="export-type-label">
+                            <div class="export-type-icon"><i class="bi bi-archive"></i></div>
+                            <div class="export-type-name">پشتیبان کامل</div>
+                            <div class="export-type-desc">همه داده‌ها</div>
+                        </label>
+                    </div>
+                    
+                    <div class="export-type-option">
+                        <input type="radio" name="export_type" value="bot_users" id="type_users">
+                        <label for="type_users" class="export-type-label">
+                            <div class="export-type-icon"><i class="bi bi-people"></i></div>
+                            <div class="export-type-name">کاربران بات</div>
+                            <div class="export-type-desc">لیست کاربران</div>
+                        </label>
+                    </div>
+                    
+                    <div class="export-type-option">
+                        <input type="radio" name="export_type" value="contributions" id="type_contrib">
+                        <label for="type_contrib" class="export-type-label">
+                            <div class="export-type-icon"><i class="bi bi-cash-coin"></i></div>
+                            <div class="export-type-name">حمایت‌ها</div>
+                            <div class="export-type-desc">لیست پرداخت‌ها</div>
+                        </label>
+                    </div>
+                    
+                    <div class="export-type-option">
+                        <input type="radio" name="export_type" value="messages" id="type_messages">
+                        <label for="type_messages" class="export-type-label">
+                            <div class="export-type-icon"><i class="bi bi-chat-dots"></i></div>
+                            <div class="export-type-name">پیام‌ها</div>
+                            <div class="export-type-desc">تیکت‌ها و گفتگوها</div>
+                        </label>
+                    </div>
+                    
+                    <div class="export-type-option">
+                        <input type="radio" name="export_type" value="analytics" id="type_analytics">
+                        <label for="type_analytics" class="export-type-label">
+                            <div class="export-type-icon"><i class="bi bi-graph-up"></i></div>
+                            <div class="export-type-name">آمار</div>
+                            <div class="export-type-desc">گزارش تحلیلی</div>
+                        </label>
+                    </div>
+                    
+                    <div class="export-type-option">
+                        <input type="radio" name="export_type" value="poll_results" id="type_polls">
+                        <label for="type_polls" class="export-type-label">
+                            <div class="export-type-icon"><i class="bi bi-bar-chart"></i></div>
+                            <div class="export-type-name">نظرسنجی‌ها</div>
+                            <div class="export-type-desc">نتایج رای‌گیری</div>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Filters (shown based on export type) -->
+                <div id="filters_users" class="filters-section">
+                    <h6><i class="bi bi-funnel"></i> فیلترهای کاربران:</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">از تاریخ:</label>
+                            <input type="date" name="date_from" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">تا تاریخ:</label>
+                            <input type="date" name="date_to" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input type="checkbox" name="active_only" class="form-check-input" id="activeOnly">
+                                <label class="form-check-label" for="activeOnly">
+                                    فقط کاربران فعال
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="filters_contributions" class="filters-section">
+                    <h6><i class="bi bi-funnel"></i> فیلترهای حمایت:</h6>
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">از تاریخ:</label>
+                            <input type="date" name="date_from" class="form-control">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">تا تاریخ:</label>
+                            <input type="date" name="date_to" class="form-control">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">وضعیت:</label>
+                            <select name="status_filter" class="form-select">
+                                <option value="">همه</option>
+                                <option value="completed">تکمیل شده</option>
+                                <option value="pending">در انتظار</option>
+                                <option value="failed">ناموفق</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="filters_messages" class="filters-section">
+                    <h6><i class="bi bi-funnel"></i> فیلترهای پیام:</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">از تاریخ:</label>
+                            <input type="date" name="date_from" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">تا تاریخ:</label>
+                            <input type="date" name="date_to" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="filters_analytics" class="filters-section">
+                    <h6><i class="bi bi-funnel"></i> معیارهای آماری:</h6>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">از تاریخ:</label>
+                            <input type="date" name="date_from" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">تا تاریخ:</label>
+                            <input type="date" name="date_to" class="form-control">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">انتخاب معیارها:</label>
+                            <div class="form-check">
+                                <input type="checkbox" name="metrics" value="users" class="form-check-input" id="metric1" checked>
+                                <label class="form-check-label" for="metric1">تعداد کاربران</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" name="metrics" value="contributions" class="form-check-input" id="metric2" checked>
+                                <label class="form-check-label" for="metric2">حمایت‌های مالی</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" name="metrics" value="engagement" class="form-check-input" id="metric3" checked>
+                                <label class="form-check-label" for="metric3">میزان تعامل</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section 3: فرمت فایل -->
+                <div class="section-title mt-4">
+                    <i class="bi bi-file-earmark"></i> فرمت فایل
+                </div>
+                
+                <div class="format-options">
+                    <div class="format-option">
+                        <input type="radio" name="format" value="excel" id="format_excel" checked>
+                        <label for="format_excel" class="format-label">
+                            <i class="bi bi-file-earmark-excel"></i> Excel
+                        </label>
+                    </div>
+                    
+                    <div class="format-option">
+                        <input type="radio" name="format" value="csv" id="format_csv">
+                        <label for="format_csv" class="format-label">
+                            <i class="bi bi-filetype-csv"></i> CSV
+                        </label>
+                    </div>
+                    
+                    <div class="format-option">
+                        <input type="radio" name="format" value="json" id="format_json">
+                        <label for="format_json" class="format-label">
+                            <i class="bi bi-filetype-json"></i> JSON
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Security Notice -->
+                <div class="info-box">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    <strong>امنیت:</strong> 
+                    همه فایل‌های export با الگوریتم AES-256 رمزگذاری می‌شوند و لینک دانلود محدود به زمان است.
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn-custom btn-create">
+                        <i class="bi bi-download"></i> ایجاد Export
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Show/hide filters based on export type
+        const exportTypes = document.querySelectorAll('input[name="export_type"]');
+        const filterSections = document.querySelectorAll('.filters-section');
+        
+        exportTypes.forEach(type => {
+            type.addEventListener('change', function() {
+                // Hide all filters
+                filterSections.forEach(section => section.classList.remove('active'));
+                
+                // Show relevant filter
+                const filterSection = document.getElementById('filters_' + this.value);
+                if (filterSection) {
+                    filterSection.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

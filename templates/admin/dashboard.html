@@ -6,6 +6,7 @@
     <title>داشبورد - پنل مدیریت انتخابات</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
 </head>
 <body>
     <div class="dashboard-wrapper">
@@ -31,6 +32,10 @@
                 <a href="{{ url_for('plans') }}" class="menu-item">
                     <i class="fas fa-money-bill-wave"></i>
                     <span>پلن‌ها و قیمت‌گذاری</span>
+                </a>
+                <a href="{{ url_for('referral_rewards') }}" class="menu-item">
+                    <i class="fas fa-gift"></i>
+                    <span>پاداش‌های معرفی</span>
                 </a>
                 <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
                     <i class="fas fa-sign-out-alt"></i>

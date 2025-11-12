@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ایجاد نماینده جدید - پنل مدیریت</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
 </head>
 <body>
 <div class="dashboard-wrapper">
@@ -42,16 +43,49 @@
 </div>
 <div class="card-body">
 <form method="POST" class="form-modern">
+<h3 style="color:#667eea;margin:0 0 20px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;"><i class="fas fa-user-circle"></i> اطلاعات شخصی</h3>
 <div class="form-row">
 <div class="form-group">
-<label for="full_name"><i class="fas fa-user"></i> نام کامل *</label>
-<input type="text" id="full_name" name="full_name" class="form-control" placeholder="مثال: علی احمدی" required>
+<label for="full_name"><i class="fas fa-user"></i> نام *</label>
+<input type="text" id="full_name" name="full_name" class="form-control" placeholder="مثال: علی" required>
 </div>
 <div class="form-group">
+<label for="last_name"><i class="fas fa-user"></i> نام خانوادگی *</label>
+<input type="text" id="last_name" name="last_name" class="form-control" placeholder="مثال: احمدی" required>
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
 <label for="phone"><i class="fas fa-phone"></i> شماره موبایل *</label>
-<input type="tel" id="phone" name="phone" class="form-control" placeholder="09123456789" pattern="09[0-9]{9}" required>
+<input type="tel" id="phone" name="phone" class="form-control" placeholder="09123456789" required>
+<small class="form-hint">مثال: 09123456789</small>
+</div>
+<div class="form-group">
+<label for="email"><i class="fas fa-envelope"></i> ایمیل</label>
+<input type="email" id="email" name="email" class="form-control" placeholder="email@example.com" style="direction:ltr;text-align:left;">
 </div>
 </div>
+<div class="form-row">
+<div class="form-group">
+<label for="education"><i class="fas fa-graduation-cap"></i> تحصیلات</label>
+<input type="text" id="education" name="education" class="form-control" placeholder="مثال: کارشناسی مهندسی">
+</div>
+<div class="form-group">
+<label for="province"><i class="fas fa-map-marked-alt"></i> استان</label>
+<input type="text" id="province" name="province" class="form-control" placeholder="مثال: تهران">
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label for="city"><i class="fas fa-city"></i> شهر</label>
+<input type="text" id="city" name="city" class="form-control" placeholder="مثال: تهران">
+</div>
+<div class="form-group">
+<label for="district"><i class="fas fa-map-pin"></i> منطقه/حوزه انتخابیه</label>
+<input type="text" id="district" name="district" class="form-control" placeholder="مثال: منطقه 5">
+</div>
+</div>
+<h3 style="color:#667eea;margin:30px 0 20px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;"><i class="fas fa-lock"></i> اطلاعات ورود</h3>
 <div class="form-row">
 <div class="form-group">
 <label for="username"><i class="fas fa-at"></i> نام کاربری *</label>
@@ -62,6 +96,9 @@
 <label for="password"><i class="fas fa-lock"></i> رمز عبور *</label>
 <input type="password" id="password" name="password" class="form-control" placeholder="حداقل 8 کاراکتر" minlength="8" required style="direction:ltr;text-align:left;">
 </div>
+</div>
+<div style="background:#f0f9ff;border:2px solid #0ea5e9;border-radius:12px;padding:20px;margin:20px 0;">
+<p style="margin:0;color:#075985;"><i class="fas fa-info-circle" style="color:#0ea5e9;margin-left:10px;"></i><strong>توجه:</strong> پس از ایجاد نماینده، پلن پایه <strong>"🚀 استارت"</strong> به‌صورت خودکار به وی اختصاص داده می‌شود که شامل تمام امکانات پایه است.</p>
 </div>
 <div class="form-actions">
 <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> ایجاد نماینده</button>

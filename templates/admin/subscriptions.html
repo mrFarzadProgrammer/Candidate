@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت اشتراک‌ها - پنل مدیریت</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
+    <style>
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-completed { background: #d1fae5; color: #065f46; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-failed { background: #fee2e2; color: #991b1b; }
+        .status-contacted { background: #dbeafe; color: #1e40af; }
+        .status-converted { background: #d1fae5; color: #065f46; }
+        .status-rejected { background: #e5e7eb; color: #374151; }
+        
+        .expiry-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .expiry-active { background: #d1fae5; color: #065f46; }
+        .expiry-warning { background: #fef3c7; color: #92400e; }
+        .expiry-expired { background: #fee2e2; color: #991b1b; }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 3px solid #e5e7eb;
+        }
+        .data-table thead {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        .data-table th {
+            padding: 15px;
+            text-align: right;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 15px;
+            border-top: 2px solid #f3f4f6;
+        }
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo"><i class="fas fa-vote-yea"></i></div>
+                <h2>پنل مدیریت</h2>
+                <p>سامانه بات‌های انتخاباتی</p>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-chart-line"></i><span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('candidates') }}" class="menu-item">
+                    <i class="fas fa-users"></i><span>نمایندگان</span>
+                </a>
+                <a href="{{ url_for('plans') }}" class="menu-item">
+                    <i class="fas fa-tags"></i><span>پلن‌ها</span>
+                </a>
+                <a href="{{ url_for('subscriptions') }}" class="menu-item active">
+                    <i class="fas fa-shopping-cart"></i><span>اشتراک‌ها</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i><span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <main class="main-content">
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
+                    <h1>مدیریت اشتراک‌ها</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <i class="fas fa-user-circle"></i>
+                        <span>مدیر سیستم</span>
+                    </div>
+                </div>
+            </header>
+            
+            <div class="content-area">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" style="margin-bottom:20px;">
+                                <i class="fas fa-check-circle"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- درخواست‌های مشاوره -->
+                {% if consultations %}
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-header">
+                        <h3><i class="fas fa-phone"></i> درخواست‌های مشاوره ({{ consultations|length }})</h3>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>کاندیدا</th>
+                                    <th>پلن مورد نظر</th>
+                                    <th>شماره تماس</th>
+                                    <th>زمان مناسب</th>
+                                    <th>تاریخ درخواست</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for consultation in consultations %}
+                                <tr>
+                                    <td><strong>{{ consultation.candidate.full_name }}</strong></td>
+                                    <td>
+                                        {% if consultation.plan %}
+                                        <span class="badge badge-primary">{{ consultation.plan.name }}</span>
+                                        {% else %}
+                                        <span style="color: #9ca3af;">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><i class="fas fa-phone"></i> {{ consultation.phone }}</td>
+                                    <td>{{ consultation.preferred_time or '-' }}</td>
+                                    <td>{{ consultation.created_at.strftime('%Y/%m/%d %H:%M') }}</td>
+                                    <td>
+                                        <span class="status-badge status-{{ consultation.status }}">
+                                            {% if consultation.status == 'pending' %}در انتظار
+                                            {% elif consultation.status == 'contacted' %}تماس گرفته شد
+                                            {% elif consultation.status == 'converted' %}خرید انجام شد
+                                            {% elif consultation.status == 'rejected' %}رد شد
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="updateConsultation({{ consultation.id }})">
+                                            <i class="fas fa-edit"></i> به‌روزرسانی
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- تاریخچه خریدها -->
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-history"></i> تاریخچه خریدها ({{ purchases|length }})</h3>
+                    </div>
+                    <div class="card-body" style="padding: 0;">
+                        {% if purchases %}
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>کاندیدا</th>
+                                    <th>پلن</th>
+                                    <th>مبلغ</th>
+                                    <th>تاریخ خرید</th>
+                                    <th>تاریخ شروع</th>
+                                    <th>تاریخ انقضا</th>
+                                    <th>روز باقیمانده</th>
+                                    <th>وضعیت پرداخت</th>
+                                    <th>وضعیت</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for purchase in purchases %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ purchase.candidate.full_name }}</strong><br>
+                                        <small style="color: #6b7280;">@{{ purchase.candidate.username }}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-{{ purchase.plan.badge_color }}">
+                                            {{ purchase.plan.name }}
+                                        </span>
+                                        {% if purchase.is_trial %}
+                                        <span style="background:#fef3c7;color:#d97706;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-right:5px;">
+                                            🎁 Trial
+                                        </span>
+                                        {% endif %}
+                                        {% if purchase.admin_granted %}
+                                        <span style="background:#dcfce7;color:#059669;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;margin-right:5px;">
+                                            💰 رایگان
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td><strong>{{ "{:,}".format(purchase.payment_amount) }}</strong> تومان</td>
+                                    <td>{{ purchase.purchase_date.strftime('%Y/%m/%d') }}</td>
+                                    <td>{{ purchase.start_date.strftime('%Y/%m/%d') }}</td>
+                                    <td>{{ purchase.end_date.strftime('%Y/%m/%d') }}</td>
+                                    <td>
+                                        {% set days = purchase.days_remaining() %}
+                                        {% if days > 7 %}
+                                        <span class="expiry-badge expiry-active">{{ days }} روز</span>
+                                        {% elif days > 0 %}
+                                        <span class="expiry-badge expiry-warning">{{ days }} روز</span>
+                                        {% else %}
+                                        <span class="expiry-badge expiry-expired">منقضی شده</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="status-badge status-{{ purchase.payment_status }}">
+                                            {% if purchase.payment_status == 'completed' %}تکمیل شده
+                                            {% elif purchase.payment_status == 'pending' %}در انتظار
+                                            {% elif purchase.payment_status == 'failed' %}ناموفق
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if purchase.is_active and not purchase.is_expired() %}
+                                        <span style="color: #10b981;"><i class="fas fa-check-circle"></i> فعال</span>
+                                        {% else %}
+                                        <span style="color: #9ca3af;"><i class="fas fa-times-circle"></i> غیرفعال</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <div style="text-align: center; padding: 60px 20px; color: #9ca3af;">
+                            <i class="fas fa-shopping-cart" style="font-size: 60px; margin-bottom: 20px;"></i>
+                            <p style="margin: 0; font-size: 18px;">هنوز خریدی ثبت نشده است</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal به‌روزرسانی مشاوره -->
+    <div class="modal" id="consultationModal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2><i class="fas fa-edit"></i> به‌روزرسانی درخواست مشاوره</h2>
+                <button onclick="closeModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            
+            <form id="consultationForm" method="POST">
+                <input type="hidden" id="consultationId" name="consultation_id">
+                
+                <div class="form-group">
+                    <label>وضعیت *</label>
+                    <select name="status" id="consultationStatus" required class="form-control">
+                        <option value="pending">در انتظار</option>
+                        <option value="contacted">تماس گرفته شد</option>
+                        <option value="converted">خرید انجام شد</option>
+                        <option value="rejected">رد شد</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>یادداشت</label>
+                    <textarea name="admin_notes" id="consultationNotes" rows="4" class="form-control" placeholder="یادداشت‌های شما درباره این درخواست..."></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn btn-success" style="flex: 1;">
+                        <i class="fas fa-save"></i> ذخیره
+                    </button>
+                    <button type="button" onclick="closeModal()" class="btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-times"></i> انصراف
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function updateConsultation(id) {
+            document.getElementById('consultationModal').classList.add('active');
+            document.getElementById('consultationId').value = id;
+            document.getElementById('consultationForm').action = '/consultation/' + id + '/update';
+        }
+        
+        function closeModal() {
+            document.getElementById('consultationModal').classList.remove('active');
+        }
+        
+        document.getElementById('consultationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Sidebar toggle
+        document.querySelector('.sidebar-toggle')?.addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

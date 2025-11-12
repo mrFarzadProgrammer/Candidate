@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exportهای {{ candidate.full_name }} | پنل ادمین</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #667eea;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .candidate-info {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .candidate-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-left: 20px;
+        }
+        
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .exports-list {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .exports-list h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        
+        .export-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .export-item:hover {
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .export-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .export-id {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .type-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+        
+        .type-excel {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .type-json {
+            background: #cfe2ff;
+            color: #084298;
+        }
+        
+        .type-csv {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .export-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .btn-custom {
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .btn-download {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+        }
+        
+        .btn-download:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-delete {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+        }
+        
+        .back-btn {
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #a0aec0;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            color: #cbd5e0;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="bi bi-person-circle"></i> Exportهای {{ candidate.full_name }}</h1>
+                    <p class="mb-0 text-muted">تاریخچه کامل خروجی داده</p>
+                </div>
+                <a href="{{ url_for('exports_dashboard') }}" class="back-btn">
+                    <i class="bi bi-arrow-right"></i> بازگشت
+                </a>
+            </div>
+        </div>
+        
+        <!-- Candidate Info -->
+        <div class="candidate-info">
+            <div class="d-flex align-items-center">
+                <div class="candidate-avatar">
+                    {{ candidate.full_name[0] }}
+                </div>
+                <div>
+                    <h3 class="mb-1">{{ candidate.full_name }}</h3>
+                    <p class="mb-1 text-muted">
+                        <i class="bi bi-at"></i> {{ candidate.username }}
+                    </p>
+                    <p class="mb-0 text-muted">
+                        <i class="bi bi-telegram"></i> {{ candidate.bot_token[:15] }}...
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-icon text-primary">
+                    <i class="bi bi-file-earmark-zip"></i>
+                </div>
+                <div class="stat-value">{{ exports|length }}</div>
+                <div class="stat-label">کل Exportها</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon text-success">
+                    <i class="bi bi-hdd"></i>
+                </div>
+                <div class="stat-value">{{ total_size_mb|round(2) }}</div>
+                <div class="stat-label">حجم کل (MB)</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon text-warning">
+                    <i class="bi bi-calendar-check"></i>
+                </div>
+                <div class="stat-value">
+                    {% if exports %}
+                        {{ exports[0].exported_at.strftime('%Y/%m/%d') }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </div>
+                <div class="stat-label">آخرین Export</div>
+            </div>
+        </div>
+        
+        <!-- Exports List -->
+        <div class="exports-list">
+            <h3><i class="bi bi-list-ul"></i> لیست Exportها</h3>
+            
+            {% if exports %}
+                {% for export in exports %}
+                <div class="export-item">
+                    <div class="export-header">
+                        <div class="export-id">#{{ export.id }}</div>
+                        <span class="type-badge 
+                            {% if export.file_type == 'excel' %}type-excel
+                            {% elif export.file_type == 'json' %}type-json
+                            {% else %}type-csv
+                            {% endif %}">
+                            {{ export.file_type.upper() }}
+                        </span>
+                    </div>
+                    
+                    <div class="export-meta">
+                        <div class="meta-item">
+                            <i class="bi bi-hdd-fill"></i>
+                            <span>{{ (export.file_size / (1024*1024))|round(2) }} MB</span>
+                        </div>
+                        
+                        <div class="meta-item">
+                            <i class="bi bi-calendar"></i>
+                            <span>{{ export.exported_at.strftime('%Y/%m/%d - %H:%M') }}</span>
+                        </div>
+                        
+                        <div class="meta-item">
+                            <i class="bi bi-geo-alt"></i>
+                            <span>{{ export.exported_by_ip }}</span>
+                        </div>
+                        
+                        {% if export.is_encrypted %}
+                        <div class="meta-item text-primary">
+                            <i class="bi bi-shield-lock-fill"></i>
+                            <span>رمزگذاری شده</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="{{ url_for('download_export', export_id=export.id) }}" 
+                           class="btn-custom btn-download">
+                            <i class="bi bi-download"></i> دانلود
+                        </a>
+                        
+                        <form method="POST" action="{{ url_for('delete_export', export_id=export.id) }}"
+                              onsubmit="return confirm('آیا از حذف این export اطمینان دارید؟')">
+                            <button type="submit" class="btn-custom btn-delete">
+                                <i class="bi bi-trash"></i> حذف
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <h3>هیچ Export‌ای برای این نماینده وجود ندارد</h3>
+                    <p>برای ایجاد Export جدید به داشبورد بروید</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

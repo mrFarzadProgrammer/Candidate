@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>راه‌اندازی بات - پنل مدیریت</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
 </head>
 <body>
 <div class="dashboard-wrapper">
@@ -85,19 +86,45 @@
 <div class="card">
 <div class="card-header"><h2><i class="fas fa-cog"></i> اطلاعات بات</h2></div>
 <div class="card-body">
+{% if candidate.bot_instance %}
+<div style="background:#dcfce7;border:2px solid #16a34a;border-radius:12px;padding:20px;margin-bottom:30px;">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:15px;">
+<i class="fas fa-check-circle" style="font-size:32px;color:#16a34a;"></i>
+<div>
+<h3 style="margin:0;color:#166534;font-size:18px;">بات فعال است ✅</h3>
+<p style="margin:5px 0 0;color:#15803d;font-size:14px;">بات قبلاً راه‌اندازی شده است. می‌توانید اطلاعات را ویرایش کنید.</p>
+</div>
+</div>
+<div style="background:white;border-radius:8px;padding:15px;margin-top:15px;">
+<p style="margin:0 0 8px;color:#475569;"><strong>یوزرنیم:</strong> <a href="https://t.me/{{ candidate.bot_instance.bot_username }}" target="_blank" style="color:#667eea;text-decoration:none;">@{{ candidate.bot_instance.bot_username }}</a></p>
+<p style="margin:0 0 8px;color:#475569;"><strong>توکن:</strong> <span style="font-family:monospace;background:#f1f5f9;padding:4px 8px;border-radius:4px;font-size:13px;">{{ candidate.bot_instance.bot_token[:20] }}...</span></p>
+<p style="margin:0;color:#475569;"><strong>وضعیت:</strong> <span style="background:{% if candidate.bot_instance.is_active %}#dcfce7;color:#16a34a{% else %}#fee2e2;color:#dc2626{% endif %};padding:4px 12px;border-radius:6px;font-size:13px;font-weight:600;">{% if candidate.bot_instance.is_active %}فعال{% else %}غیرفعال{% endif %}</span></p>
+</div>
+</div>
+{% else %}
+<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:12px;padding:20px;margin-bottom:30px;">
+<div style="display:flex;align-items:center;gap:12px;">
+<i class="fas fa-exclamation-triangle" style="font-size:32px;color:#d97706;"></i>
+<div>
+<h3 style="margin:0;color:#92400e;font-size:18px;">هنوز بات راه‌اندازی نشده</h3>
+<p style="margin:5px 0 0;color:#b45309;font-size:14px;">لطفاً اطلاعات بات را در فرم زیر وارد کنید تا بات فعال شود.</p>
+</div>
+</div>
+</div>
+{% endif %}
 <form method="POST" class="form-modern">
 <div class="form-group">
 <label for="bot_token"><i class="fas fa-key"></i> توکن بات *</label>
-<input type="text" id="bot_token" name="bot_token" class="form-control" placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz" required style="font-family:monospace;direction:ltr;text-align:left;">
+<input type="text" id="bot_token" name="bot_token" class="form-control" value="{{ candidate.bot_instance.bot_token if candidate.bot_instance else '' }}" placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz" required style="font-family:monospace;direction:ltr;text-align:left;">
 <small class="form-hint">توکن دریافتی از BotFather</small>
 </div>
 <div class="form-group">
 <label for="bot_username"><i class="fas fa-at"></i> نام کاربری بات *</label>
-<input type="text" id="bot_username" name="bot_username" class="form-control" placeholder="ali_ahmadi_bot" required style="direction:ltr;text-align:left;">
+<input type="text" id="bot_username" name="bot_username" class="form-control" value="{{ candidate.bot_instance.bot_username if candidate.bot_instance else '' }}" placeholder="ali_ahmadi_bot" required style="direction:ltr;text-align:left;">
 <small class="form-hint">باید به _bot ختم شود</small>
 </div>
 <div class="form-actions">
-<button type="submit" class="btn btn-success"><i class="fas fa-rocket"></i> راه‌اندازی بات</button>
+<button type="submit" class="btn btn-success"><i class="fas fa-{% if candidate.bot_instance %}save{% else %}rocket{% endif %}"></i> {% if candidate.bot_instance %}به‌روزرسانی بات{% else %}راه‌اندازی بات{% endif %}</button>
 <a href="{{ url_for('candidates') }}" class="btn btn-secondary"><i class="fas fa-arrow-right"></i> بازگشت</a>
 </div>
 </form>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت بتا تسترها | پنل ادمین</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #667eea;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .add-tester-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .add-tester-card h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .testers-list {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .tester-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .tester-item:hover {
+            background: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .tester-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .tester-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tester-badge {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tester-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #4a5568;
+        }
+        
+        .info-item i {
+            color: #667eea;
+        }
+        
+        .btn-custom {
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-add {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .btn-add:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-remove {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .btn-remove:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #a0aec0;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            color: #cbd5e0;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .back-btn {
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="bi bi-people"></i> مدیریت بتا تسترها</h1>
+                    <p class="mb-0 text-muted">دسترسی زودهنگام به پلن‌های جدید</p>
+                </div>
+                <a href="{{ url_for('plan_release_manager') }}" class="back-btn">
+                    <i class="bi bi-arrow-right"></i> بازگشت
+                </a>
+            </div>
+        </div>
+        
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon text-primary">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div class="stat-value">{{ testers|length }}</div>
+                <div class="stat-label">کل بتا تسترها</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon text-success">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="stat-value">{{ testers|selectattr('is_active')|list|length }}</div>
+                <div class="stat-label">فعال</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon text-warning">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <div class="stat-value">{{ testers|selectattr('plan_code')|list|length }}</div>
+                <div class="stat-label">با پلن اختصاصی</div>
+            </div>
+        </div>
+        
+        <!-- Add Beta Tester Form -->
+        <div class="add-tester-card">
+            <h3><i class="bi bi-person-plus"></i> افزودن بتا تستر جدید</h3>
+            
+            <form method="POST" action="{{ url_for('add_beta_tester') }}">
+                <div class="row">
+                    <div class="col-md-5 mb-3">
+                        <label class="form-label">انتخاب نماینده:</label>
+                        <select name="candidate_id" class="form-select" required>
+                            <option value="">-- انتخاب کنید --</option>
+                            {% for candidate in candidates %}
+                                <option value="{{ candidate.id }}">
+                                    {{ candidate.full_name }} ({{ candidate.username }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-5 mb-3">
+                        <label class="form-label">پلن اختصاصی (اختیاری):</label>
+                        <select name="plan_code" class="form-select">
+                            <option value="">-- همه پلن‌ها --</option>
+                            <option value="trial">آزمایشی (Trial)</option>
+                            <option value="starter">استارتر (Starter)</option>
+                            <option value="basic">پایه (Basic)</option>
+                            <option value="standard">استاندارد (Standard)</option>
+                            <option value="premium">پریمیوم (Premium)</option>
+                            <option value="elite">نخبه (Elite)</option>
+                            <option value="enterprise">سازمانی (Enterprise)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-2 mb-3">
+                        <label class="form-label">&nbsp;</label>
+                        <button type="submit" class="btn-custom btn-add w-100">
+                            <i class="bi bi-plus-circle"></i> افزودن
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Beta Testers List -->
+        <div class="testers-list">
+            <h3 class="mb-4"><i class="bi bi-list-ul"></i> لیست بتا تسترها</h3>
+            
+            {% if testers %}
+                {% for tester in testers %}
+                <div class="tester-item">
+                    <div class="tester-header">
+                        <h4 class="tester-name">
+                            <i class="bi bi-person-badge"></i>
+                            {{ tester.candidate.full_name }}
+                            <span class="tester-badge">
+                                <i class="bi bi-shield-check"></i> بتا تستر
+                            </span>
+                        </h4>
+                        
+                        <form method="POST" action="{{ url_for('remove_beta_tester', tester_id=tester.id) }}" 
+                              onsubmit="return confirm('آیا از حذف این بتا تستر اطمینان دارید؟')">
+                            <button type="submit" class="btn-custom btn-remove">
+                                <i class="bi bi-trash"></i> حذف
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="tester-info">
+                        <div class="info-item">
+                            <i class="bi bi-person-circle"></i>
+                            <strong>نام کاربری:</strong> {{ tester.candidate.username }}
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="bi bi-box-seam"></i>
+                            <strong>پلن فعلی:</strong> 
+                            {% if tester.candidate.subscription_plan %}
+                                {{ tester.candidate.subscription_plan }}
+                            {% else %}
+                                <span class="text-muted">ندارد</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="bi bi-gift"></i>
+                            <strong>پلن اختصاصی:</strong> 
+                            {% if tester.plan_code %}
+                                <span class="text-primary">{{ tester.plan_code }}</span>
+                            {% else %}
+                                <span class="text-muted">همه پلن‌ها</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="bi bi-calendar-plus"></i>
+                            <strong>تاریخ افزودن:</strong> 
+                            {{ tester.added_at.strftime('%Y/%m/%d') }}
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="bi bi-person-check"></i>
+                            <strong>وضعیت:</strong> 
+                            {% if tester.is_active %}
+                                <span class="text-success">فعال</span>
+                            {% else %}
+                                <span class="text-danger">غیرفعال</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="info-item">
+                            <i class="bi bi-person-workspace"></i>
+                            <strong>افزوده توسط:</strong> 
+                            ادمین (ID: {{ tester.added_by_admin_id }})
+                        </div>
+                    </div>
+                    
+                    {% if tester.notes %}
+                    <div class="mt-3 p-2 bg-light rounded">
+                        <small class="text-muted">
+                            <i class="bi bi-chat-left-text"></i> یادداشت: {{ tester.notes }}
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <h3>هیچ بتا تستری وجود ندارد</h3>
+                    <p>از فرم بالا برای افزودن بتا تستر جدید استفاده کنید</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

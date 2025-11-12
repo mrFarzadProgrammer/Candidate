@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامه‌ریزی Export خودکار | پنل ادمین</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #667eea;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            color: #2d3748;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-control, .form-select, .form-textarea {
+            border-radius: 10px;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+        }
+        
+        .form-control:focus, .form-select:focus, .form-textarea:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .schedule-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .schedule-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .schedule-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .schedule-option input[type="radio"]:checked + .schedule-label {
+            background: linear-gradient(135deg, #e0e7ff 0%, #ddd6fe 100%);
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .schedule-label:hover {
+            transform: translateY(-3px);
+        }
+        
+        .schedule-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .btn-custom {
+            padding: 12px 35px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+        
+        .btn-schedule {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+        }
+        
+        .btn-schedule:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+        }
+        
+        .back-btn {
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box i {
+            color: #f59e0b;
+            font-size: 1.5rem;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="bi bi-calendar-event"></i> برنامه‌ریزی Export خودکار</h1>
+                    <p class="mb-0 text-muted">Export دوره‌ای خودکار داده‌ها</p>
+                </div>
+                <a href="{{ url_for('exports_dashboard') }}" class="back-btn">
+                    <i class="bi bi-arrow-right"></i> بازگشت
+                </a>
+            </div>
+        </div>
+        
+        <!-- Form -->
+        <div class="form-card">
+            <form method="POST" action="{{ url_for('schedule_export_route') }}">
+                <!-- Section 1: انتخاب نماینده -->
+                <div class="section-title">
+                    <i class="bi bi-person-check"></i> انتخاب نماینده
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">نماینده:</label>
+                    <select name="candidate_id" class="form-select" required>
+                        <option value="">-- انتخاب کنید --</option>
+                        {% for candidate in candidates %}
+                            <option value="{{ candidate.id }}">
+                                {{ candidate.full_name }} ({{ candidate.username }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Section 2: نوع Export -->
+                <div class="section-title">
+                    <i class="bi bi-box-seam"></i> نوع Export
+                </div>
+                
+                <div class="mb-4">
+                    <select name="export_type" class="form-select" required>
+                        <option value="">-- انتخاب کنید --</option>
+                        <option value="complete">پشتیبان کامل</option>
+                        <option value="bot_users">کاربران بات</option>
+                        <option value="contributions">حمایت‌ها</option>
+                        <option value="messages">پیام‌ها</option>
+                        <option value="analytics">آمار</option>
+                        <option value="poll_results">نظرسنجی‌ها</option>
+                    </select>
+                </div>
+                
+                <!-- Section 3: دوره برنامه‌ریزی -->
+                <div class="section-title">
+                    <i class="bi bi-clock-history"></i> دوره برنامه‌ریزی
+                </div>
+                
+                <div class="schedule-options">
+                    <div class="schedule-option">
+                        <input type="radio" name="schedule_type" value="daily" id="schedule_daily" required>
+                        <label for="schedule_daily" class="schedule-label">
+                            <div class="schedule-icon"><i class="bi bi-calendar-day"></i></div>
+                            <strong>روزانه</strong>
+                            <small>هر روز</small>
+                        </label>
+                    </div>
+                    
+                    <div class="schedule-option">
+                        <input type="radio" name="schedule_type" value="weekly" id="schedule_weekly">
+                        <label for="schedule_weekly" class="schedule-label">
+                            <div class="schedule-icon"><i class="bi bi-calendar-week"></i></div>
+                            <strong>هفتگی</strong>
+                            <small>هر هفته</small>
+                        </label>
+                    </div>
+                    
+                    <div class="schedule-option">
+                        <input type="radio" name="schedule_type" value="monthly" id="schedule_monthly">
+                        <label for="schedule_monthly" class="schedule-label">
+                            <div class="schedule-icon"><i class="bi bi-calendar-month"></i></div>
+                            <strong>ماهانه</strong>
+                            <small>هر ماه</small>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- Section 4: گیرندگان ایمیل -->
+                <div class="section-title">
+                    <i class="bi bi-envelope"></i> گیرندگان (اختیاری)
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">آدرس‌های ایمیل (با کاما جدا کنید):</label>
+                    <textarea name="recipients" class="form-control form-textarea" rows="3" 
+                              placeholder="admin@example.com, manager@example.com"></textarea>
+                    <small class="text-muted">
+                        در صورت تکمیل، لینک دانلود به این ایمیل‌ها ارسال می‌شود
+                    </small>
+                </div>
+                
+                <!-- Info Box -->
+                <div class="info-box">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>نکته:</strong> 
+                    Export خودکار در ساعت 02:00 صبح (به وقت سرور) اجرا می‌شود و لینک دانلود به مدت 24 ساعت معتبر است.
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn-custom btn-schedule">
+                        <i class="bi bi-check-circle"></i> برنامه‌ریزی Export
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

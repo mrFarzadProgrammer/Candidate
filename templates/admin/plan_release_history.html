@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تاریخچه انتشار {{ plan.name }} | پنل ادمین</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            margin: 0;
+            color: #667eea;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            right: 30px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, #667eea, #764ba2);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding: 0 0 30px 70px;
+        }
+        
+        .timeline-icon {
+            position: absolute;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            z-index: 1;
+        }
+        
+        .icon-enabled {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .icon-disabled {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .icon-scheduled {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .icon-released {
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+        }
+        
+        .timeline-content {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .timeline-content:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .timeline-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin: 0;
+        }
+        
+        .timeline-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .timeline-details {
+            color: #4a5568;
+            line-height: 1.8;
+        }
+        
+        .event-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .badge-enabled {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-disabled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-scheduled {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-released {
+            background: #cfe2ff;
+            color: #084298;
+        }
+        
+        .empty-state {
+            background: white;
+            border-radius: 15px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            color: #cbd5e0;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p {
+            color: #a0aec0;
+        }
+        
+        .back-btn {
+            padding: 10px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .plan-info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .info-label {
+            color: #6c757d;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            color: #2d3748;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1><i class="bi bi-clock-history"></i> تاریخچه انتشار</h1>
+                    <p class="mb-0 text-muted">پلن: <strong>{{ plan.name }}</strong> ({{ plan.code }})</p>
+                </div>
+                <a href="{{ url_for('plan_release_manager') }}" class="back-btn">
+                    <i class="bi bi-arrow-right"></i> بازگشت
+                </a>
+            </div>
+        </div>
+        
+        <!-- Plan Info Card -->
+        <div class="plan-info-card">
+            <div class="info-grid">
+                <div class="info-box">
+                    <div class="info-label">وضعیت فعلی</div>
+                    <div class="info-value">
+                        {% if plan.is_enabled %}
+                            <span class="text-success"><i class="bi bi-check-circle"></i> فعال</span>
+                        {% else %}
+                            <span class="text-danger"><i class="bi bi-x-circle"></i> غیرفعال</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-label">قیمت (تومان)</div>
+                    <div class="info-value">{{ "{:,}".format(plan.price) }}</div>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-label">تاریخ ایجاد</div>
+                    <div class="info-value">
+                        {% if plan.created_at %}
+                            {{ plan.created_at.strftime('%Y/%m/%d') }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <div class="info-label">آخرین تغییر</div>
+                    <div class="info-value">
+                        {% if plan.updated_at %}
+                            {{ plan.updated_at.strftime('%Y/%m/%d') }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Timeline -->
+        {% if history %}
+        <div class="timeline">
+            {% for event in history %}
+            <div class="timeline-item">
+                <div class="timeline-icon 
+                    {% if event.event_type == 'plan_enabled' %}icon-enabled
+                    {% elif event.event_type == 'plan_disabled' %}icon-disabled
+                    {% elif event.event_type == 'plan_scheduled' %}icon-scheduled
+                    {% else %}icon-released
+                    {% endif %}">
+                    {% if event.event_type == 'plan_enabled' %}
+                        <i class="bi bi-check-circle"></i>
+                    {% elif event.event_type == 'plan_disabled' %}
+                        <i class="bi bi-x-circle"></i>
+                    {% elif event.event_type == 'plan_scheduled' %}
+                        <i class="bi bi-calendar-event"></i>
+                    {% else %}
+                        <i class="bi bi-rocket-takeoff"></i>
+                    {% endif %}
+                </div>
+                
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <div>
+                            <span class="event-badge 
+                                {% if event.event_type == 'plan_enabled' %}badge-enabled
+                                {% elif event.event_type == 'plan_disabled' %}badge-disabled
+                                {% elif event.event_type == 'plan_scheduled' %}badge-scheduled
+                                {% else %}badge-released
+                                {% endif %}">
+                                {% if event.event_type == 'plan_enabled' %}
+                                    فعال‌سازی
+                                {% elif event.event_type == 'plan_disabled' %}
+                                    غیرفعال‌سازی
+                                {% elif event.event_type == 'plan_scheduled' %}
+                                    برنامه‌ریزی انتشار
+                                {% else %}
+                                    {{ event.event_type }}
+                                {% endif %}
+                            </span>
+                            <h4 class="timeline-title">
+                                {% if event.event_type == 'plan_enabled' %}
+                                    پلن فعال شد
+                                {% elif event.event_type == 'plan_disabled' %}
+                                    پلن غیرفعال شد
+                                {% elif event.event_type == 'plan_scheduled' %}
+                                    انتشار برنامه‌ریزی شد
+                                {% else %}
+                                    {{ event.event_type }}
+                                {% endif %}
+                            </h4>
+                        </div>
+                        <div class="timeline-date">
+                            <i class="bi bi-clock"></i> {{ event.timestamp.strftime('%Y/%m/%d - %H:%M') }}
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-details">
+                        <p><i class="bi bi-person-badge"></i> <strong>توسط:</strong> 
+                            {% if event.user_type == 'admin' %}
+                                ادمین سیستم (ID: {{ event.user_id }})
+                            {% else %}
+                                کاربر {{ event.user_id }}
+                            {% endif %}
+                        </p>
+                        
+                        <p><i class="bi bi-geo-alt"></i> <strong>IP:</strong> {{ event.ip_address }}</p>
+                        
+                        {% if event.details %}
+                            {% if event.details.reason %}
+                                <p><i class="bi bi-info-circle"></i> <strong>دلیل:</strong> {{ event.details.reason }}</p>
+                            {% endif %}
+                            
+                            {% if event.details.scheduled_for %}
+                                <p><i class="bi bi-calendar-check"></i> <strong>زمان برنامه‌ریزی شده:</strong> 
+                                    {{ event.details.scheduled_for }}
+                                </p>
+                            {% endif %}
+                            
+                            {% if event.details.notes %}
+                                <p><i class="bi bi-chat-left-text"></i> <strong>یادداشت:</strong> 
+                                    {{ event.details.notes }}
+                                </p>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <h3>هیچ رویدادی ثبت نشده است</h3>
+            <p>تاریخچه تغییرات این پلن خالی است</p>
+        </div>
+        {% endif %}
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت تیکت‌ها</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-icon.total { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .stat-icon.pending { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; }
+        .stat-icon.approved { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; }
+        .stat-icon.rejected { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; }
+
+        .stat-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 2rem;
+            color: #333;
+        }
+
+        .stat-info p {
+            margin: 0;
+            color: #999;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .filter-tab {
+            padding: 10px 25px;
+            border-radius: 8px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .filter-tab:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .ticket-item {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .ticket-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f5f5f5;
+        }
+
+        .ticket-number {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .ticket-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .badge-pending { background: #fff3cd; color: #856404; }
+        .badge-approved { background: #d4edda; color: #155724; }
+        .badge-rejected { background: #f8d7da; color: #721c24; }
+
+        .ticket-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .ticket-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .info-label {
+            color: #999;
+            min-width: 100px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .receipt-section {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .receipt-section img {
+            max-width: 400px;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            cursor: pointer;
+        }
+
+        .ticket-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-approve {
+            flex: 1;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-approve:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(17, 153, 142, 0.4);
+        }
+
+        .btn-reject {
+            flex: 1;
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-reject:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(235, 51, 73, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #999;
+            cursor: pointer;
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-footer button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-crown"></i>
+            <h2>پنل ادمین</h2>
+        </div>
+        <nav class="menu">
+            <a href="{{ url_for('dashboard') }}">
+                <i class="fas fa-home"></i>
+                <span>داشبورد</span>
+            </a>
+            <a href="{{ url_for('candidates') }}">
+                <i class="fas fa-users"></i>
+                <span>نماینده‌ها</span>
+            </a>
+            <a href="{{ url_for('plans') }}">
+                <i class="fas fa-box"></i>
+                <span>پلن‌ها</span>
+            </a>
+            <a href="{{ url_for('tickets') }}" class="active">
+                <i class="fas fa-ticket-alt"></i>
+                <span>تیکت‌ها</span>
+            </a>
+            <a href="{{ url_for('logout') }}">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>خروج</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1><i class="fas fa-ticket-alt"></i> مدیریت تیکت‌ها</h1>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- آمار -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon total">
+                    <i class="fas fa-inbox"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ stats.total }}</h3>
+                    <p>کل تیکت‌ها</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon pending">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ stats.pending }}</h3>
+                    <p>در انتظار</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon approved">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ stats.approved }}</h3>
+                    <p>تایید شده</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon rejected">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ stats.rejected }}</h3>
+                    <p>رد شده</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- فیلتر -->
+        <div class="filter-tabs">
+            <a href="{{ url_for('tickets', status='all') }}" class="filter-tab {% if status_filter == 'all' %}active{% endif %}">
+                <i class="fas fa-list"></i> همه
+            </a>
+            <a href="{{ url_for('tickets', status='pending') }}" class="filter-tab {% if status_filter == 'pending' %}active{% endif %}">
+                <i class="fas fa-clock"></i> در انتظار
+            </a>
+            <a href="{{ url_for('tickets', status='approved') }}" class="filter-tab {% if status_filter == 'approved' %}active{% endif %}">
+                <i class="fas fa-check"></i> تایید شده
+            </a>
+            <a href="{{ url_for('tickets', status='rejected') }}" class="filter-tab {% if status_filter == 'rejected' %}active{% endif %}">
+                <i class="fas fa-times"></i> رد شده
+            </a>
+        </div>
+
+        <!-- لیست تیکت‌ها -->
+        {% if tickets %}
+            {% for ticket in tickets %}
+            <div class="ticket-item">
+                <div class="ticket-header">
+                    <div>
+                        <div class="ticket-number">
+                            <i class="fas fa-hashtag"></i> {{ ticket.ticket_number }}
+                        </div>
+                        <small style="color: #999;">
+                            <i class="fas fa-calendar"></i> {{ ticket.created_at.strftime('%Y/%m/%d %H:%M') }}
+                        </small>
+                    </div>
+                    <div class="ticket-badge badge-{{ ticket.status }}">
+                        {% if ticket.status == 'pending' %}
+                            <i class="fas fa-clock"></i> در انتظار
+                        {% elif ticket.status == 'approved' %}
+                            <i class="fas fa-check"></i> تایید شده
+                        {% elif ticket.status == 'rejected' %}
+                            <i class="fas fa-times"></i> رد شده
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="ticket-body">
+                    <div class="ticket-info">
+                        <div class="info-row">
+                            <span class="info-label">کاندید:</span>
+                            <span class="info-value">{{ ticket.candidate.full_name }}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">موضوع:</span>
+                            <span class="info-value">{{ ticket.subject }}</span>
+                        </div>
+                        {% if ticket.plan %}
+                        <div class="info-row">
+                            <span class="info-label">پلن:</span>
+                            <span class="info-value">{{ ticket.plan.name }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="ticket-info">
+                        {% if ticket.payment_amount %}
+                        <div class="info-row">
+                            <span class="info-label">مبلغ:</span>
+                            <span class="info-value">{{ "{:,}".format(ticket.payment_amount) }} تومان</span>
+                        </div>
+                        {% endif %}
+                        {% if ticket.payment_method %}
+                        <div class="info-row">
+                            <span class="info-label">روش پرداخت:</span>
+                            <span class="info-value">
+                                {% if ticket.payment_method == 'card_to_card' %}کارت به کارت
+                                {% elif ticket.payment_method == 'sheba' %}شبا{% endif %}
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    {% if ticket.receipt_image %}
+                    <div class="receipt-section">
+                        <h4><i class="fas fa-receipt"></i> فیش پرداخت</h4>
+                        <img src="{{ url_for('static', filename='../uploads/receipts/' + ticket.receipt_image.split('/')[-1]) }}" 
+                             alt="فیش" 
+                             onclick="window.open(this.src)">
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if ticket.status == 'pending' %}
+                <div class="ticket-actions">
+                    <button class="btn-approve" onclick="openModal('approve', {{ ticket.id }})">
+                        <i class="fas fa-check"></i> تایید و فعال‌سازی پلن
+                    </button>
+                    <button class="btn-reject" onclick="openModal('reject', {{ ticket.id }})">
+                        <i class="fas fa-times"></i> رد درخواست
+                    </button>
+                </div>
+                {% elif ticket.admin_response %}
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border-right: 4px solid #667eea; margin-top: 15px;">
+                    <strong><i class="fas fa-comment-dots"></i> پاسخ ادمین:</strong><br>
+                    {{ ticket.admin_response }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h3>هیچ تیکتی یافت نشد</h3>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Modal تایید -->
+    <div class="modal" id="approveModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-check-circle"></i> تایید تیکت</h3>
+                <button class="close-modal" onclick="closeModal('approveModal')">&times;</button>
+            </div>
+            <form method="POST" id="approveForm">
+                <div class="modal-body">
+                    <label>پیام برای کاربر (اختیاری):</label>
+                    <textarea name="admin_response" placeholder="پرداخت شما تایید و پلن فعال شد..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeModal('approveModal')" style="background: #6c757d; color: white;">
+                        انصراف
+                    </button>
+                    <button type="submit" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white;">
+                        <i class="fas fa-check"></i> تایید
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal رد -->
+    <div class="modal" id="rejectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-times-circle"></i> رد تیکت</h3>
+                <button class="close-modal" onclick="closeModal('rejectModal')">&times;</button>
+            </div>
+            <form method="POST" id="rejectForm">
+                <div class="modal-body">
+                    <label>دلیل رد (اختیاری):</label>
+                    <textarea name="admin_response" placeholder="متاسفانه پرداخت شما تایید نشد..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeModal('rejectModal')" style="background: #6c757d; color: white;">
+                        انصراف
+                    </button>
+                    <button type="submit" style="background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); color: white;">
+                        <i class="fas fa-times"></i> رد
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openModal(action, ticketId) {
+            if (action === 'approve') {
+                document.getElementById('approveForm').action = `/tickets/${ticketId}/approve`;
+                document.getElementById('approveModal').classList.add('active');
+            } else if (action === 'reject') {
+                document.getElementById('rejectForm').action = `/tickets/${ticketId}/reject`;
+                document.getElementById('rejectModal').classList.add('active');
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // بستن modal با کلیک خارج از آن
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
