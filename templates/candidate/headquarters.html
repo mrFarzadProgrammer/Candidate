@@ -6,6 +6,28 @@
     <title>ستادها و دفاتر - پنل نماینده</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
+    <style>
+        #map {
+            height: 500px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+        .map-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-wrapper">
@@ -21,6 +43,10 @@
                 <a href="{{ url_for('dashboard') }}" class="menu-item">
                     <i class="fas fa-home"></i>
                     <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('view_plans') }}" class="menu-item">
+                    <i class="fas fa-tags"></i>
+                    <span>پلن‌های اشتراک</span>
                 </a>
                 <a href="{{ url_for('profile') }}" class="menu-item">
                     <i class="fas fa-user-circle"></i>
@@ -102,10 +128,21 @@
                 <div class="card" style="margin-top: 30px;">
                     <div class="card-header">
                         <h3><i class="fas fa-list"></i> لیست دفاتر</h3>
+                        <button onclick="showMap()" class="map-btn">
+                            <i class="fas fa-map"></i> نمایش روی نقشه
+                        </button>
                     </div>
                     <div class="card-body">
+                        <!-- Map Container (Hidden by default) -->
+                        <div id="mapContainer" style="display: none;">
+                            <div id="map"></div>
+                            <button onclick="hideMap()" style="margin-top: 15px; padding: 10px 20px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                                <i class="fas fa-times"></i> بستن نقشه
+                            </button>
+                        </div>
+                        
                         {% if headquarters %}
-                        <div style="display: grid; gap: 20px;">
+                        <div style="display: grid; gap: 20px;" id="headquartersList">
                             {% for hq in headquarters %}
                             <div style="background: white; border: 2px solid #e5e7eb; border-radius: 16px; padding: 25px;">
                                 <div style="display: flex; justify-content: space-between;">
@@ -138,6 +175,41 @@
         </div>
     </div>
     <script>
+        let map = null;
+        
+        function showMap() {
+            document.getElementById('mapContainer').style.display = 'block';
+            document.getElementById('headquartersList').style.display = 'none';
+            
+            if (!map) {
+                // Initialize map centered on Iran
+                map = L.map('map').setView([32.4279, 53.6880], 6);
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
+                
+                // Add markers for headquarters (if coordinates available)
+                {% if headquarters %}
+                {% for hq in headquarters %}
+                {% if hq.latitude and hq.longitude %}
+                L.marker([{{ hq.latitude }}, {{ hq.longitude }}]).addTo(map)
+                    .bindPopup('<b>{{ hq.name }}</b><br>{{ hq.address }}');
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            }
+            
+            setTimeout(() => {
+                map.invalidateSize();
+            }, 100);
+        }
+        
+        function hideMap() {
+            document.getElementById('mapContainer').style.display = 'none';
+            document.getElementById('headquartersList').style.display = 'grid';
+        }
+        
         const sidebarToggle = document.getElementById('sidebarToggle');
         const sidebar = document.querySelector('.sidebar');
         if (sidebarToggle) {

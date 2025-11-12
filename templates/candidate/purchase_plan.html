@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خرید پلن - {{ plan.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .payment-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 700px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .plan-info {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .plan-info h2 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .plan-price {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .plan-price small {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .bank-info {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            border-right: 5px solid #667eea;
+        }
+        
+        .bank-info h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 10px;
+            align-items: center;
+        }
+        
+        .info-label {
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .info-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #333;
+            direction: ltr;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .method-option {
+            flex: 1;
+            padding: 20px;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .method-option:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .method-option input[type="radio"] {
+            display: none;
+        }
+        
+        .method-option input[type="radio"]:checked + label {
+            color: #667eea;
+        }
+        
+        .method-option.selected {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+        
+        .method-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 25px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            background: #f0f3ff;
+            border-color: #5568d3;
+        }
+        
+        .upload-area i {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .upload-area input[type="file"] {
+            display: none;
+        }
+        
+        .file-name {
+            margin-top: 15px;
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            color: #0c5460;
+        }
+        
+        .alert-info i {
+            margin-left: 10px;
+            color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-poll-h"></i>
+            <h2>پنل کاندید</h2>
+        </div>
+        <nav class="menu">
+            <a href="{{ url_for('dashboard') }}">
+                <i class="fas fa-home"></i>
+                <span>داشبورد</span>
+            </a>
+            <a href="{{ url_for('view_plans') }}" class="active">
+                <i class="fas fa-crown"></i>
+                <span>پلن‌ها</span>
+            </a>
+            <a href="{{ url_for('my_tickets') }}">
+                <i class="fas fa-ticket-alt"></i>
+                <span>تیکت‌های من</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="welcome">
+                <h3>خرید پلن</h3>
+            </div>
+            <div class="user-info">
+                <span>{{ candidate.full_name }}</span>
+                <a href="{{ url_for('logout') }}" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="payment-card">
+            <!-- اطلاعات پلن -->
+            <div class="plan-info">
+                <h2>{{ plan.name }}</h2>
+                <p>{{ plan.description }}</p>
+                <div class="plan-price">
+                    {{ "{:,}".format(plan.price) }} <small>تومان</small>
+                </div>
+                <p>مدت اعتبار: {{ plan.duration_days }} روز</p>
+            </div>
+
+            <!-- راهنمای پرداخت -->
+            <div class="alert-info">
+                <i class="fas fa-info-circle"></i>
+                برای خرید این پلن، مبلغ را به یکی از روش‌های زیر واریز کنید و تصویر فیش را آپلود نمایید.
+            </div>
+
+            <form method="POST" enctype="multipart/form-data" id="purchaseForm">
+                <!-- انتخاب روش پرداخت -->
+                <h3 style="margin: 25px 0 15px;">روش پرداخت:</h3>
+                <div class="payment-methods">
+                    <div class="method-option" onclick="selectMethod('card_to_card', this)">
+                        <input type="radio" name="payment_method" id="card_to_card" value="card_to_card" required>
+                        <label for="card_to_card">
+                            <div class="method-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <h4>کارت به کارت</h4>
+                        </label>
+                    </div>
+                    
+                    <div class="method-option" onclick="selectMethod('sheba', this)">
+                        <input type="radio" name="payment_method" id="sheba" value="sheba" required>
+                        <label for="sheba">
+                            <div class="method-icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h4>شماره شبا</h4>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- اطلاعات بانکی - کارت به کارت -->
+                <div class="bank-info" id="card-info" style="display: none;">
+                    <h3><i class="fas fa-credit-card"></i> اطلاعات کارت</h3>
+                    <div class="info-row">
+                        <div class="info-label">شماره کارت:</div>
+                        <div>
+                            <button type="button" class="copy-btn" onclick="copyText('6037-9971-1234-5678')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <span class="info-value" id="card-number">6037-9971-1234-5678</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">به نام:</div>
+                        <div class="info-value">علی احمدی</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">بانک:</div>
+                        <div class="info-value">ملی</div>
+                    </div>
+                </div>
+
+                <!-- اطلاعات بانکی - شبا -->
+                <div class="bank-info" id="sheba-info" style="display: none;">
+                    <h3><i class="fas fa-university"></i> شماره شبا</h3>
+                    <div class="info-row">
+                        <div class="info-label">شماره شبا:</div>
+                        <div>
+                            <button type="button" class="copy-btn" onclick="copyText('IR120170000000123456789001')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <span class="info-value" id="sheba-number">IR120170000000123456789001</span>
+                        </div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">به نام:</div>
+                        <div class="info-value">علی احمدی</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">بانک:</div>
+                        <div class="info-value">ملی</div>
+                    </div>
+                </div>
+
+                <!-- آپلود فیش -->
+                <h3 style="margin: 30px 0 15px;">تصویر فیش واریزی:</h3>
+                <label for="receipt" class="upload-area" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h4>کلیک کنید یا فایل را اینجا بکشید</h4>
+                    <p>فرمت‌های مجاز: JPG, PNG, PDF - حداکثر 5MB</p>
+                    <input type="file" id="receipt" name="receipt_image" accept="image/*,application/pdf" required>
+                    <div class="file-name" id="fileName"></div>
+                </label>
+
+                <!-- دکمه ارسال -->
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    <i class="fas fa-paper-plane"></i>
+                    ارسال درخواست و ثبت تیکت
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function selectMethod(method, element) {
+            // حذف selected از همه
+            document.querySelectorAll('.method-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // اضافه کردن selected به انتخاب شده
+            element.classList.add('selected');
+            document.getElementById(method).checked = true;
+            
+            // نمایش اطلاعات بانکی مربوطه
+            document.getElementById('card-info').style.display = 'none';
+            document.getElementById('sheba-info').style.display = 'none';
+            
+            if (method === 'card_to_card') {
+                document.getElementById('card-info').style.display = 'block';
+            } else if (method === 'sheba') {
+                document.getElementById('sheba-info').style.display = 'block';
+            }
+            
+            checkFormValidity();
+        }
+        
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // نمایش پیام کپی شد
+                const Toast = document.createElement('div');
+                Toast.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #28a745; color: white; padding: 15px 30px; border-radius: 10px; z-index: 10000;';
+                Toast.textContent = 'کپی شد ✓';
+                document.body.appendChild(Toast);
+                setTimeout(() => Toast.remove(), 2000);
+            });
+        }
+        
+        // نمایش نام فایل
+        document.getElementById('receipt').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                document.getElementById('fileName').textContent = '✓ ' + fileName;
+                checkFormValidity();
+            }
+        });
+        
+        function checkFormValidity() {
+            const methodSelected = document.querySelector('input[name="payment_method"]:checked');
+            const fileSelected = document.getElementById('receipt').files.length > 0;
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (methodSelected && fileSelected) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+    </script>
+</body>
+</html>

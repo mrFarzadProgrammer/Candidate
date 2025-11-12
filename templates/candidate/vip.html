@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شهروند ماه 🌟</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        /* Hero Card */
+        .hero-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        /* VIP Citizens Section */
+        .vip-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        /* VIP Medals */
+        .vip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .vip-card {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .vip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .vip-card.gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+        }
+
+        .vip-card.silver {
+            background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+        }
+
+        .vip-card.bronze {
+            background: linear-gradient(135deg, #cd7f32 0%, #e9b880 100%);
+        }
+
+        .medal-icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+
+        .vip-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .vip-score {
+            font-size: 1rem;
+            color: #4a5568;
+            margin-bottom: 15px;
+        }
+
+        .vip-details {
+            display: flex;
+            justify-content: space-around;
+            font-size: 0.85rem;
+            color: #4a5568;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .vip-detail-item {
+            text-align: center;
+        }
+
+        .vip-detail-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        /* Meetings Section */
+        .meeting-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-right: 4px solid #8b5cf6;
+            transition: all 0.3s;
+        }
+
+        .meeting-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .meeting-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .meeting-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .meeting-date {
+            color: #8b5cf6;
+            font-weight: 600;
+        }
+
+        .meeting-info {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .meeting-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-complete {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .btn-cancel {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        /* Award Button */
+        .award-btn {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            box-shadow: 0 5px 20px rgba(236, 72, 153, 0.4);
+            transition: all 0.3s;
+        }
+
+        .award-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(236, 72, 153, 0.5);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Schedule Modal Button */
+        .schedule-btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .vip-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .meeting-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .meeting-actions {
+                flex-direction: column;
+            }
+
+            .meeting-actions button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button -->
+    <a href="{{ url_for('dashboard') }}" class="back-btn">
+        <i class="bi bi-arrow-right" style="font-size: 1.5rem; color: #ec4899;"></i>
+    </a>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-card">
+            <h1 class="hero-title">🌟 شهروند ماه</h1>
+            <p style="color: #6c757d; font-size: 1.1rem; margin-bottom: 20px;">
+                قدردانی از برترین شهروندان فعال با جلسات اختصاصی VIP
+            </p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);">
+                    <i class="bi bi-trophy-fill" style="color: white;"></i>
+                </div>
+                <div class="stat-value">{{ stats.total_vips }}</div>
+                <div class="stat-label">کل شهروندان VIP</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <i class="bi bi-check-circle-fill" style="color: white;"></i>
+                </div>
+                <div class="stat-value">{{ stats.completed_interactions }}</div>
+                <div class="stat-label">جلسات برگزار شده</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                    <i class="bi bi-calendar-check" style="color: white;"></i>
+                </div>
+                <div class="stat-value">{{ stats.upcoming_interactions }}</div>
+                <div class="stat-label">جلسات آینده</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);">
+                    <i class="bi bi-star-fill" style="color: white;"></i>
+                </div>
+                <div class="stat-value" style="font-size: 1.2rem;">
+                    {{ stats.top_this_month or '-' }}
+                </div>
+                <div class="stat-label">برتر این ماه</div>
+            </div>
+        </div>
+
+        <!-- VIP Citizens Section -->
+        <div class="vip-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2 class="section-title" style="margin: 0;">
+                    <i class="bi bi-trophy"></i>
+                    شهروندان برتر این ماه
+                </h2>
+                <form method="POST" action="{{ url_for('vip_award') }}" style="display: inline;">
+                    <button type="submit" class="award-btn">
+                        <i class="bi bi-award"></i>
+                        اعطای وضعیت VIP
+                    </button>
+                </form>
+            </div>
+
+            {% if vip_citizens %}
+                <div class="vip-grid">
+                    {% for vip in vip_citizens %}
+                    <div class="vip-card {{ vip.vip_status }}">
+                        <div class="medal-icon">
+                            {% if vip.vip_status == 'gold' %}
+                                🥇
+                            {% elif vip.vip_status == 'silver' %}
+                                🥈
+                            {% elif vip.vip_status == 'bronze' %}
+                                🥉
+                            {% endif %}
+                        </div>
+                        <div class="vip-name">{{ vip.citizen_name }}</div>
+                        <div class="vip-score">
+                            <i class="bi bi-star-fill"></i>
+                            امتیاز: {{ vip.total_score }}
+                        </div>
+                        
+                        <div class="vip-details">
+                            <div class="vip-detail-item">
+                                <div class="vip-detail-value">{{ vip.contributions }}</div>
+                                <div>مشارکت</div>
+                            </div>
+                            <div class="vip-detail-item">
+                                <div class="vip-detail-value">{{ vip.upvotes }}</div>
+                                <div>آپ‌ووت</div>
+                            </div>
+                            <div class="vip-detail-item">
+                                <div class="vip-detail-value">{{ vip.comments }}</div>
+                                <div>کامنت</div>
+                            </div>
+                        </div>
+
+                        <button class="schedule-btn" style="margin-top: 15px; width: 100%;" 
+                                onclick="showScheduleModal({{ vip.citizen_phone }}, '{{ vip.citizen_name }}')">
+                            <i class="bi bi-calendar-plus"></i>
+                            زمان‌بندی جلسه
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-trophy"></i>
+                    <h4>هنوز شهروند برتری انتخاب نشده</h4>
+                    <p>روی دکمه "اعطای وضعیت VIP" کلیک کنید تا 3 شهروند برتر انتخاب شوند</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Upcoming Meetings Section -->
+        <div class="vip-section">
+            <h2 class="section-title">
+                <i class="bi bi-calendar3"></i>
+                جلسات آینده
+            </h2>
+
+            {% if upcoming_meetings %}
+                {% for meeting in upcoming_meetings %}
+                <div class="meeting-item">
+                    <div class="meeting-header">
+                        <div class="meeting-title">
+                            <i class="bi bi-camera-video"></i>
+                            {{ meeting.title }}
+                        </div>
+                        <div class="meeting-date">
+                            <i class="bi bi-clock"></i>
+                            {{ meeting.scheduled_date.strftime('%Y/%m/%d - %H:%M') }}
+                        </div>
+                    </div>
+                    
+                    <div class="meeting-info">
+                        <i class="bi bi-person"></i>
+                        <strong>شهروند:</strong> {{ meeting.citizen_name }} ({{ meeting.citizen_phone }})
+                    </div>
+                    
+                    {% if meeting.meeting_platform %}
+                    <div class="meeting-info">
+                        <i class="bi bi-badge-vo"></i>
+                        <strong>پلتفرم:</strong> {{ meeting.meeting_platform }}
+                        {% if meeting.meeting_link %}
+                        - <a href="{{ meeting.meeting_link }}" target="_blank">لینک جلسه</a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if meeting.description %}
+                    <div class="meeting-info">
+                        <i class="bi bi-info-circle"></i>
+                        {{ meeting.description }}
+                    </div>
+                    {% endif %}
+
+                    <div class="meeting-actions">
+                        <form method="POST" action="{{ url_for('vip_complete_meeting', interaction_id=meeting.id) }}" style="flex: 1;">
+                            <button type="submit" class="btn-complete" style="width: 100%;">
+                                <i class="bi bi-check-circle"></i>
+                                تکمیل جلسه
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('vip_cancel_meeting', interaction_id=meeting.id) }}" style="flex: 1;">
+                            <button type="submit" class="btn-cancel" style="width: 100%;">
+                                <i class="bi bi-x-circle"></i>
+                                لغو جلسه
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-calendar-x"></i>
+                    <h4>هیچ جلسه‌ای برنامه‌ریزی نشده</h4>
+                    <p>با شهروندان VIP خود جلسه تنظیم کنید</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showScheduleModal(citizenId, citizenName) {
+            alert('قابلیت زمان‌بندی جلسه به زودی اضافه می‌شود برای: ' + citizenName);
+            // TODO: Implement modal for scheduling
+        }
+    </script>
+</body>
+</html>

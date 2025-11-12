@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوت دوستان 🎁</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        /* Hero Card */
+        .hero-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+
+        /* Referral Code Card */
+        .code-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .code-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .code-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 5px;
+            margin: 20px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .copy-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.3);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.95rem;
+        }
+
+        /* Referrals Table */
+        .referrals-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .table-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d3748;
+        }
+
+        .referral-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .referral-item:hover {
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+
+        .referral-item:last-child {
+            border-bottom: none;
+        }
+
+        .referral-info {
+            flex: 1;
+        }
+
+        .referral-name {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .referral-date {
+            font-size: 0.85rem;
+            color: #718096;
+        }
+
+        .status-badge {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-converted {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-pending {
+            background: #feebc8;
+            color: #744210;
+        }
+
+        .status-no-purchase {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .reward-amount {
+            font-weight: 700;
+            color: #10b981;
+            margin-right: 10px;
+        }
+
+        /* Share Buttons */
+        .share-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .share-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .share-btn.telegram {
+            background: linear-gradient(135deg, #0088cc 0%, #006ba3 100%);
+            color: white;
+        }
+
+        .share-btn.whatsapp {
+            background: linear-gradient(135deg, #25d366 0%, #1ebe57 100%);
+            color: white;
+        }
+
+        .share-btn.twitter {
+            background: linear-gradient(135deg, #1da1f2 0%, #0c7abf 100%);
+            color: white;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .code-value {
+                font-size: 1.8rem;
+                letter-spacing: 3px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .share-buttons {
+                flex-direction: column;
+            }
+
+            .share-btn {
+                width: 100%;
+            }
+
+            .referral-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .leaderboard-btn {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .leaderboard-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(245, 158, 11, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button -->
+    <a href="{{ url_for('dashboard') }}" class="back-btn">
+        <i class="bi bi-arrow-right" style="font-size: 1.5rem; color: #667eea;"></i>
+    </a>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-card">
+            <h1 class="hero-title">🎁 دعوت دوستان</h1>
+            <p class="hero-subtitle">
+                هر دوست که معرفی کنید و پلن بخرد، <strong>20٪ پاداش</strong> دریافت می‌کنید!
+            </p>
+            <a href="{{ url_for('referral_leaderboard') }}">
+                <button class="leaderboard-btn">
+                    <i class="bi bi-trophy"></i>
+                    <span>رتبه‌بندی برترین‌ها</span>
+                </button>
+            </a>
+        </div>
+
+        {% if stats.has_program %}
+        <!-- Referral Code Card -->
+        <div class="code-card">
+            <h3 style="margin: 0 0 10px 0;">کد اختصاصی شما</h3>
+            <div class="code-value">{{ stats.referral_code }}</div>
+            <button class="copy-btn" onclick="copyCode('{{ stats.referral_code }}')">
+                <i class="bi bi-clipboard"></i> کپی کد
+            </button>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <i class="bi bi-people-fill" style="color: white;"></i>
+                </div>
+                <div class="stat-value">{{ stats.total_referrals }}</div>
+                <div class="stat-label">افراد معرفی شده</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                    <i class="bi bi-check-circle-fill" style="color: white;"></i>
+                </div>
+                <div class="stat-value">{{ stats.successful_conversions }}</div>
+                <div class="stat-label">تبدیل موفق (خرید پلن)</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                    <i class="bi bi-hourglass-split" style="color: white;"></i>
+                </div>
+                <div class="stat-value">{{ stats.pending_rewards }}</div>
+                <div class="stat-label">پاداش در انتظار تایید</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
+                    <i class="bi bi-cash-coin" style="color: white;"></i>
+                </div>
+                <div class="stat-value">{{ "{:,.0f}".format(stats.total_earned) }}</div>
+                <div class="stat-label">کل درآمد (تومان)</div>
+            </div>
+        </div>
+
+        <!-- Share Section -->
+        <div class="share-section">
+            <h3 class="table-title">
+                <i class="bi bi-share"></i>
+                اشتراک‌گذاری کد معرفی
+            </h3>
+            <p style="color: #718096; margin-bottom: 20px;">
+                کد خود را با دوستان و همکاران به اشتراک بگذارید
+            </p>
+            <div class="share-buttons">
+                <button class="share-btn telegram" onclick="shareOnTelegram()">
+                    <i class="bi bi-telegram" style="font-size: 1.3rem;"></i>
+                    <span>تلگرام</span>
+                </button>
+                <button class="share-btn whatsapp" onclick="shareOnWhatsApp()">
+                    <i class="bi bi-whatsapp" style="font-size: 1.3rem;"></i>
+                    <span>واتساپ</span>
+                </button>
+                <button class="share-btn twitter" onclick="shareOnTwitter()">
+                    <i class="bi bi-twitter" style="font-size: 1.3rem;"></i>
+                    <span>توییتر</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Referrals List -->
+        <div class="referrals-card">
+            <h3 class="table-title">
+                <i class="bi bi-list-ul"></i>
+                لیست افراد معرفی شده
+                {% if stats.conversion_rate > 0 %}
+                <span style="font-size: 0.9rem; color: #10b981; font-weight: 600;">
+                    (نرخ تبدیل: {{ stats.conversion_rate }}٪)
+                </span>
+                {% endif %}
+            </h3>
+
+            {% if stats.top_referrals %}
+                {% for referral in stats.top_referrals %}
+                <div class="referral-item">
+                    <div class="referral-info">
+                        <div class="referral-name">
+                            <i class="bi bi-person-circle"></i>
+                            {{ referral.name }} ({{ referral.phone }})
+                        </div>
+                        <div class="referral-date">
+                            <i class="bi bi-calendar3"></i>
+                            {{ referral.created_at.strftime('%Y/%m/%d') }}
+                        </div>
+                    </div>
+                    <div>
+                        {% if referral.has_plan %}
+                            {% if referral.reward_status == 'approved' %}
+                                <span class="reward-amount">
+                                    {{ "{:,.0f}".format(referral.reward_amount) }} تومان
+                                </span>
+                                <span class="status-badge status-converted">
+                                    <i class="bi bi-check-circle"></i> پرداخت شده
+                                </span>
+                            {% elif referral.reward_status == 'pending' %}
+                                <span class="reward-amount">
+                                    {{ "{:,.0f}".format(referral.reward_amount) }} تومان
+                                </span>
+                                <span class="status-badge status-pending">
+                                    <i class="bi bi-hourglass"></i> در انتظار تایید
+                                </span>
+                            {% endif %}
+                        {% else %}
+                            <span class="status-badge status-no-purchase">
+                                <i class="bi bi-clock"></i> هنوز خرید نکرده
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-inbox"></i>
+                    <h4>هنوز کسی را معرفی نکرده‌اید</h4>
+                    <p>کد خود را با دوستان به اشتراک بگذارید</p>
+                </div>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                // تغییر متن دکمه به صورت موقت
+                const btn = event.target.closest('button');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="bi bi-check2"></i> کپی شد!';
+                btn.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'white';
+                }, 2000);
+            });
+        }
+
+        function shareOnTelegram() {
+            const code = '{{ stats.referral_code }}';
+            const text = `🎁 از کد معرفی من استفاده کن:\n${code}\n\nپنل مدیریت انتخابات کاندیدا - همراه هوشمند نامزدها`;
+            const url = `https://t.me/share/url?url=${encodeURIComponent('')}&text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function shareOnWhatsApp() {
+            const code = '{{ stats.referral_code }}';
+            const text = `🎁 از کد معرفی من استفاده کن: ${code}\n\nپنل مدیریت انتخابات کاندیدا`;
+            const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function shareOnTwitter() {
+            const code = '{{ stats.referral_code }}';
+            const text = `🎁 کد معرفی من: ${code} - پنل مدیریت انتخابات`;
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتایج نظرسنجی - {{ candidate.full_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .poll-container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .poll-question {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .poll-info {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 12px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .info-item i {
+            color: #667eea;
+            font-size: 20px;
+        }
+        
+        .chart-container {
+            margin: 30px 0;
+            max-width: 600px;
+        }
+        
+        .results-list {
+            margin-top: 30px;
+        }
+        
+        .result-item {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .option-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .vote-count {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .progress-bar {
+            background: #f3f4f6;
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.5s ease;
+        }
+        
+        .percentage {
+            margin-top: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>{{ candidate.full_name }}</h2>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('polls') }}" class="menu-item active">
+                    <i class="fas fa-poll"></i>
+                    <span>نظرسنجی</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <div class="main-content">
+            <div class="topbar">
+                <h1><i class="fas fa-chart-pie"></i> نتایج نظرسنجی</h1>
+                <div class="topbar-user">
+                    <span>{{ candidate.full_name }}</span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <a href="{{ url_for('polls') }}" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background: #667eea; color: white; text-decoration: none; border-radius: 8px; margin-bottom: 20px;">
+                    <i class="fas fa-arrow-right"></i> بازگشت
+                </a>
+                
+                <div class="poll-container">
+                    <div class="poll-question">{{ poll.question }}</div>
+                    
+                    <div class="poll-info">
+                        <div class="info-item">
+                            <i class="fas fa-vote-yea"></i>
+                            <span><strong>{{ poll.total_votes }}</strong> رأی</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ poll.created_at.strftime('%Y/%m/%d') }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-{{ 'check-circle' if poll.is_active else 'times-circle' }}"></i>
+                            <span>{{ 'فعال' if poll.is_active else 'غیرفعال' }}</span>
+                        </div>
+                    </div>
+                    
+                    {% if poll.total_votes > 0 %}
+                    <!-- Chart -->
+                    <div class="chart-container">
+                        <canvas id="pollChart"></canvas>
+                    </div>
+                    
+                    <!-- Results List -->
+                    <div class="results-list">
+                        {% for option in poll.options|sort(attribute='vote_count', reverse=True) %}
+                        <div class="result-item">
+                            <div class="result-header">
+                                <span class="option-text">{{ option.option_text }}</span>
+                                <span class="vote-count">{{ option.vote_count }} رأی</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{ (option.vote_count / poll.total_votes * 100) | round(1) }}%"></div>
+                            </div>
+                            <div class="percentage">
+                                {{ (option.vote_count / poll.total_votes * 100) | round(1) }}%
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div style="text-align: center; padding: 60px; color: #999;">
+                        <i class="fas fa-vote-yea" style="font-size: 64px; opacity: 0.3; margin-bottom: 20px;"></i>
+                        <p>هنوز رأیی ثبت نشده است</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        {% if poll.total_votes > 0 %}
+        const ctx = document.getElementById('pollChart').getContext('2d');
+        
+        const data = {
+            labels: [
+                {% for option in poll.options %}
+                '{{ option.option_text }}'{% if not loop.last %},{% endif %}
+                {% endfor %}
+            ],
+            datasets: [{
+                label: 'تعداد آرا',
+                data: [
+                    {% for option in poll.options %}
+                    {{ option.vote_count }}{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                backgroundColor: [
+                    'rgba(102, 126, 234, 0.8)',
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(139, 92, 246, 0.8)',
+                    'rgba(236, 72, 153, 0.8)',
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        };
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 14
+                            },
+                            padding: 15
+                        }
+                    }
+                }
+            }
+        });
+        {% endif %}
+    </script>
+</body>
+</html>

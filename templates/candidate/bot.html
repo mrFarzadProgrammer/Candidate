@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت بات - پنل نماینده</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
+    <style>
+        /* iPhone 17 Pro Max Frame */
+        .iphone-frame {
+            width: 430px;
+            height: 932px;
+            background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+            border-radius: 60px;
+            padding: 8px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4), 
+                        inset 0 0 0 2px rgba(255,255,255,0.1);
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        /* Dynamic Island */
+        .dynamic-island {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 126px;
+            height: 37px;
+            background: #000;
+            border-radius: 26px;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        
+        .iphone-screen {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 52px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Telegram Header */
+        .telegram-header {
+            background: linear-gradient(135deg, #0088cc, #00a8e8);
+            color: white;
+            padding: 55px 20px 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(0,136,204,0.3);
+        }
+        
+        .telegram-avatar {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0088cc;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .telegram-title h3 {
+            margin: 0;
+            font-size: 17px;
+            font-weight: 600;
+        }
+        
+        .telegram-title p {
+            margin: 2px 0 0 0;
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        
+        /* Chat Area */
+        .telegram-chat {
+            background: #e5ddd5;
+            height: calc(100% - 280px);
+            overflow-y: auto;
+            padding: 20px 15px;
+        }
+        
+        /* Message Bubbles */
+        .bot-message {
+            background: white;
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            max-width: 85%;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            animation: slideIn 0.4s ease;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bot-message h3 {
+            margin: 0 0 10px 0;
+            color: #0088cc;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .bot-message p {
+            margin: 0;
+            color: #333;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            color: #555;
+            font-size: 14px;
+        }
+        
+        .info-item i {
+            color: #0088cc;
+            width: 18px;
+            font-size: 15px;
+        }
+        
+        .info-box {
+            margin: 12px 0;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 12px;
+        }
+        
+        .info-box strong {
+            display: block;
+            color: #0088cc;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        /* Telegram Keyboard */
+        .telegram-keyboard {
+            background: white;
+            padding: 16px 12px 20px 12px;
+            border-top: 1px solid #e0e0e0;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        
+        .keyboard-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .keyboard-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .keyboard-button {
+            flex: 1;
+            background: white;
+            border: 1.5px solid #0088cc;
+            color: #0088cc;
+            padding: 14px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .keyboard-button:hover {
+            background: #0088cc;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,136,204,0.3);
+        }
+        
+        .keyboard-button:active {
+            transform: scale(0.97);
+        }
+        
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        /* Status Badge */
+        .bot-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .bot-status.active {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: #065f46;
+        }
+        
+        .bot-status.inactive {
+            background: linear-gradient(135deg, #fee2e2, #fca5a5);
+            color: #991b1b;
+        }
+        
+        /* Scrollbar */
+        .telegram-chat::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .telegram-chat::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.2);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>پنل نماینده</h2>
+                <p>{{ candidate.full_name }}</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('view_plans') }}" class="menu-item">
+                    <i class="fas fa-tags"></i>
+                    <span>پلن‌های اشتراک</span>
+                </a>
+                <a href="{{ url_for('bot_management') }}" class="menu-item active">
+                    <i class="fas fa-robot"></i>
+                    <span>مدیریت بات</span>
+                </a>
+                <a href="{{ url_for('profile') }}" class="menu-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>اطلاعات شخصی</span>
+                </a>
+                <a href="{{ url_for('resume') }}" class="menu-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>رزومه</span>
+                </a>
+                <a href="{{ url_for('programs') }}" class="menu-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>برنامه‌های انتخاباتی</span>
+                </a>
+                <a href="{{ url_for('headquarters') }}" class="menu-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ستادها و دفاتر</span>
+                </a>
+                <a href="{{ url_for('messages') }}" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>پیام‌های کاربران</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>مدیریت بات تلگرام</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            {{ candidate.full_name[0]|upper }}
+                        </div>
+                        <div class="user-info">
+                            <h4>{{ candidate.full_name }}</h4>
+                            <p>نماینده انتخاباتی</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; background: {% if category == 'success' %}#10b981{% elif category == 'error' %}#ef4444{% else %}#3b82f6{% endif %}; color: white;">
+                                <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h2>مدیریت بات تلگرام</h2>
+                    <div class="breadcrumb">
+                        <span>پنل نماینده</span>
+                        <i class="fas fa-chevron-left"></i>
+                        <span>مدیریت بات</span>
+                    </div>
+                </div>
+                
+                <!-- Bot Status -->
+                {% if bot_info %}
+                <div class="card" style="margin-bottom: 30px;">
+                    <div class="card-header">
+                        <h3><i class="fas fa-info-circle"></i> وضعیت بات</h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                            <div>
+                                <p style="margin: 0 0 10px 0; color: #6b7280;">نام کاربری بات:</p>
+                                <h3 style="margin: 0; color: #1f2937;">@{{ bot_info.username }}</h3>
+                            </div>
+                            <div style="text-align: center;">
+                                <p style="margin: 0 0 10px 0; color: #6b7280;">وضعیت:</p>
+                                {% if bot_info.is_active %}
+                                <span class="bot-status active">
+                                    <i class="fas fa-check-circle"></i> فعال
+                                </span>
+                                {% else %}
+                                <span class="bot-status inactive">
+                                    <i class="fas fa-times-circle"></i> غیرفعال
+                                </span>
+                                {% endif %}
+                            </div>
+                            {% if bot_info.bot_link %}
+                            <div>
+                                <a href="{{ bot_info.bot_link }}" target="_blank" class="btn btn-primary" style="padding: 12px 24px;">
+                                    <i class="fas fa-paper-plane"></i> مشاهده در تلگرام
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="card" style="margin-bottom: 30px; border: 2px dashed #fbbf24;">
+                    <div class="card-body" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-robot" style="font-size: 60px; color: #fbbf24; margin-bottom: 20px;"></i>
+                        <h3 style="color: #92400e; margin-bottom: 10px;">بات تلگرام شما هنوز راه‌اندازی نشده است</h3>
+                        <p style="color: #78350f; margin: 0;">لطفا با پشتیبانی تماس بگیرید تا بات شما فعال شود</p>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <!-- Edit Form -->
+                    <div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-edit"></i> ویرایش اطلاعات بات</h3>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" id="botForm">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-user"></i> نام *</label>
+                                        <input type="text" name="full_name" value="{{ candidate.full_name }}" required class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-user"></i> نام خانوادگی</label>
+                                        <input type="text" name="last_name" value="{{ candidate.last_name or '' }}" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-info-circle"></i> بیوگرافی</label>
+                                        <textarea name="bio" rows="3" class="form-control">{{ candidate.bio or '' }}</textarea>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-phone"></i> شماره تماس</label>
+                                        <input type="tel" name="phone" value="{{ candidate.phone or '' }}" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-envelope"></i> ایمیل</label>
+                                        <input type="email" name="email" value="{{ candidate.email or '' }}" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-map-marked-alt"></i> استان</label>
+                                        <input type="text" name="province" value="{{ candidate.province or '' }}" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-city"></i> شهر</label>
+                                        <input type="text" name="city" value="{{ candidate.city or '' }}" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-map-pin"></i> حوزه انتخابیه</label>
+                                        <input type="text" name="district" value="{{ candidate.district or '' }}" class="form-control">
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-graduation-cap"></i> تحصیلات</label>
+                                        <input type="text" name="education" value="{{ candidate.education or '' }}" class="form-control">
+                                    </div>
+                                    
+                                    <div style="margin-top: 20px;">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> ذخیره و اعمال در بات
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- تنظیمات BotFather -->
+                        {% if bot_info %}
+                        <div class="card" style="margin-top: 30px;">
+                            <div class="card-header">
+                                <h3><i class="fas fa-cog"></i> تنظیمات بات (BotFather)</h3>
+                                <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 13px;">تنظیمات ظاهری بات در تلگرام</p>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="{{ url_for('update_bot_settings') }}" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-signature"></i> نام بات (Bot Name)</label>
+                                        <input type="text" name="bot_name" value="{{ bot_info.bot_name or '' }}" class="form-control" placeholder="نام نمایشی بات">
+                                        <small class="form-text text-muted">نام کامل بات که در لیست چت‌ها نمایش داده می‌شود</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-comment-dots"></i> درباره بات (About) - حداکثر 120 کاراکتر</label>
+                                        <textarea name="bot_about" rows="2" maxlength="120" class="form-control" placeholder="توضیح کوتاه درباره بات">{{ bot_info.bot_about or '' }}</textarea>
+                                        <small class="form-text text-muted">متن کوتاهی که در پروفایل بات نمایش داده می‌شود</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-align-left"></i> توضیحات بات (Description)</label>
+                                        <textarea name="bot_description" rows="4" class="form-control" placeholder="توضیحات کامل درباره بات و قابلیت‌های آن">{{ bot_info.bot_description or '' }}</textarea>
+                                        <small class="form-text text-muted">توضیحات کاملی که قبل از استارت بات نمایش داده می‌شود</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-image"></i> تصویر توضیحات (Description Picture)</label>
+                                        <input type="file" name="bot_description_picture" accept="image/*" class="form-control">
+                                        {% if bot_info.bot_description_picture %}
+                                        <small class="form-text text-muted">تصویر فعلی: {{ bot_info.bot_description_picture }}</small>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-user-circle"></i> تصویر پروفایل بات (Bot Picture)</label>
+                                        <input type="file" name="bot_pic" accept="image/*" class="form-control">
+                                        {% if bot_info.bot_pic %}
+                                        <small class="form-text text-muted">تصویر فعلی: {{ bot_info.bot_pic }}</small>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-terminal"></i> دستورات بات (Commands)</label>
+                                        <textarea name="bot_commands" rows="5" class="form-control" placeholder="start - شروع کار با بات&#10;help - راهنما&#10;profile - مشاهده پروفایل">{{ bot_info.bot_commands or '' }}</textarea>
+                                        <small class="form-text text-muted">هر دستور در یک خط، به فرمت: command - توضیحات</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label><i class="fas fa-shield-alt"></i> لینک سیاست حفظ حریم خصوصی</label>
+                                        <input type="url" name="privacy_policy_url" value="{{ bot_info.privacy_policy_url or '' }}" class="form-control" placeholder="https://example.com/privacy">
+                                        <small class="form-text text-muted">لینک به صفحه سیاست حفظ حریم خصوصی</small>
+                                    </div>
+                                    
+                                    <div style="margin-top: 20px;">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-check"></i> ذخیره تنظیمات BotFather
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- iPhone Preview -->
+                    <div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-mobile-alt"></i> پیش‌نمایش iPhone 17 Pro Max</h3>
+                                <p style="margin: 5px 0 0 0; color: #6b7280; font-size: 13px;">نمایش دقیق بات در تلگرام</p>
+                            </div>
+                            <div class="card-body" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px;">
+                                <!-- iPhone Frame -->
+                                <div class="iphone-frame">
+                                    <div class="dynamic-island"></div>
+                                    <div class="iphone-screen">
+                                        <!-- Telegram Header -->
+                                        <div class="telegram-header">
+                                            <div class="telegram-avatar" id="preview_avatar">
+                                                {{ candidate.full_name[0]|upper }}
+                                            </div>
+                                            <div class="telegram-title">
+                                                <h3 id="bot_name">{{ candidate.full_name }}{% if candidate.last_name %} {{ candidate.last_name }}{% endif %}</h3>
+                                                <p>نماینده مجلس شورای اسلامی</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Chat Area -->
+                                        <div class="telegram-chat" id="chatArea">
+                                            <!-- Welcome Message -->
+                                            <div class="bot-message" id="welcomeMessage">
+                                                <h3>👋 سلام و خوش آمدید!</h3>
+                                                <p>به ربات انتخاباتی من خوش آمدید. از دکمه‌های زیر می‌توانید اطلاعات مورد نظرتان را مشاهده کنید.</p>
+                                            </div>
+                                            
+                                            <!-- Profile Content -->
+                                            <div class="bot-message content-section" id="profileContent">
+                                                <h3>👤 درباره من</h3>
+                                                <p id="preview_bio">{{ candidate.bio or 'بیوگرافی هنوز وارد نشده است' }}</p>
+                                                {% if candidate.education %}
+                                                <div class="info-item">
+                                                    <i class="fas fa-graduation-cap"></i>
+                                                    <span id="preview_edu">{{ candidate.education }}</span>
+                                                </div>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <!-- Contact Content -->
+                                            <div class="bot-message content-section" id="contactContent">
+                                                <h3>📞 اطلاعات تماس</h3>
+                                                <div class="info-item">
+                                                    <i class="fas fa-phone"></i>
+                                                    <span id="preview_phone">{{ candidate.phone or 'شماره تماس وارد نشده' }}</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <i class="fas fa-envelope"></i>
+                                                    <span id="preview_email">{{ candidate.email or 'ایمیل وارد نشده' }}</span>
+                                                </div>
+                                                <div class="info-item">
+                                                    <i class="fas fa-map-marker-alt"></i>
+                                                    <span id="preview_location">
+                                                        {% if candidate.province %}{{ candidate.province }}{% endif %}
+                                                        {% if candidate.city %}، {{ candidate.city }}{% endif %}
+                                                        {% if candidate.district %} ({{ candidate.district }}){% endif %}
+                                                        {% if not candidate.province and not candidate.city %}موقعیت وارد نشده{% endif %}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Resume Content -->
+                                            <div class="bot-message content-section" id="resumeContent">
+                                                <h3>📄 رزومه و سوابق</h3>
+                                                {% if resume and resume.work_experience %}
+                                                <p style="white-space: pre-line;">{{ resume.work_experience }}</p>
+                                                {% else %}
+                                                <p>رزومه هنوز وارد نشده است</p>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <!-- Programs Content -->
+                                            <div class="bot-message content-section" id="programsContent">
+                                                <h3>📋 برنامه‌های انتخاباتی</h3>
+                                                {% if programs %}
+                                                    {% for program in programs %}
+                                                    <div class="info-box">
+                                                        <strong>{{ program.title }}</strong>
+                                                        <p style="margin: 5px 0 0 0;">{{ program.description }}</p>
+                                                    </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                <p>برنامه‌های انتخاباتی هنوز وارد نشده است</p>
+                                                {% endif %}
+                                            </div>
+                                            
+                                            <!-- Headquarters Content -->
+                                            <div class="bot-message content-section" id="headquartersContent">
+                                                <h3>🏢 دفاتر و ستادها</h3>
+                                                {% if headquarters %}
+                                                    {% for hq in headquarters %}
+                                                    <div class="info-box">
+                                                        <div class="info-item">
+                                                            <i class="fas fa-building"></i>
+                                                            <strong>{{ hq.name }}</strong>
+                                                        </div>
+                                                        <div class="info-item">
+                                                            <i class="fas fa-map-marker-alt"></i>
+                                                            <span>{{ hq.address }}</span>
+                                                        </div>
+                                                        {% if hq.phone %}
+                                                        <div class="info-item">
+                                                            <i class="fas fa-phone"></i>
+                                                            <span>{{ hq.phone }}</span>
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+                                                    {% endfor %}
+                                                {% else %}
+                                                <p>دفاتر و ستادها هنوز وارد نشده است</p>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Telegram Keyboard -->
+                                        <div class="telegram-keyboard">
+                                            <div class="keyboard-row">
+                                                <button class="keyboard-button" onclick="showContent('profile')">
+                                                    👤 درباره من
+                                                </button>
+                                                <button class="keyboard-button" onclick="showContent('contact')">
+                                                    📞 تماس با من
+                                                </button>
+                                            </div>
+                                            <div class="keyboard-row">
+                                                <button class="keyboard-button" onclick="showContent('resume')">
+                                                    📄 رزومه
+                                                </button>
+                                                <button class="keyboard-button" onclick="showContent('programs')">
+                                                    📋 برنامه‌ها
+                                                </button>
+                                            </div>
+                                            <div class="keyboard-row">
+                                                <button class="keyboard-button" onclick="showContent('headquarters')">
+                                                    🏢 دفاتر
+                                                </button>
+                                                <button class="keyboard-button" onclick="showContent('welcome')">
+                                                    🏠 منوی اصلی
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Sidebar Toggle
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebar = document.querySelector('.sidebar');
+        
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        }
+        
+        // Show Content Function
+        function showContent(section) {
+            document.querySelectorAll('.content-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            const welcomeMsg = document.getElementById('welcomeMessage');
+            
+            if (section === 'welcome') {
+                welcomeMsg.style.display = 'block';
+            } else {
+                welcomeMsg.style.display = 'none';
+                
+                const contentMap = {
+                    'profile': 'profileContent',
+                    'contact': 'contactContent',
+                    'resume': 'resumeContent',
+                    'programs': 'programsContent',
+                    'headquarters': 'headquartersContent'
+                };
+                
+                const contentId = contentMap[section];
+                if (contentId) {
+                    const element = document.getElementById(contentId);
+                    if (element) {
+                        element.classList.add('active');
+                        const chatArea = document.getElementById('chatArea');
+                        setTimeout(() => {
+                            chatArea.scrollTop = chatArea.scrollHeight;
+                        }, 100);
+                    }
+                }
+            }
+        }
+        
+        // Update Preview Function
+        function updatePreview() {
+            const form = document.getElementById('botForm');
+            if (!form) return;
+            
+            const fullName = form.full_name.value;
+            const lastName = form.last_name.value;
+            const bio = form.bio.value;
+            const phone = form.phone.value;
+            const email = form.email.value;
+            const province = form.province.value;
+            const city = form.city.value;
+            const district = form.district.value;
+            const education = form.education.value;
+            
+            // Update bot name
+            const botNameEl = document.getElementById('bot_name');
+            if (botNameEl) {
+                botNameEl.textContent = fullName + (lastName ? ' ' + lastName : '');
+            }
+            
+            // Update avatar
+            const avatarEl = document.getElementById('preview_avatar');
+            if (avatarEl && fullName) {
+                avatarEl.textContent = fullName[0].toUpperCase();
+            }
+            
+            // Update bio
+            const bioEl = document.getElementById('preview_bio');
+            if (bioEl) {
+                bioEl.textContent = bio || 'بیوگرافی هنوز وارد نشده است';
+            }
+            
+            // Update phone
+            const phoneEl = document.getElementById('preview_phone');
+            if (phoneEl) {
+                phoneEl.textContent = phone || 'شماره تماس وارد نشده';
+            }
+            
+            // Update email
+            const emailEl = document.getElementById('preview_email');
+            if (emailEl) {
+                emailEl.textContent = email || 'ایمیل وارد نشده';
+            }
+            
+            // Update location
+            const locationEl = document.getElementById('preview_location');
+            if (locationEl) {
+                let location = '';
+                if (province) location += province;
+                if (city) location += (location ? '، ' : '') + city;
+                if (district) location += (location ? ' (' + district + ')' : district);
+                locationEl.textContent = location || 'موقعیت وارد نشده';
+            }
+            
+            // Update education
+            const eduEl = document.getElementById('preview_edu');
+            if (eduEl) {
+                eduEl.textContent = education || 'تحصیلات وارد نشده';
+            }
+        }
+        
+        // Auto-update on input
+        const form = document.getElementById('botForm');
+        if (form) {
+            form.addEventListener('input', updatePreview);
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            showContent('welcome');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ایجاد رویداد جدید</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .create-event-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #666;
+            font-size: 0.85em;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .section-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-right: 4px solid #2196f3;
+        }
+
+        .info-box strong {
+            color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <div class="create-event-container">
+        <div class="page-header">
+            <h1>🎙️ ایجاد رویداد زنده جدید</h1>
+            <p>رویداد تعاملی خود را با شهروندان برنامه‌ریزی کنید</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="form-card">
+            <form method="POST" action="{{ url_for('create_event') }}">
+                
+                <!-- اطلاعات اصلی -->
+                <div class="section-title">📋 اطلاعات اصلی</div>
+
+                <div class="form-group">
+                    <label for="title">عنوان رویداد *</label>
+                    <input type="text" id="title" name="title" required 
+                           placeholder="مثال: گفتگوی زنده با شهروندان محله شهدا">
+                    <small>عنوانی جذاب و توصیفی انتخاب کنید</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">توضیحات</label>
+                    <textarea id="description" name="description" 
+                              placeholder="توضیحات کامل درباره رویداد، موضوعات مورد بحث و..."></textarea>
+                    <small>شرح کاملی از رویداد، اهداف و برنامه‌های آن</small>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event_type">نوع رویداد *</label>
+                        <select id="event_type" name="event_type" required>
+                            <option value="">انتخاب کنید</option>
+                            <option value="live_qa">🙋 سوال و جواب زنده</option>
+                            <option value="town_hall">🏛️ جلسه عمومی (Town Hall)</option>
+                            <option value="webinar">🎓 وبینار آموزشی</option>
+                            <option value="ama">💬 Ask Me Anything</option>
+                            <option value="workshop">🛠️ کارگاه آموزشی</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="platform">پلتفرم پخش *</label>
+                        <select id="platform" name="platform" required>
+                            <option value="telegram_live">📱 تلگرام لایو</option>
+                            <option value="zoom">📹 Zoom</option>
+                            <option value="youtube_live">▶️ یوتیوب لایو</option>
+                            <option value="instagram_live">📷 اینستاگرام لایو</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- زمان‌بندی -->
+                <div class="section-title">⏰ زمان‌بندی</div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="starts_at">تاریخ و ساعت شروع *</label>
+                        <input type="datetime-local" id="starts_at" name="starts_at" required>
+                        <small>زمان دقیق شروع رویداد</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration_minutes">مدت زمان (دقیقه) *</label>
+                        <input type="number" id="duration_minutes" name="duration_minutes" 
+                               value="60" min="15" max="240" required>
+                        <small>معمولاً 60-90 دقیقه</small>
+                    </div>
+                </div>
+
+                <!-- پیوند پخش -->
+                <div class="section-title">🔗 اطلاعات پخش</div>
+
+                <div class="form-group">
+                    <label for="stream_url">لینک پخش زنده</label>
+                    <input type="url" id="stream_url" name="stream_url" 
+                           placeholder="https://...">
+                    <small>لینک Zoom، یوتیوب یا پلتفرم مورد نظر (اختیاری)</small>
+                </div>
+
+                <!-- محدودیت‌ها -->
+                <div class="section-title">🎯 محدودیت‌ها و دسترسی</div>
+
+                <div class="info-box">
+                    <strong>نکته:</strong> می‌توانید دسترسی به رویداد را محدود کنید تا فقط شهروندان خاص بتوانند شرکت کنند
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="max_participants">حداکثر شرکت‌کننده</label>
+                        <input type="number" id="max_participants" name="max_participants" 
+                               min="1" placeholder="نامحدود">
+                        <small>خالی بگذارید برای نامحدود</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="min_points_required">حداقل امتیاز لازم</label>
+                        <input type="number" id="min_points_required" name="min_points_required" 
+                               value="0" min="0">
+                        <small>شهروندان باید این امتیاز را داشته باشند</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="vip_only" name="vip_only">
+                        <label for="vip_only">⭐ فقط برای شهروندان VIP</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="requires_registration" name="requires_registration" checked>
+                        <label for="requires_registration">✅ نیاز به ثبت‌نام دارد</label>
+                    </div>
+                    <small style="margin-right: 30px;">اگر فعال باشد، شهروندان باید قبلاً ثبت‌نام کنند</small>
+                </div>
+
+                <!-- دکمه‌ها -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        ✅ ایجاد رویداد
+                    </button>
+                    <a href="{{ url_for('events_dashboard') }}" class="btn btn-secondary">
+                        ❌ انصراف
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // تنظیم حداقل تاریخ به امروز
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        document.getElementById('starts_at').min = now.toISOString().slice(0,16);
+
+        // پیش‌فرض: فردا ساعت 18:00
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(18, 0, 0, 0);
+        tomorrow.setMinutes(tomorrow.getMinutes() - tomorrow.getTimezoneOffset());
+        document.getElementById('starts_at').value = tomorrow.toISOString().slice(0,16);
+    </script>
+</body>
+</html>

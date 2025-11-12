@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول امتیازات - پنل نماینده</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>پنل نماینده</h2>
+                <p>{{ session.get('candidate_name', 'نامزد') }}</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('contributions') }}" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>مشارکت شهروندی</span>
+                </a>
+                <a href="{{ url_for('leaderboard') }}" class="menu-item active">
+                    <i class="fas fa-trophy"></i>
+                    <span>جدول امتیازات</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>🏆 جدول امتیازات</h1>
+            </div>
+
+<div class="container-fluid py-4" dir="rtl">
+    
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h3 class="mb-3">🏆 جدول امتیازات شهروندان</h3>
+            <p class="text-muted">شهروندان فعال و برتر در مشارکت</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-body">
+            {% if top_citizens %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center">رتبه</th>
+                            <th>نام</th>
+                            <th class="text-center">سطح</th>
+                            <th class="text-center">امتیاز</th>
+                            <th class="text-center">مشارکت‌ها</th>
+                            <th class="text-center">رای‌ها</th>
+                            <th class="text-center">نظرات</th>
+                            <th>نشان‌ها</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for citizen in top_citizens %}
+                        <tr>
+                            <td class="text-center">
+                                {% if loop.index == 1 %}
+                                <span class="fs-4">🥇</span>
+                                {% elif loop.index == 2 %}
+                                <span class="fs-4">🥈</span>
+                                {% elif loop.index == 3 %}
+                                <span class="fs-4">🥉</span>
+                                {% else %}
+                                <strong>{{ loop.index }}</strong>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div>
+                                    <strong>{{ citizen.full_name }}</strong>
+                                    {% if citizen.username %}
+                                    <br><small class="text-muted">@{{ citizen.username }}</small>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-primary fs-6">
+                                    {% if citizen.level == 1 %}🌱
+                                    {% elif citizen.level == 2 %}🌿
+                                    {% elif citizen.level == 3 %}🍀
+                                    {% elif citizen.level == 4 %}🌳
+                                    {% elif citizen.level == 5 %}⭐
+                                    {% elif citizen.level == 6 %}🌟
+                                    {% elif citizen.level == 7 %}💫
+                                    {% elif citizen.level == 8 %}✨
+                                    {% elif citizen.level >= 9 %}👑
+                                    {% endif %}
+                                    سطح {{ citizen.level }}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <strong class="text-success">{{ citizen.total_points }}</strong>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-info">{{ citizen.contributions_count }}</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-warning">{{ citizen.votes_given }}</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-secondary">{{ citizen.comments_count }}</span>
+                            </td>
+                            <td>
+                                {% if citizen.badges %}
+                                    {% for badge in citizen.badges[:5] %}
+                                        {% if badge == 'beginner' %}
+                                        <span title="تازه‌وارد">🎓</span>
+                                        {% elif badge == 'contributor' %}
+                                        <span title="مشارکت‌کننده">💡</span>
+                                        {% elif badge == 'active_voter' %}
+                                        <span title="رای‌دهنده فعال">🗳️</span>
+                                        {% elif badge == 'discusser' %}
+                                        <span title="گفتگوگر">💬</span>
+                                        {% elif badge == 'star' %}
+                                        <span title="ستاره">⭐</span>
+                                        {% elif badge == 'champion' %}
+                                        <span title="قهرمان">🏆</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if citizen.badges|length > 5 %}
+                                    <small class="text-muted">+{{ citizen.badges|length - 5 }}</small>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="alert alert-info text-center">
+                <h5>هنوز شهروندی در سیستم ثبت‌نام نکرده است</h5>
+                <p>با شروع مشارکت شهروندان، این جدول پر خواهد شد.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- راهنما -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">📊 سطوح</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li>🌱 سطح 1: 0-49 امتیاز</li>
+                        <li>🌿 سطح 2: 50-149 امتیاز</li>
+                        <li>🍀 سطح 3: 150-299 امتیاز</li>
+                        <li>🌳 سطح 4: 300-499 امتیاز</li>
+                        <li>⭐ سطح 5: 500-999 امتیاز</li>
+                        <li>🌟 سطح 6: 1000-1999 امتیاز</li>
+                        <li>💫 سطح 7: 2000-4999 امتیاز</li>
+                        <li>✨ سطح 8: 5000-9999 امتیاز</li>
+                        <li>👑 سطح 9: 10000+ امتیاز</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning">
+                    <h6 class="mb-0">🎯 نحوه کسب امتیاز</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li>💡 ارسال ایده/مشکل: <strong>10 امتیاز</strong></li>
+                        <li>👍 رای دادن: <strong>1 امتیاز</strong></li>
+                        <li>💬 ارسال نظر: <strong>2 امتیاز</strong></li>
+                        <li>✅ تایید ایده: <strong>50 امتیاز</strong></li>
+                        <li>🔄 ایده در حال انجام: <strong>75 امتیاز</strong></li>
+                        <li>✔️ اجرای ایده: <strong>100 امتیاز</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<style>
+.table td, .table th {
+    vertical-align: middle;
+}
+
+.fs-4 {
+    font-size: 1.5rem;
+}
+
+.badge.fs-6 {
+    font-size: 0.9rem;
+}
+</style>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

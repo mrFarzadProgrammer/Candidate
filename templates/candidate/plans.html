@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پلن‌های اشتراک - پنل نماینده</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
+    <style>
+        .pricing-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 16px;
+            border: 3px solid #e5e7eb;
+            padding: 35px 30px;
+            position: relative;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+        
+        .pricing-card.current {
+            border-color: #10b981;
+            background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+        }
+        
+        .pricing-card.popular {
+            border-color: #f59e0b;
+            position: relative;
+        }
+        
+        .pricing-card.popular::before {
+            content: "⭐ محبوب‌ترین";
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(245,158,11,0.4);
+        }
+        
+        .current-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #10b981;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+        }
+        
+        .plan-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .plan-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1f2937;
+            margin: 0 0 10px 0;
+        }
+        
+        .plan-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 0;
+        }
+        
+        .plan-price {
+            text-align: center;
+            margin: 25px 0;
+        }
+        
+        .price-amount {
+            font-size: 42px;
+            font-weight: bold;
+            color: #059669;
+            line-height: 1;
+        }
+        
+        .price-currency {
+            font-size: 18px;
+            color: #6b7280;
+            margin-right: 5px;
+        }
+        
+        .price-period {
+            display: block;
+            font-size: 14px;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+        
+        .features-list {
+            flex: 1;
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+        }
+        
+        .features-list li {
+            padding: 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #f3f4f6;
+            color: #374151;
+            font-size: 14px;
+        }
+        
+        .features-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .features-list li i {
+            font-size: 18px;
+            min-width: 20px;
+        }
+        
+        .features-list li.enabled i {
+            color: #10b981;
+        }
+        
+        .features-list li.disabled {
+            color: #9ca3af;
+            text-decoration: line-through;
+        }
+        
+        .features-list li.disabled i {
+            color: #d1d5db;
+        }
+        
+        .plan-actions {
+            margin-top: 25px;
+        }
+        
+        .plan-actions .btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .current-plan-info {
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .current-plan-info h3 {
+            margin: 0 0 15px 0;
+            color: #1e40af;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .info-item strong {
+            display: block;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        
+        .info-item span {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            padding: 35px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .comparison-section {
+            margin: 50px 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 3px solid #e5e7eb;
+        }
+        
+        .comparison-table thead {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .comparison-table tbody tr {
+            border-bottom: 2px solid #f3f4f6;
+        }
+        
+        .comparison-table tbody tr:hover {
+            background: #f9fafb;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>پنل نماینده</h2>
+                <p>{{ candidate.full_name }}</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('view_plans') }}" class="menu-item active">
+                    <i class="fas fa-tags"></i>
+                    <span>پلن‌های اشتراک</span>
+                </a>
+                <a href="{{ url_for('bot_management') }}" class="menu-item">
+                    <i class="fas fa-robot"></i>
+                    <span>مدیریت بات</span>
+                </a>
+                <a href="{{ url_for('profile') }}" class="menu-item">
+                    <i class="fas fa-user-circle"></i>
+                    <span>اطلاعات شخصی</span>
+                </a>
+                <a href="{{ url_for('resume') }}" class="menu-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>رزومه</span>
+                </a>
+                <a href="{{ url_for('programs') }}" class="menu-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>برنامه‌های انتخاباتی</span>
+                </a>
+                <a href="{{ url_for('headquarters') }}" class="menu-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>ستادها و دفاتر</span>
+                </a>
+                <a href="{{ url_for('messages') }}" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>پیام‌های کاربران</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>پلن‌های اشتراک</h1>
+                </div>
+                <div class="topbar-right">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            {{ candidate.full_name[0]|upper }}
+                        </div>
+                        <div class="user-info">
+                            <h4>{{ candidate.full_name }}</h4>
+                            <p>نماینده انتخاباتی</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}" style="margin-bottom: 20px;">
+                                <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' or category == 'warning' %}exclamation-circle{% else %}info-circle{% endif %}"></i>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <!-- اطلاعات پلن فعلی -->
+                {% if active_plan and latest_purchase %}
+                <div class="current-plan-info">
+                    <h3><i class="fas fa-check-circle"></i> پلن فعال فعلی شما</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>نام پلن</strong>
+                            <span>{{ active_plan.name }}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>تاریخ انقضا</strong>
+                            <span>{{ latest_purchase.end_date.strftime('%Y/%m/%d') }}</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>روزهای باقیمانده</strong>
+                            <span style="color: {% if latest_purchase.days_remaining() > 7 %}#10b981{% elif latest_purchase.days_remaining() > 0 %}#f59e0b{% else %}#ef4444{% endif %}; font-weight: bold;">
+                                {{ latest_purchase.days_remaining() }} روز
+                            </span>
+                        </div>
+                        <div class="info-item">
+                            <strong>وضعیت</strong>
+                            <span style="color: #10b981; font-weight: bold;">
+                                <i class="fas fa-check"></i> فعال
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div style="background: linear-gradient(135deg, #fef3c7, #fde68a); border: 2px solid #f59e0b; border-radius: 12px; padding: 25px; margin-bottom: 30px; text-align: center;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #d97706; margin-bottom: 15px;"></i>
+                    <h3 style="color: #92400e; margin: 0 0 10px 0;">شما هنوز پلنی فعال ندارید</h3>
+                    <p style="color: #78350f; margin: 0;">لطفاً یکی از پلن‌های زیر را انتخاب کنید تا بتوانید از امکانات سیستم استفاده نمایید</p>
+                </div>
+                {% endif %}
+                
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h2>انتخاب پلن مناسب</h2>
+                    <div class="breadcrumb">
+                        <span>پنل نماینده</span>
+                        <i class="fas fa-chevron-left"></i>
+                        <span>پلن‌های اشتراک</span>
+                    </div>
+                </div>
+                
+                <!-- بنر Trial رایگان -->
+                {% if not candidate.has_used_trial and not active_plan %}
+                <div style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%); border-radius: 16px; padding: 40px; margin-bottom: 40px; color: white; box-shadow: 0 10px 40px rgba(245,158,11,0.3); position: relative; overflow: hidden;">
+                    <!-- Background Pattern -->
+                    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.1; background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.5) 10px, rgba(255,255,255,.5) 20px);"></div>
+                    
+                    <div style="position: relative; z-index: 1;">
+                        <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 300px;">
+                                <div style="font-size: 48px; margin-bottom: 15px;">🎁</div>
+                                <h2 style="margin: 0 0 15px 0; font-size: 32px; font-weight: bold;">3 روز تست رایگان!</h2>
+                                <p style="margin: 0 0 20px 0; font-size: 18px; opacity: 0.95;">
+                                    همه امکانات پلن <strong>حرفه‌ای</strong> را بدون پرداخت امتحان کنید
+                                </p>
+                                
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 25px 0;">
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+                                        <span>بات تلگرام اختصاصی</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+                                        <span>پیام نامحدود</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+                                        <span>مدیریت 3 کانال</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+                                        <span>پست زمان‌بندی</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+                                        <span>آمار پیشرفته</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+                                        <span>پشتیبانی ویژه</span>
+                                    </div>
+                                </div>
+                                
+                                <form method="POST" action="{{ url_for('activate_trial') }}" style="margin-top: 30px;">
+                                    <button type="submit" style="background: white; color: #ea580c; border: none; padding: 18px 40px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s; display: inline-flex; align-items: center; gap: 10px;"
+                                            onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.3)';"
+                                            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(0,0,0,0.2)';"
+                                            onclick="return confirm('فعال‌سازی دوره تست 3 روزه رایگان؟\n\n✅ بدون نیاز به کارت بانکی\n✅ تمام امکانات پلن حرفه‌ای\n✅ لغو آسان');">
+                                        <i class="fas fa-rocket"></i>
+                                        <span>شروع رایگان 3 روزه</span>
+                                    </button>
+                                </form>
+                                
+                                <p style="margin: 15px 0 0 0; font-size: 13px; opacity: 0.85;">
+                                    <i class="fas fa-shield-alt"></i> بدون نیاز به کارت اعتباری • لغو آسان در هر زمان
+                                </p>
+                            </div>
+                            
+                            <div style="flex: 0 0 auto;">
+                                <div style="background: rgba(255,255,255,0.2); border-radius: 16px; padding: 25px; backdrop-filter: blur(10px);">
+                                    <div style="font-size: 64px; text-align: center; margin-bottom: 10px;">⏰</div>
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 48px; font-weight: bold; line-height: 1;">3</div>
+                                        <div style="font-size: 18px; opacity: 0.9;">روز رایگان</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% elif candidate.has_used_trial and not active_plan %}
+                <div style="background: #eff6ff; border: 2px solid #3b82f6; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i class="fas fa-info-circle" style="font-size: 32px; color: #3b82f6;"></i>
+                        <div>
+                            <strong style="color: #1e40af;">شما قبلاً از دوره تست رایگان استفاده کرده‌اید</strong>
+                            <p style="margin: 5px 0 0 0; color: #1e40af; font-size: 14px;">
+                                برای ادامه استفاده از سیستم، لطفاً یکی از پلن‌های زیر را انتخاب کنید
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Pricing Cards -->
+                <div class="pricing-table">
+                    {% for plan in plans %}
+                    <div class="pricing-card {% if plan.is_popular %}popular{% endif %} {% if active_plan and active_plan.id == plan.id %}current{% endif %}">
+                        {% if active_plan and active_plan.id == plan.id %}
+                        <div class="current-badge">
+                            <i class="fas fa-check"></i> پلن فعلی
+                        </div>
+                        {% endif %}
+                        
+                        <div class="plan-header">
+                            <h3 class="plan-name">{{ plan.name }}</h3>
+                            <p class="plan-description">{{ plan.description }}</p>
+                        </div>
+                        
+                        <div class="plan-price">
+                            <div class="price-amount">
+                                {{ "{:,}".format(plan.price) }}
+                                <span class="price-currency">تومان</span>
+                            </div>
+                            <span class="price-period">{{ plan.duration_days }} روزه</span>
+                        </div>
+                        
+                        <ul class="features-list">
+                            <li class="{% if plan.max_messages == 0 %}disabled{% else %}enabled{% endif %}">
+                                <i class="fas fa-envelope"></i>
+                                <span>پیام: {% if plan.max_messages == -1 %}نامحدود{% else %}{{ plan.max_messages }} در ماه{% endif %}</span>
+                            </li>
+                            
+                            <li class="{% if plan.max_programs == 0 %}disabled{% else %}enabled{% endif %}">
+                                <i class="fas fa-bullhorn"></i>
+                                <span>برنامه‌ها: {% if plan.max_programs == -1 %}نامحدود{% else %}{{ plan.max_programs }}{% endif %}</span>
+                            </li>
+                            
+                            <li class="{% if plan.max_headquarters == 0 %}disabled{% else %}enabled{% endif %}">
+                                <i class="fas fa-building"></i>
+                                <span>دفاتر: {% if plan.max_headquarters == -1 %}نامحدود{% else %}{{ plan.max_headquarters }}{% endif %}</span>
+                            </li>
+                            
+                            <li class="{% if plan.has_analytics %}enabled{% else %}disabled{% endif %}">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>آمار و تحلیل{% if plan.has_advanced_analytics %} پیشرفته{% endif %}</span>
+                            </li>
+                            
+                            <li class="{% if plan.can_mass_message %}enabled{% else %}disabled{% endif %}">
+                                <i class="fas fa-paper-plane"></i>
+                                <span>ارسال انبوه{% if plan.max_mass_message_per_day > 0 %} ({{ plan.max_mass_message_per_day }}/روز){% endif %}</span>
+                            </li>
+                            
+                            <li class="{% if plan.has_ai %}enabled{% else %}disabled{% endif %}">
+                                <i class="fas fa-robot"></i>
+                                <span>هوش مصنوعی</span>
+                            </li>
+                            
+                            {% if plan.ai_message_classification %}
+                            <li class="enabled">
+                                <i class="fas fa-tags"></i>
+                                <span>دسته‌بندی خودکار پیام‌ها</span>
+                            </li>
+                            {% endif %}
+                            
+                            {% if plan.ai_sentiment_analysis %}
+                            <li class="enabled">
+                                <i class="fas fa-smile"></i>
+                                <span>احساس‌سنجی پیام‌ها</span>
+                            </li>
+                            {% endif %}
+                            
+                            {% if plan.ai_auto_reply %}
+                            <li class="enabled">
+                                <i class="fas fa-reply"></i>
+                                <span>پاسخ خودکار هوشمند</span>
+                            </li>
+                            {% endif %}
+                            
+                            {% if plan.ai_content_generation %}
+                            <li class="enabled">
+                                <i class="fas fa-magic"></i>
+                                <span>تولید خودکار محتوا</span>
+                            </li>
+                            {% endif %}
+                            
+                            {% if plan.ai_smart_chatbot %}
+                            <li class="enabled">
+                                <i class="fas fa-comments"></i>
+                                <span>چت‌بات هوشمند پیشرفته</span>
+                            </li>
+                            {% endif %}
+                            
+                            <li class="{% if plan.priority_support %}enabled{% else %}disabled{% endif %}">
+                                <i class="fas fa-headset"></i>
+                                <span>پشتیبانی اولویت‌دار</span>
+                            </li>
+                        </ul>
+                        
+                        <div class="plan-actions">
+                            {% if active_plan and active_plan.id == plan.id %}
+                            <button class="btn btn-success" disabled>
+                                <i class="fas fa-check"></i> پلن فعلی شما
+                            </button>
+                            {% else %}
+                            <a href="{{ url_for('purchase_plan', plan_id=plan.id) }}" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
+                                <i class="fas fa-shopping-cart"></i> خرید پلن
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- راهنما -->
+                <div style="margin: 50px 0; padding: 30px; background: linear-gradient(135deg, #eef2ff, #e0e7ff); border-radius: 12px; border: 2px solid #c7d2fe;">
+                    <h3 style="margin: 0 0 15px 0; color: #3730a3;">
+                        <i class="fas fa-question-circle"></i> سوالات متداول
+                    </h3>
+                    <div style="display: grid; gap: 15px;">
+                        <details style="background: white; padding: 15px; border-radius: 8px;">
+                            <summary style="cursor: pointer; font-weight: 600; color: #1e40af;">
+                                چگونه پلن خود را ارتقا دهم؟
+                            </summary>
+                            <p style="margin: 10px 0 0 0; color: #4338ca;">
+                                روی دکمه "درخواست مشاوره و خرید" کلیک کنید. تیم ما در اسرع وقت با شما تماس خواهد گرفت.
+                            </p>
+                        </details>
+                        
+                        <details style="background: white; padding: 15px; border-radius: 8px;">
+                            <summary style="cursor: pointer; font-weight: 600; color: #1e40af;">
+                                آیا می‌توانم پلن خود را تغییر دهم؟
+                            </summary>
+                            <p style="margin: 10px 0 0 0; color: #4338ca;">
+                                بله، می‌توانید در هر زمان پلن خود را ارتقا دهید. برای کاهش پلن با پشتیبانی تماس بگیرید.
+                            </p>
+                        </details>
+                        
+                        <details style="background: white; padding: 15px; border-radius: 8px;">
+                            <summary style="cursor: pointer; font-weight: 600; color: #1e40af;">
+                                امکانات هوش مصنوعی چه زمانی فعال می‌شود؟
+                            </summary>
+                            <p style="margin: 10px 0 0 0; color: #4338ca;">
+                                امکانات AI در حال توسعه هستند و به‌زودی فعال خواهند شد. در صورت فعال‌سازی، به شما اطلاع داده می‌شود.
+                            </p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal درخواست مشاوره -->
+    <div class="modal" id="consultationModal">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h2><i class="fas fa-phone"></i> درخواست مشاوره</h2>
+                <button onclick="closeModal()" style="background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280;">&times;</button>
+            </div>
+            
+            <div style="background: #f0fdf4; border: 2px solid #10b981; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+                <p style="margin: 0; color: #065f46; font-size: 14px;">
+                    <i class="fas fa-info-circle"></i>
+                    تیم ما در اسرع وقت با شما تماس گرفته و در خصوص خرید و فعال‌سازی پلن <strong id="selectedPlanName"></strong> راهنمایی خواهند کرد.
+                </p>
+            </div>
+            
+            <form method="POST" action="{{ url_for('request_consultation') }}">
+                <input type="hidden" name="plan_id" id="selectedPlanId">
+                
+                <div class="form-group">
+                    <label><i class="fas fa-phone"></i> شماره تماس *</label>
+                    <input type="tel" name="phone" required class="form-control" 
+                           placeholder="مثال: 09123456789" value="{{ candidate.phone or '' }}">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-clock"></i> زمان مناسب تماس</label>
+                    <select name="preferred_time" class="form-control">
+                        <option value="">انتخاب کنید</option>
+                        <option value="morning">صبح (9 تا 12)</option>
+                        <option value="afternoon">بعدازظهر (12 تا 17)</option>
+                        <option value="evening">عصر (17 تا 21)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-comment"></i> توضیحات (اختیاری)</label>
+                    <textarea name="message" rows="3" class="form-control" placeholder="سوالات یا توضیحات خود را بنویسید..."></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 25px;">
+                    <button type="submit" class="btn btn-success" style="flex: 1;">
+                        <i class="fas fa-paper-plane"></i> ارسال درخواست
+                    </button>
+                    <button type="button" onclick="closeModal()" class="btn btn-secondary" style="flex: 1;">
+                        <i class="fas fa-times"></i> انصراف
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        function requestConsultation(planId, planName) {
+            document.getElementById('selectedPlanId').value = planId;
+            document.getElementById('selectedPlanName').textContent = planName;
+            document.getElementById('consultationModal').classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('consultationModal').classList.remove('active');
+        }
+        
+        // بستن modal با کلیک روی پس‌زمینه
+        document.getElementById('consultationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Sidebar toggle
+        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

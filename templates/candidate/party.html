@@ -1,0 +1,483 @@
+{% extends "candidate/base.html" %}
+
+{% block title %}مدیریت حزب و ائتلاف{% endblock %}
+
+{% block extra_css %}
+<style>
+    .party-hero {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+    
+    .party-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border-right: 5px solid #667eea;
+    }
+    
+    .party-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .ideology-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    
+    .ideology-اصلاح‌طلب { background: #10b981; color: white; }
+    .ideology-اصولگرا { background: #f59e0b; color: white; }
+    .ideology-میانه‌رو { background: #6366f1; color: white; }
+    .ideology-مستقل { background: #6b7280; color: white; }
+    
+    .role-badge {
+        padding: 0.2rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    
+    .role-leader { background: #ef4444; color: white; }
+    .role-deputy { background: #f59e0b; color: white; }
+    .role-secretary { background: #10b981; color: white; }
+    .role-member { background: #6b7280; color: white; }
+    
+    .stat-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 12px;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    
+    .stat-box h3 {
+        font-size: 2rem;
+        margin: 0;
+        font-weight: 700;
+    }
+    
+    .stat-box p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.9;
+    }
+    
+    .coalition-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-right: 5px solid #ec4899;
+    }
+    
+    .member-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    
+    .action-btn {
+        padding: 0.5rem 1.2rem;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary-party {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .btn-success-party {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+    
+    .btn-danger-party {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+    
+    .action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        right: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+        background: white;
+        margin: 5% auto;
+        padding: 2rem;
+        border-radius: 15px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .close-modal {
+        float: left;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #6b7280;
+        cursor: pointer;
+    }
+    
+    .close-modal:hover {
+        color: #ef4444;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border 0.3s ease;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+    
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    @media (max-width: 768px) {
+        .party-hero {
+            padding: 1.5rem;
+        }
+        
+        .stat-box h3 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-top: 2rem;">
+    
+    <!-- Hero Section -->
+    <div class="party-hero">
+        <h1 style="margin: 0 0 0.5rem 0;">🏛️ مدیریت حزب و ائتلاف</h1>
+        <p style="margin: 0; opacity: 0.9;">مدیریت احزاب سیاسی، اعضا، نقش‌ها و ائتلاف‌های انتخاباتی</p>
+    </div>
+    
+    <!-- Alerts -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" style="border-radius: 10px; margin-bottom: 1rem;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <!-- Stats Summary -->
+    {% if party_stats %}
+    <div class="row" style="margin-bottom: 2rem;">
+        <div class="col-md-3 col-6">
+            <div class="stat-box">
+                <h3>{{ party_stats.total_members }}</h3>
+                <p>👥 کل اعضا</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-box" style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);">
+                <h3>{{ party_stats.pending_approvals }}</h3>
+                <p>⏳ منتظر تایید</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-box" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <h3>{{ party_stats.active_coalitions }}</h3>
+                <p>🤝 ائتلاف فعال</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="stat-box" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                <h3>{{ 'فعال' if party_stats.subscription_active else 'غیرفعال' }}</h3>
+                <p>📋 اشتراک حزب</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- My Parties Section -->
+    <div style="margin-bottom: 3rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="margin: 0;">🏛️ احزاب من</h2>
+            <button onclick="openCreatePartyModal()" class="action-btn btn-primary-party">
+                <i class="fas fa-plus"></i> ایجاد حزب جدید
+            </button>
+        </div>
+        
+        {% if parties %}
+            {% for party, membership in parties %}
+            <div class="party-card">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0 0 0.5rem 0;">{{ party.name }}</h3>
+                        <span class="ideology-badge ideology-{{ party.ideology }}">{{ party.ideology }}</span>
+                        <span class="role-badge role-{{ membership.role }}" style="margin-right: 0.5rem;">
+                            {{ membership.role }}
+                        </span>
+                        
+                        {% if party.description %}
+                        <p style="margin: 1rem 0; color: #6b7280;">{{ party.description[:150] }}{% if party.description|length > 150 %}...{% endif %}</p>
+                        {% endif %}
+                        
+                        <div style="display: flex; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                            <div>
+                                <i class="fas fa-users" style="color: #667eea;"></i>
+                                <span style="margin-right: 0.3rem;">{{ party.total_members }} عضو</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-calendar" style="color: #10b981;"></i>
+                                <span style="margin-right: 0.3rem;">تاسیس {{ party.founded_year if party.founded_year else 'نامشخص' }}</span>
+                            </div>
+                            {% if party.is_verified %}
+                            <div>
+                                <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                                <span style="margin-right: 0.3rem;">تایید شده</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <a href="{{ url_for('party_detail', party_id=party.id) }}" class="action-btn btn-primary-party">
+                            <i class="fas fa-eye"></i> مشاهده جزئیات
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 3rem; background: #f9fafb; border-radius: 15px;">
+                <i class="fas fa-users" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem;"></i>
+                <p style="color: #6b7280; margin: 0;">شما هنوز عضو هیچ حزبی نیستید</p>
+                <button onclick="openCreatePartyModal()" class="action-btn btn-primary-party" style="margin-top: 1rem;">
+                    ایجاد حزب جدید
+                </button>
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Coalitions Section -->
+    <div style="margin-bottom: 3rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="margin: 0;">🤝 ائتلاف‌های من</h2>
+            <button onclick="openCreateCoalitionModal()" class="action-btn btn-success-party">
+                <i class="fas fa-handshake"></i> ایجاد ائتلاف
+            </button>
+        </div>
+        
+        {% if coalitions %}
+            {% for coalition, membership in coalitions %}
+            <div class="coalition-card">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0 0 0.5rem 0;">{{ coalition.name }}</h3>
+                        <p style="margin: 0.5rem 0; color: #6b7280;">
+                            <i class="fas fa-vote-yea"></i> {{ coalition.election_type }} {{ coalition.election_year }}
+                        </p>
+                        
+                        {% if coalition.description %}
+                        <p style="margin: 0.5rem 0; color: #6b7280;">{{ coalition.description[:120] }}...</p>
+                        {% endif %}
+                        
+                        <div style="display: flex; gap: 1.5rem; margin-top: 1rem;">
+                            <div>
+                                <i class="fas fa-flag" style="color: #ec4899;"></i>
+                                <span style="margin-right: 0.3rem;">{{ coalition.total_parties }} حزب</span>
+                            </div>
+                            <div>
+                                <i class="fas fa-user-tie" style="color: #667eea;"></i>
+                                <span style="margin-right: 0.3rem;">{{ coalition.total_candidates }} نامزد</span>
+                            </div>
+                            <div>
+                                <span class="ideology-badge" style="background: #6366f1;">{{ coalition.status }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <a href="{{ url_for('coalition_detail', coalition_id=coalition.id) }}" class="action-btn btn-success-party">
+                            <i class="fas fa-eye"></i> مشاهده
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 3rem; background: #f9fafb; border-radius: 15px;">
+                <i class="fas fa-handshake" style="font-size: 3rem; color: #d1d5db; margin-bottom: 1rem;"></i>
+                <p style="color: #6b7280; margin: 0;">شما در هیچ ائتلافی عضو نیستید</p>
+                <button onclick="openCreateCoalitionModal()" class="action-btn btn-success-party" style="margin-top: 1rem;">
+                    ایجاد ائتلاف جدید
+                </button>
+            </div>
+        {% endif %}
+    </div>
+    
+</div>
+
+<!-- Create Party Modal -->
+<div id="createPartyModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeCreatePartyModal()">&times;</span>
+        <h2 style="margin: 0 0 1.5rem 0;">🏛️ ایجاد حزب جدید</h2>
+        
+        <form method="POST" action="{{ url_for('party_create') }}">
+            <div class="form-group">
+                <label for="name">نام حزب *</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="ideology">ایدئولوژی</label>
+                <select id="ideology" name="ideology" class="form-control">
+                    <option value="مستقل">مستقل</option>
+                    <option value="اصلاح‌طلب">اصلاح‌طلب</option>
+                    <option value="اصولگرا">اصولگرا</option>
+                    <option value="میانه‌رو">میانه‌رو</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="description">توضیحات</label>
+                <textarea id="description" name="description" class="form-control"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="manifesto">منشور و برنامه حزب</label>
+                <textarea id="manifesto" name="manifesto" class="form-control"></textarea>
+            </div>
+            
+            <button type="submit" class="action-btn btn-primary-party" style="width: 100%;">
+                <i class="fas fa-plus"></i> ایجاد حزب
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Create Coalition Modal -->
+<div id="createCoalitionModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeCreateCoalitionModal()">&times;</span>
+        <h2 style="margin: 0 0 1.5rem 0;">🤝 ایجاد ائتلاف انتخاباتی</h2>
+        
+        <form method="POST" action="{{ url_for('coalition_create') }}">
+            <div class="form-group">
+                <label for="coalition_name">نام ائتلاف *</label>
+                <input type="text" id="coalition_name" name="name" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="election_type">نوع انتخابات *</label>
+                <select id="election_type" name="election_type" class="form-control" required>
+                    <option value="مجلس">مجلس شورای اسلامی</option>
+                    <option value="شورا">شورای شهر</option>
+                    <option value="ریاست‌جمهوری">ریاست‌جمهوری</option>
+                    <option value="خبرگان">مجلس خبرگان</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="election_year">سال انتخابات *</label>
+                <input type="number" id="election_year" name="election_year" class="form-control" 
+                       value="1404" min="1400" max="1450" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="coalition_description">توضیحات</label>
+                <textarea id="coalition_description" name="description" class="form-control"></textarea>
+            </div>
+            
+            <button type="submit" class="action-btn btn-success-party" style="width: 100%;">
+                <i class="fas fa-handshake"></i> ایجاد ائتلاف
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+function openCreatePartyModal() {
+    document.getElementById('createPartyModal').style.display = 'block';
+}
+
+function closeCreatePartyModal() {
+    document.getElementById('createPartyModal').style.display = 'none';
+}
+
+function openCreateCoalitionModal() {
+    document.getElementById('createCoalitionModal').style.display = 'block';
+}
+
+function closeCreateCoalitionModal() {
+    document.getElementById('createCoalitionModal').style.display = 'none';
+}
+
+// Close modal when clicking outside
+window.onclick = function(event) {
+    const partyModal = document.getElementById('createPartyModal');
+    const coalitionModal = document.getElementById('createCoalitionModal');
+    
+    if (event.target == partyModal) {
+        closeCreatePartyModal();
+    }
+    if (event.target == coalitionModal) {
+        closeCreateCoalitionModal();
+    }
+}
+</script>
+
+{% endblock %}

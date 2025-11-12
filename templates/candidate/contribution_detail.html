@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جزئیات مشارکت - {{ contribution.tracking_code }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>پنل نماینده</h2>
+                <p>{{ session.get('candidate_name', 'نامزد') }}</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('contributions') }}" class="menu-item active">
+                    <i class="fas fa-users"></i>
+                    <span>مشارکت شهروندی</span>
+                </a>
+                <a href="{{ url_for('leaderboard') }}" class="menu-item">
+                    <i class="fas fa-trophy"></i>
+                    <span>جدول امتیازات</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>📋 جزئیات مشارکت</h1>
+            </div>
+
+<div class="container-fluid py-4" dir="rtl">
+    
+    <!-- هدر -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h3>📋 جزئیات مشارکت</h3>
+            <p class="text-muted mb-0">کد پیگیری: <strong>{{ contribution.tracking_code }}</strong></p>
+        </div>
+        <a href="{{ url_for('contributions') }}" class="btn btn-secondary">
+            ← بازگشت به لیست
+        </a>
+    </div>
+    
+    <div class="row">
+        <!-- ستون اصلی -->
+        <div class="col-lg-8">
+            
+            <!-- کارت اطلاعات اصلی -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            {% if contribution.contribution_type == 'idea' %}
+                            <span class="badge bg-light text-dark">💡 ایده</span>
+                            {% else %}
+                            <span class="badge bg-warning">📣 مشکل</span>
+                            {% endif %}
+                            
+                            {% if contribution.category == 'education' %}
+                            <span class="badge bg-light text-dark">📚 آموزش</span>
+                            {% elif contribution.category == 'health' %}
+                            <span class="badge bg-light text-dark">🏥 بهداشت</span>
+                            {% elif contribution.category == 'traffic' %}
+                            <span class="badge bg-light text-dark">🚗 ترافیک</span>
+                            {% elif contribution.category == 'security' %}
+                            <span class="badge bg-light text-dark">🛡️ امنیت</span>
+                            {% elif contribution.category == 'environment' %}
+                            <span class="badge bg-light text-dark">🌳 محیط زیست</span>
+                            {% elif contribution.category == 'cultural' %}
+                            <span class="badge bg-light text-dark">🎭 فرهنگی</span>
+                            {% elif contribution.category == 'infrastructure' %}
+                            <span class="badge bg-light text-dark">🏗️ زیرساخت</span>
+                            {% elif contribution.category == 'economic' %}
+                            <span class="badge bg-light text-dark">💰 اقتصاد</span>
+                            {% elif contribution.category == 'welfare' %}
+                            <span class="badge bg-light text-dark">🤝 رفاه</span>
+                            {% else %}
+                            <span class="badge bg-light text-dark">📋 سایر</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div>
+                            {% if contribution.status == 'pending' %}
+                            <span class="badge bg-warning">⏳ در انتظار بررسی</span>
+                            {% elif contribution.status == 'under_review' %}
+                            <span class="badge bg-info">👀 در حال بررسی</span>
+                            {% elif contribution.status == 'approved' %}
+                            <span class="badge bg-success">✅ تایید شده</span>
+                            {% elif contribution.status == 'in_progress' %}
+                            <span class="badge bg-primary">🔄 در حال انجام</span>
+                            {% elif contribution.status == 'completed' %}
+                            <span class="badge bg-success">✔️ انجام شده</span>
+                            {% elif contribution.status == 'rejected' %}
+                            <span class="badge bg-danger">❌ رد شده</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <h4 class="mb-3">{{ contribution.title }}</h4>
+                    <p class="lead">{{ contribution.description }}</p>
+                    
+                    <!-- تصاویر -->
+                    {% if contribution.images %}
+                    <div class="mb-4">
+                        <h6>🖼️ تصاویر پیوست:</h6>
+                        <div class="row g-2">
+                            {% for image in contribution.images %}
+                            <div class="col-md-4">
+                                <a href="{{ url_for('static', filename='uploads/contributions/' + image) }}" target="_blank">
+                                    <img src="{{ url_for('static', filename='uploads/contributions/' + image) }}" 
+                                         class="img-fluid rounded shadow-sm" alt="تصویر مشارکت">
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- موقعیت مکانی -->
+                    {% if contribution.location_text or (contribution.latitude and contribution.longitude) %}
+                    <div class="alert alert-info">
+                        <h6>📍 موقعیت مکانی:</h6>
+                        {% if contribution.location_text %}
+                        <p class="mb-1"><strong>آدرس:</strong> {{ contribution.location_text }}</p>
+                        {% endif %}
+                        
+                        {% if contribution.latitude and contribution.longitude %}
+                        <p class="mb-1"><strong>مختصات:</strong> {{ contribution.latitude }}, {{ contribution.longitude }}</p>
+                        <a href="https://www.google.com/maps?q={{ contribution.latitude }},{{ contribution.longitude }}" 
+                           target="_blank" class="btn btn-sm btn-primary mt-2">
+                            🗺️ مشاهده در نقشه
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- آمار -->
+                    <div class="d-flex justify-content-around py-3 border-top border-bottom my-3">
+                        <div class="text-center">
+                            <h5 class="text-primary mb-0">{{ contribution.votes_count }}</h5>
+                            <small class="text-muted">👍 رای</small>
+                        </div>
+                        <div class="text-center">
+                            <h5 class="text-info mb-0">{{ contribution.comments_count }}</h5>
+                            <small class="text-muted">💬 نظر</small>
+                        </div>
+                        <div class="text-center">
+                            <h5 class="text-success mb-0">{{ contribution.views_count }}</h5>
+                            <small class="text-muted">👁️ بازدید</small>
+                        </div>
+                    </div>
+                    
+                    <!-- پاسخ مدیر -->
+                    {% if contribution.admin_response %}
+                    <div class="alert alert-success mt-3">
+                        <h6>✉️ پاسخ:</h6>
+                        <p class="mb-0">{{ contribution.admin_response }}</p>
+                        <small class="text-muted">{{ contribution.response_date.strftime('%Y/%m/%d %H:%M') }}</small>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>ارسال‌کننده:</strong> {{ contribution.user_first_name }} {{ contribution.user_last_name or '' }}
+                            {% if contribution.user_username %}
+                            <span class="text-muted">(@{{ contribution.user_username }})</span>
+                            {% endif %}
+                        </div>
+                        <div class="text-muted">
+                            <small>📅 {{ contribution.created_at.strftime('%Y/%m/%d %H:%M') }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- نظرات -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">💬 نظرات ({{ contribution.comments_count }})</h5>
+                </div>
+                <div class="card-body">
+                    {% if comments %}
+                        {% for comment in comments %}
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>{{ comment.user_name }}</strong>
+                                    <p class="mb-1 mt-2">{{ comment.comment_text }}</p>
+                                </div>
+                                <small class="text-muted">{{ comment.created_at.strftime('%Y/%m/%d %H:%M') }}</small>
+                            </div>
+                            
+                            <!-- پاسخ‌ها -->
+                            {% if comment.replies %}
+                            <div class="ms-4 mt-2">
+                                {% for reply in comment.replies %}
+                                <div class="border-start border-3 ps-3 mt-2">
+                                    <strong class="small">{{ reply.user_name }}</strong>
+                                    <p class="small mb-1">{{ reply.comment_text }}</p>
+                                    <small class="text-muted">{{ reply.created_at.strftime('%Y/%m/%d %H:%M') }}</small>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted text-center mb-0">هنوز نظری ثبت نشده است</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- ستون کناری - عملیات مدیریتی -->
+        <div class="col-lg-4">
+            
+            <!-- تغییر وضعیت -->
+            <div class="card mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h6 class="mb-0">⚙️ تغییر وضعیت</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('update_contribution_status', contribution_id=contribution.id) }}">
+                        <div class="mb-3">
+                            <label class="form-label">وضعیت جدید</label>
+                            <select name="status" class="form-select" required>
+                                <option value="pending" {% if contribution.status == 'pending' %}selected{% endif %}>⏳ در انتظار</option>
+                                <option value="under_review" {% if contribution.status == 'under_review' %}selected{% endif %}>👀 در حال بررسی</option>
+                                <option value="approved" {% if contribution.status == 'approved' %}selected{% endif %}>✅ تایید شده</option>
+                                <option value="in_progress" {% if contribution.status == 'in_progress' %}selected{% endif %}>🔄 در حال انجام</option>
+                                <option value="completed" {% if contribution.status == 'completed' %}selected{% endif %}>✔️ انجام شده</option>
+                                <option value="rejected" {% if contribution.status == 'rejected' %}selected{% endif %}>❌ رد شده</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">به‌روزرسانی</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- عملیات سریع -->
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0">⚡ عملیات سریع</h6>
+                </div>
+                <div class="card-body">
+                    {% if contribution.status == 'pending' or contribution.status == 'under_review' %}
+                    <form method="post" action="{{ url_for('approve_contribution', contribution_id=contribution.id) }}" class="mb-2">
+                        <button type="submit" class="btn btn-success w-100" onclick="return confirm('آیا مطمئن هستید؟')">
+                            ✅ تایید مشارکت
+                        </button>
+                    </form>
+                    {% endif %}
+                    
+                    {% if contribution.status != 'rejected' %}
+                    <button type="button" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                        ❌ رد مشارکت
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- تعیین اولویت -->
+            <div class="card mb-4">
+                <div class="card-header bg-warning">
+                    <h6 class="mb-0">⚠️ اولویت</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('set_contribution_priority', contribution_id=contribution.id) }}">
+                        <div class="mb-3">
+                            <select name="priority" class="form-select" required>
+                                <option value="low" {% if contribution.priority == 'low' %}selected{% endif %}>⬇️ پایین</option>
+                                <option value="medium" {% if contribution.priority == 'medium' %}selected{% endif %}>➡️ متوسط</option>
+                                <option value="high" {% if contribution.priority == 'high' %}selected{% endif %}>⚠️ بالا</option>
+                                <option value="urgent" {% if contribution.priority == 'urgent' %}selected{% endif %}>🔥 فوری</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">تعیین اولویت</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- ارسال پاسخ -->
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0">✉️ ارسال پاسخ</h6>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ url_for('respond_to_contribution', contribution_id=contribution.id) }}">
+                        <div class="mb-3">
+                            <label class="form-label">متن پاسخ</label>
+                            <textarea name="response" class="form-control" rows="4" required 
+                                      placeholder="پاسخ خود به شهروند را اینجا بنویسید...">{{ contribution.admin_response or '' }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-info w-100">ارسال پاسخ</button>
+                    </form>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    
+</div>
+
+<!-- Modal رد مشارکت -->
+<div class="modal fade" id="rejectModal" tabindex="-1" dir="rtl">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">❌ رد مشارکت</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="{{ url_for('reject_contribution', contribution_id=contribution.id) }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">دلیل رد</label>
+                        <textarea name="reason" class="form-control" rows="4" required 
+                                  placeholder="لطفا دلیل رد این مشارکت را توضیح دهید..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">انصراف</button>
+                    <button type="submit" class="btn btn-danger">تایید رد</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

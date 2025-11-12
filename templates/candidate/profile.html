@@ -6,6 +6,7 @@
     <title>اطلاعات شخصی - پنل نماینده</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
 </head>
 <body>
     <div class="dashboard-wrapper">
@@ -23,6 +24,10 @@
                 <a href="{{ url_for('dashboard') }}" class="menu-item">
                     <i class="fas fa-home"></i>
                     <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('view_plans') }}" class="menu-item">
+                    <i class="fas fa-tags"></i>
+                    <span>پلن‌های اشتراک</span>
                 </a>
                 <a href="{{ url_for('profile') }}" class="menu-item active">
                     <i class="fas fa-user-circle"></i>
@@ -104,11 +109,17 @@
                         <h3><i class="fas fa-user-edit"></i> اطلاعات حساب کاربری</h3>
                     </div>
                     <div class="card-body">
-                        <form method="POST" style="max-width: 800px;">
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                        <form method="POST" style="max-width: 900px;">
+                            <h4 style="color: #667eea; margin: 0 0 15px; padding-bottom: 10px; border-bottom: 2px solid #e5e7eb;"><i class="fas fa-user-circle"></i> مشخصات فردی</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                                 <div class="form-group">
-                                    <label><i class="fas fa-user"></i> نام کامل *</label>
+                                    <label><i class="fas fa-user"></i> نام *</label>
                                     <input type="text" name="full_name" value="{{ candidate.full_name }}" required class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-user"></i> نام خانوادگی</label>
+                                    <input type="text" name="last_name" value="{{ candidate.last_name or '' }}" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
                                 </div>
                                 
                                 <div class="form-group">
@@ -116,7 +127,10 @@
                                     <input type="text" value="{{ candidate.username }}" disabled class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px; background: #f9fafb; color: #6b7280;">
                                     <small style="color: #6b7280; font-size: 12px; margin-top: 5px; display: block;">نام کاربری قابل تغییر نیست</small>
                                 </div>
-                                
+                            </div>
+                            
+                            <h4 style="color: #667eea; margin: 25px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #e5e7eb;"><i class="fas fa-address-book"></i> اطلاعات تماس</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
                                 <div class="form-group">
                                     <label><i class="fas fa-envelope"></i> ایمیل</label>
                                     <input type="email" name="email" value="{{ candidate.email or '' }}" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
@@ -126,6 +140,30 @@
                                     <label><i class="fas fa-phone"></i> شماره تماس</label>
                                     <input type="tel" name="phone" value="{{ candidate.phone or '' }}" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
                                 </div>
+                            </div>
+                            
+                            <h4 style="color: #667eea; margin: 25px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #e5e7eb;"><i class="fas fa-map-marked-alt"></i> اطلاعات جغرافیایی</h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                                <div class="form-group">
+                                    <label><i class="fas fa-map"></i> استان</label>
+                                    <input type="text" name="province" value="{{ candidate.province or '' }}" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-city"></i> شهر</label>
+                                    <input type="text" name="city" value="{{ candidate.city or '' }}" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label><i class="fas fa-map-pin"></i> حوزه انتخابیه</label>
+                                    <input type="text" name="district" value="{{ candidate.district or '' }}" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;">
+                                </div>
+                            </div>
+                            
+                            <h4 style="color: #667eea; margin: 25px 0 15px; padding-bottom: 10px; border-bottom: 2px solid #e5e7eb;"><i class="fas fa-graduation-cap"></i> تحصیلات</h4>
+                            <div class="form-group">
+                                <label><i class="fas fa-university"></i> مدرک تحصیلی</label>
+                                <input type="text" name="education" value="{{ candidate.education or '' }}" class="form-control" style="padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 14px;" placeholder="مثال: کارشناسی ارشد مهندسی کامپیوتر">
                             </div>
                             
                             <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e5e7eb; display: flex; gap: 15px;">

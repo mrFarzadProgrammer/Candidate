@@ -6,6 +6,7 @@
     <title>رزومه - پنل نماینده</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
 </head>
 <body>
     <div class="dashboard-wrapper">
@@ -21,6 +22,10 @@
                 <a href="{{ url_for('dashboard') }}" class="menu-item">
                     <i class="fas fa-home"></i>
                     <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('view_plans') }}" class="menu-item">
+                    <i class="fas fa-tags"></i>
+                    <span>پلن‌های اشتراک</span>
                 </a>
                 <a href="{{ url_for('profile') }}" class="menu-item">
                     <i class="fas fa-user-circle"></i>

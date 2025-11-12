@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ایجاد نظرسنجی - {{ candidate.full_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .create-form {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group input[type="datetime-local"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .option-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .option-item input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: inherit;
+        }
+        
+        .remove-option {
+            padding: 10px 15px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .add-option-btn {
+            padding: 10px 20px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .submit-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>{{ candidate.full_name }}</h2>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('polls') }}" class="menu-item active">
+                    <i class="fas fa-poll"></i>
+                    <span>نظرسنجی</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <div class="main-content">
+            <div class="topbar">
+                <h1><i class="fas fa-plus-circle"></i> ایجاد نظرسنجی جدید</h1>
+                <div class="topbar-user">
+                    <span>{{ candidate.full_name }}</span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <div class="create-form">
+                    <form method="POST" id="pollForm">
+                        <div class="form-group">
+                            <label for="question">
+                                <i class="fas fa-question-circle"></i> سوال نظرسنجی
+                            </label>
+                            <textarea name="question" id="question" rows="3" required 
+                                      placeholder="سوال خود را بنویسید..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-list"></i> گزینه‌ها (حداقل 2 گزینه)
+                            </label>
+                            <div class="options-container" id="optionsContainer">
+                                <div class="option-item">
+                                    <input type="text" name="options[]" placeholder="گزینه 1" required>
+                                </div>
+                                <div class="option-item">
+                                    <input type="text" name="options[]" placeholder="گزینه 2" required>
+                                </div>
+                            </div>
+                            <button type="button" class="add-option-btn" onclick="addOption()">
+                                <i class="fas fa-plus"></i> افزودن گزینه
+                            </button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" name="is_anonymous" id="is_anonymous" checked>
+                                <label for="is_anonymous" style="margin: 0;">
+                                    <i class="fas fa-user-secret"></i> نظرسنجی ناشناس (رای‌ها محرمانه باشد)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="end_date">
+                                <i class="fas fa-calendar-times"></i> تاریخ پایان (اختیاری)
+                            </label>
+                            <input type="datetime-local" name="end_date" id="end_date">
+                            <small style="color: #999; display: block; margin-top: 5px;">
+                                اگر خالی بگذارید، نظرسنجی تا زمان نامحدود فعال خواهد بود
+                            </small>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-check"></i> ایجاد نظرسنجی
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let optionCount = 2;
+        
+        function addOption() {
+            optionCount++;
+            const container = document.getElementById('optionsContainer');
+            const optionItem = document.createElement('div');
+            optionItem.className = 'option-item';
+            optionItem.innerHTML = `
+                <input type="text" name="options[]" placeholder="گزینه ${optionCount}">
+                <button type="button" class="remove-option" onclick="removeOption(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            container.appendChild(optionItem);
+        }
+        
+        function removeOption(btn) {
+            const container = document.getElementById('optionsContainer');
+            if (container.children.length > 2) {
+                btn.parentElement.remove();
+            } else {
+                alert('حداقل 2 گزینه باید وجود داشته باشد');
+            }
+        }
+        
+        document.getElementById('pollForm').addEventListener('submit', function(e) {
+            const options = document.querySelectorAll('input[name="options[]"]');
+            let filledOptions = 0;
+            
+            options.forEach(opt => {
+                if (opt.value.trim()) filledOptions++;
+            });
+            
+            if (filledOptions < 2) {
+                e.preventDefault();
+                alert('حداقل 2 گزینه باید پر شود');
+            }
+        });
+    </script>
+</body>
+</html>

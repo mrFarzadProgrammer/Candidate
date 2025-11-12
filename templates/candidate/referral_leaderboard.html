@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 رتبه‌بندی معرفین برتر</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            min-height: 100vh;
+            padding: 20px 0;
+        }
+
+        .container {
+            max-width: 900px;
+        }
+
+        /* Hero Card */
+        .hero-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+
+        /* Leaderboard Card */
+        .leaderboard-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        /* Rank Item */
+        .rank-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .rank-item:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Top 3 Special Styling */
+        .rank-item.rank-1 {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .rank-item.rank-2 {
+            background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+            box-shadow: 0 8px 25px rgba(192, 192, 192, 0.4);
+        }
+
+        .rank-item.rank-3 {
+            background: linear-gradient(135deg, #cd7f32 0%, #e9b880 100%);
+            box-shadow: 0 8px 25px rgba(205, 127, 50, 0.4);
+        }
+
+        /* Rank Badge */
+        .rank-badge {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .rank-1 .rank-badge {
+            background: white;
+            color: #f59e0b;
+            font-size: 2rem;
+        }
+
+        .rank-2 .rank-badge {
+            background: white;
+            color: #6b7280;
+            font-size: 1.8rem;
+        }
+
+        .rank-3 .rank-badge {
+            background: white;
+            color: #92400e;
+            font-size: 1.6rem;
+        }
+
+        .rank-badge.normal {
+            background: white;
+            color: #6b7280;
+        }
+
+        /* User Info */
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .rank-1 .user-name {
+            color: #92400e;
+        }
+
+        .user-code {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-family: monospace;
+        }
+
+        /* Stats Pills */
+        .stats-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-pill {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-pill.referrals {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .stat-pill.conversions {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .stat-pill.earnings {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* My Rank Banner */
+        .my-rank-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .my-rank-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Medal Icons */
+        .medal-icon {
+            font-size: 2.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .rank-item {
+                flex-wrap: wrap;
+            }
+
+            .stats-pills {
+                width: 100%;
+            }
+
+            .stat-pill {
+                flex: 1;
+                min-width: calc(50% - 5px);
+                justify-content: center;
+            }
+        }
+
+        /* Trophy Animation */
+        @keyframes trophy-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .trophy-icon {
+            animation: trophy-bounce 2s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Back Button -->
+    <a href="{{ url_for('referral_dashboard') }}" class="back-btn">
+        <i class="bi bi-arrow-right" style="font-size: 1.5rem; color: #f59e0b;"></i>
+    </a>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-card">
+            <div class="trophy-icon" style="font-size: 4rem; margin-bottom: 20px;">🏆</div>
+            <h1 class="hero-title">رتبه‌بندی معرفین برتر</h1>
+            <p class="hero-subtitle">
+                برترین افرادی که بیشترین معرفی موفق را داشته‌اند
+            </p>
+        </div>
+
+        <!-- My Rank Banner -->
+        {% if my_rank %}
+        <div class="my-rank-banner">
+            <div>رتبه شما در جدول</div>
+            <div class="my-rank-value">#{{ my_rank }}</div>
+            <div>از {{ leaderboard|length }} نفر برتر</div>
+        </div>
+        {% endif %}
+
+        <!-- Leaderboard -->
+        <div class="leaderboard-card">
+            {% if leaderboard %}
+                {% for item in leaderboard %}
+                <div class="rank-item {% if item.rank <= 3 %}rank-{{ item.rank }}{% endif %}">
+                    <!-- Rank Badge -->
+                    <div class="rank-badge {% if item.rank > 3 %}normal{% endif %}">
+                        {% if item.rank == 1 %}
+                            <span class="medal-icon">🥇</span>
+                        {% elif item.rank == 2 %}
+                            <span class="medal-icon">🥈</span>
+                        {% elif item.rank == 3 %}
+                            <span class="medal-icon">🥉</span>
+                        {% else %}
+                            #{{ item.rank }}
+                        {% endif %}
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="user-info">
+                        <div class="user-name">{{ item.name }}</div>
+                        <div class="user-code">کد: {{ item.referral_code }}</div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="stats-pills">
+                        <div class="stat-pill referrals" title="تعداد کل معرفی‌ها">
+                            <i class="bi bi-people-fill"></i>
+                            <span>{{ item.total_referrals }}</span>
+                        </div>
+                        <div class="stat-pill conversions" title="تبدیل موفق (خرید پلن)">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span>{{ item.successful_conversions }}</span>
+                        </div>
+                        <div class="stat-pill earnings" title="کل درآمد">
+                            <i class="bi bi-cash-coin"></i>
+                            <span>{{ "{:,.0f}".format(item.total_earned) }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="bi bi-trophy"></i>
+                    <h4>هنوز هیچ معرفی ثبت نشده</h4>
+                    <p>اولین نفر باشید که دوستانش را معرفی می‌کند!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Info Card -->
+        <div class="hero-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h3 style="margin-bottom: 15px;">
+                <i class="bi bi-info-circle"></i>
+                چگونه در رتبه‌بندی بالاتر بیایم؟
+            </h3>
+            <p style="margin: 0; line-height: 1.8;">
+                ✅ کد معرفی خود را با دوستان به اشتراک بگذارید<br>
+                ✅ افراد بیشتری را ترغیب به ثبت‌نام کنید<br>
+                ✅ به آن‌ها کمک کنید تا پلن مناسب را خریداری کنند<br>
+                ✅ هر تبدیل موفق = پاداش 20٪ + رتبه بالاتر
+            </p>
+        </div>
+    </div>
+</body>
+</html>

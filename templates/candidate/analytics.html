@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آمار و تحلیل - {{ candidate.full_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .analytics-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-right: 4px solid;
+        }
+        
+        .analytics-card.blue {
+            border-color: #667eea;
+        }
+        
+        .analytics-card.green {
+            border-color: #10b981;
+        }
+        
+        .analytics-card.orange {
+            border-color: #f59e0b;
+        }
+        
+        .analytics-card.purple {
+            border-color: #8b5cf6;
+        }
+        
+        .analytics-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        
+        .analytics-label {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .analytics-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .popular-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .section-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .section-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar-bg {
+            background: #f3f4f6;
+            border-radius: 8px;
+            height: 12px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 8px;
+            transition: width 0.5s ease;
+        }
+        
+        .section-count {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>{{ candidate.full_name }}</h2>
+                <p>پنل اختصاصی نماینده</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('analytics') }}" class="menu-item active">
+                    <i class="fas fa-chart-line"></i>
+                    <span>آمار و تحلیل</span>
+                </a>
+                <a href="{{ url_for('broadcast') }}" class="menu-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>ارسال انبوه</span>
+                </a>
+                <a href="{{ url_for('messages') }}" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>پیام‌ها</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <button class="mobile-menu-btn" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1><i class="fas fa-chart-line"></i> آمار و تحلیل</h1>
+                <div class="topbar-user">
+                    <span>{{ candidate.full_name }}</span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Summary Cards -->
+                <div class="analytics-grid">
+                    <div class="analytics-card blue">
+                        <div class="analytics-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="analytics-value">{{ total_bot_users }}</div>
+                        <div class="analytics-label">کل کاربران بات</div>
+                    </div>
+                    
+                    <div class="analytics-card green">
+                        <div class="analytics-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="analytics-value">{{ active_bot_users }}</div>
+                        <div class="analytics-label">کاربران فعال (7 روز)</div>
+                    </div>
+                    
+                    <div class="analytics-card orange">
+                        <div class="analytics-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                            <i class="fas fa-mouse-pointer"></i>
+                        </div>
+                        <div class="analytics-value">{{ total_interactions }}</div>
+                        <div class="analytics-label">کل تعاملات</div>
+                    </div>
+                    
+                    <div class="analytics-card purple">
+                        <div class="analytics-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="analytics-value">{{ messages_count }}</div>
+                        <div class="analytics-label">پیام‌های دریافتی</div>
+                        {% if unread_messages > 0 %}
+                        <div style="margin-top: 10px; color: #ef4444; font-weight: 600;">
+                            <i class="fas fa-bell"></i> {{ unread_messages }} پیام جدید
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Charts -->
+                <div class="chart-container">
+                    <div class="section-title">
+                        <i class="fas fa-chart-area"></i>
+                        روند کاربران جدید (30 روز اخیر)
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="usersChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <div class="section-title">
+                        <i class="fas fa-chart-line"></i>
+                        روند تعاملات روزانه
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="interactionsChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Popular Sections -->
+                <div class="chart-container">
+                    <div class="section-title">
+                        <i class="fas fa-fire"></i>
+                        محبوب‌ترین بخش‌ها
+                    </div>
+                    <div class="popular-sections">
+                        {% set max_views = [popular_sections.resume, popular_sections.programs, popular_sections.headquarters] | max %}
+                        
+                        <div class="section-bar">
+                            <div class="section-name">
+                                <i class="fas fa-file-alt" style="color: #667eea;"></i> رزومه
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" 
+                                     style="width: {% if max_views > 0 %}{{ (popular_sections.resume / max_views * 100) | round }}{% else %}0{% endif %}%; 
+                                            background: linear-gradient(90deg, #667eea, #764ba2);"></div>
+                            </div>
+                            <div class="section-count">{{ popular_sections.resume }} بازدید</div>
+                        </div>
+                        
+                        <div class="section-bar">
+                            <div class="section-name">
+                                <i class="fas fa-clipboard-list" style="color: #10b981;"></i> برنامه‌ها
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" 
+                                     style="width: {% if max_views > 0 %}{{ (popular_sections.programs / max_views * 100) | round }}{% else %}0{% endif %}%; 
+                                            background: linear-gradient(90deg, #10b981, #059669);"></div>
+                            </div>
+                            <div class="section-count">{{ popular_sections.programs }} بازدید</div>
+                        </div>
+                        
+                        <div class="section-bar">
+                            <div class="section-name">
+                                <i class="fas fa-building" style="color: #f59e0b;"></i> ستادها
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" 
+                                     style="width: {% if max_views > 0 %}{{ (popular_sections.headquarters / max_views * 100) | round }}{% else %}0{% endif %}%; 
+                                            background: linear-gradient(90deg, #f59e0b, #d97706);"></div>
+                            </div>
+                            <div class="section-count">{{ popular_sections.headquarters }} بازدید</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Prepare data
+        const analyticsData = {{ analytics_data | tojson | safe }};
+        
+        const dates = analyticsData.map(d => new Date(d.date).toLocaleDateString('fa-IR', {month: 'short', day: 'numeric'}));
+        const newUsers = analyticsData.map(d => d.new_users);
+        const interactions = analyticsData.map(d => d.total_interactions);
+        
+        // Users Chart
+        const usersCtx = document.getElementById('usersChart').getContext('2d');
+        new Chart(usersCtx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'کاربران جدید',
+                    data: newUsers,
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        align: 'end'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // Interactions Chart
+        const interactionsCtx = document.getElementById('interactionsChart').getContext('2d');
+        new Chart(interactionsCtx, {
+            type: 'bar',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'تعداد تعاملات',
+                    data: interactions,
+                    backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                    borderColor: '#10b981',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        align: 'end'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // Mobile menu toggle
+        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

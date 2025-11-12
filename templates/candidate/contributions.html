@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشارکت شهروندی - پنل نماینده</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>پنل نماینده</h2>
+                <p>{{ session.get('candidate_name', 'نامزد') }}</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('contributions') }}" class="menu-item active">
+                    <i class="fas fa-users"></i>
+                    <span>مشارکت شهروندی</span>
+                </a>
+                <a href="{{ url_for('leaderboard') }}" class="menu-item">
+                    <i class="fas fa-trophy"></i>
+                    <span>جدول امتیازات</span>
+                </a>
+                <a href="{{ url_for('broadcast') }}" class="menu-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>پیام انبوه</span>
+                </a>
+                <a href="{{ url_for('messages') }}" class="menu-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>پیام‌ها</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>📊 مشارکت شهروندی</h1>
+            </div>
+
+<div class="container-fluid py-4" dir="rtl">
+    
+    <!-- آمار -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h3 class="mb-3">📊 مشارکت شهروندی</h3>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-primary">{{ stats.total }}</h5>
+                    <p class="card-text">کل مشارکت‌ها</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-warning">{{ stats.pending }}</h5>
+                    <p class="card-text">⏳ در انتظار بررسی</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-info">{{ stats.in_progress }}</h5>
+                    <p class="card-text">🔄 در حال انجام</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 mb-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title text-success">{{ stats.completed }}</h5>
+                    <p class="card-text">✅ انجام شده</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- فیلترها -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">وضعیت</label>
+                    <select name="status" class="form-select" onchange="this.form.submit()">
+                        <option value="all" {% if status_filter == 'all' %}selected{% endif %}>همه</option>
+                        <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>⏳ در انتظار</option>
+                        <option value="under_review" {% if status_filter == 'under_review' %}selected{% endif %}>👀 در حال بررسی</option>
+                        <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>✅ تایید شده</option>
+                        <option value="in_progress" {% if status_filter == 'in_progress' %}selected{% endif %}>🔄 در حال انجام</option>
+                        <option value="completed" {% if status_filter == 'completed' %}selected{% endif %}>✔️ انجام شده</option>
+                        <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>❌ رد شده</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label">دسته‌بندی</label>
+                    <select name="category" class="form-select" onchange="this.form.submit()">
+                        <option value="all" {% if category_filter == 'all' %}selected{% endif %}>همه</option>
+                        {% for cat_value, cat_label in categories %}
+                        <option value="{{ cat_value }}" {% if category_filter == cat_value %}selected{% endif %}>{{ cat_label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label">مرتب‌سازی</label>
+                    <select name="sort" class="form-select" onchange="this.form.submit()">
+                        <option value="newest" {% if sort_by == 'newest' %}selected{% endif %}>جدیدترین</option>
+                        <option value="popular" {% if sort_by == 'popular' %}selected{% endif %}>محبوب‌ترین</option>
+                        <option value="most_commented" {% if sort_by == 'most_commented' %}selected{% endif %}>پربحث‌ترین</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <a href="{{ url_for('contributions') }}" class="btn btn-secondary w-100">پاک کردن فیلترها</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- لیست مشارکت‌ها -->
+    <div class="row">
+        {% if contributions %}
+            {% for contrib in contributions %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm hover-shadow">
+                    <div class="card-body">
+                        <!-- هدر -->
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <span class="badge bg-primary">{{ contrib.tracking_code }}</span>
+                                {% if contrib.contribution_type == 'idea' %}
+                                <span class="badge bg-info">💡 ایده</span>
+                                {% else %}
+                                <span class="badge bg-warning">📣 مشکل</span>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {% if contrib.status == 'pending' %}
+                                <span class="badge bg-warning">⏳ در انتظار</span>
+                                {% elif contrib.status == 'under_review' %}
+                                <span class="badge bg-info">👀 بررسی</span>
+                                {% elif contrib.status == 'approved' %}
+                                <span class="badge bg-success">✅ تایید</span>
+                                {% elif contrib.status == 'in_progress' %}
+                                <span class="badge bg-primary">🔄 در حال انجام</span>
+                                {% elif contrib.status == 'completed' %}
+                                <span class="badge bg-success">✔️ انجام شده</span>
+                                {% elif contrib.status == 'rejected' %}
+                                <span class="badge bg-danger">❌ رد شده</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- عنوان -->
+                        <h5 class="card-title">{{ contrib.title }}</h5>
+                        
+                        <!-- توضیحات کوتاه -->
+                        <p class="card-text text-muted small">
+                            {{ contrib.description[:100] }}{% if contrib.description|length > 100 %}...{% endif %}
+                        </p>
+                        
+                        <!-- دسته‌بندی -->
+                        <div class="mb-2">
+                            {% if contrib.category == 'education' %}
+                            <span class="badge bg-light text-dark">📚 آموزش</span>
+                            {% elif contrib.category == 'health' %}
+                            <span class="badge bg-light text-dark">🏥 بهداشت</span>
+                            {% elif contrib.category == 'traffic' %}
+                            <span class="badge bg-light text-dark">🚗 ترافیک</span>
+                            {% elif contrib.category == 'security' %}
+                            <span class="badge bg-light text-dark">🛡️ امنیت</span>
+                            {% elif contrib.category == 'environment' %}
+                            <span class="badge bg-light text-dark">🌳 محیط زیست</span>
+                            {% elif contrib.category == 'cultural' %}
+                            <span class="badge bg-light text-dark">🎭 فرهنگی</span>
+                            {% elif contrib.category == 'infrastructure' %}
+                            <span class="badge bg-light text-dark">🏗️ زیرساخت</span>
+                            {% elif contrib.category == 'economic' %}
+                            <span class="badge bg-light text-dark">💰 اقتصاد</span>
+                            {% elif contrib.category == 'welfare' %}
+                            <span class="badge bg-light text-dark">🤝 رفاه</span>
+                            {% else %}
+                            <span class="badge bg-light text-dark">📋 سایر</span>
+                            {% endif %}
+                            
+                            {% if contrib.priority %}
+                                {% if contrib.priority == 'urgent' %}
+                                <span class="badge bg-danger">🔥 فوری</span>
+                                {% elif contrib.priority == 'high' %}
+                                <span class="badge bg-warning">⚠️ بالا</span>
+                                {% elif contrib.priority == 'medium' %}
+                                <span class="badge bg-info">➡️ متوسط</span>
+                                {% elif contrib.priority == 'low' %}
+                                <span class="badge bg-secondary">⬇️ پایین</span>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        
+                        <!-- متا اطلاعات -->
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                            <div class="small text-muted">
+                                <span>👤 {{ contrib.user_first_name }}</span>
+                            </div>
+                            <div class="small">
+                                <span class="me-2">👍 {{ contrib.votes_count }}</span>
+                                <span class="me-2">💬 {{ contrib.comments_count }}</span>
+                                <span>👁️ {{ contrib.views_count }}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- دکمه جزئیات -->
+                        <a href="{{ url_for('contribution_detail', contribution_id=contrib.id) }}" class="btn btn-primary w-100 mt-3">
+                            مشاهده جزئیات
+                        </a>
+                    </div>
+                    
+                    <div class="card-footer text-muted small">
+                        <span>📅 {{ contrib.created_at.strftime('%Y/%m/%d %H:%M') }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <h5>هنوز مشارکتی ثبت نشده است</h5>
+                    <p>شهروندان می‌توانند از طریق ربات تلگرام ایده‌ها و مشکلات خود را ارسال کنند.</p>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+</div>
+
+<style>
+.hover-shadow {
+    transition: box-shadow 0.3s ease;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+}
+</style>
+
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

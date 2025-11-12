@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظرسنجی‌ها - {{ candidate.full_name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .polls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .create-poll-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .poll-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .poll-question {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .poll-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .poll-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-user-tie" style="font-size: 40px;"></i>
+                </div>
+                <h2>{{ candidate.full_name }}</h2>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="{{ url_for('dashboard') }}" class="menu-item">
+                    <i class="fas fa-home"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a href="{{ url_for('polls') }}" class="menu-item active">
+                    <i class="fas fa-poll"></i>
+                    <span>نظرسنجی</span>
+                </a>
+                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>خروج</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <div class="main-content">
+            <div class="topbar">
+                <h1><i class="fas fa-poll"></i> نظرسنجی‌ها</h1>
+                <div class="topbar-user">
+                    <span>{{ candidate.full_name }}</span>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </div>
+            
+            <div class="content-area">
+                <div class="polls-header">
+                    <h2>لیست نظرسنجی‌ها</h2>
+                    <a href="{{ url_for('create_poll') }}" class="create-poll-btn">
+                        <i class="fas fa-plus"></i> ایجاد نظرسنجی جدید
+                    </a>
+                </div>
+                
+                {% if polls %}
+                    {% for poll in polls %}
+                    <div class="poll-card">
+                        <div class="poll-question">{{ poll.question }}</div>
+                        <div class="poll-stats">
+                            <div class="poll-stat">
+                                <i class="fas fa-vote-yea"></i>
+                                <span>{{ poll.total_votes }} رأی</span>
+                            </div>
+                            <div class="poll-stat">
+                                <i class="fas fa-list"></i>
+                                <span>{{ poll.options|length }} گزینه</span>
+                            </div>
+                            <div class="poll-stat">
+                                <i class="fas fa-calendar"></i>
+                                <span>{{ poll.created_at.strftime('%Y/%m/%d') }}</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <a href="{{ url_for('poll_results', poll_id=poll.id) }}" 
+                               style="padding: 8px 20px; background: #667eea; color: white; border-radius: 8px; text-decoration: none;">
+                                <i class="fas fa-chart-bar"></i> مشاهده نتایج
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p style="text-align: center; padding: 60px; color: #999;">
+                        <i class="fas fa-poll" style="font-size: 64px; display: block; margin-bottom: 20px; opacity: 0.3;"></i>
+                        هنوز نظرسنجی ای ایجاد نکرده‌اید
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تیکت‌های من</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tickets-container {
+            padding: 20px;
+        }
+        
+        .ticket-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        
+        .ticket-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .ticket-number {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .ticket-status {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .status-closed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .ticket-body {
+            margin: 20px 0;
+        }
+        
+        .ticket-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-weight: bold;
+            color: #333;
+            font-size: 1rem;
+        }
+        
+        .ticket-subject {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .ticket-message {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .receipt-preview {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .receipt-preview img {
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        
+        .admin-response {
+            background: #f8f9fa;
+            border-right: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .admin-response h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .empty-state i {
+            font-size: 5rem;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            color: #999;
+            margin-bottom: 10px;
+        }
+        
+        .btn-plans {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .btn-plans:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .timeline {
+            margin-top: 20px;
+            padding-right: 20px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: 9px;
+            top: 25px;
+            width: 2px;
+            height: calc(100% - 10px);
+            background: #e0e0e0;
+        }
+
+        .timeline-item:last-child::before {
+            display: none;
+        }
+
+        .timeline-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-poll-h"></i>
+            <h2>پنل کاندید</h2>
+        </div>
+        <nav class="menu">
+            <a href="{{ url_for('dashboard') }}">
+                <i class="fas fa-home"></i>
+                <span>داشبورد</span>
+            </a>
+            <a href="{{ url_for('view_plans') }}">
+                <i class="fas fa-crown"></i>
+                <span>پلن‌ها</span>
+            </a>
+            <a href="{{ url_for('my_tickets') }}" class="active">
+                <i class="fas fa-ticket-alt"></i>
+                <span>تیکت‌های من</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="welcome">
+                <h3>تیکت‌های من</h3>
+                <p>مشاهده وضعیت درخواست‌های خرید و پشتیبانی</p>
+            </div>
+            <div class="user-info">
+                <span>{{ candidate.full_name }}</span>
+                <a href="{{ url_for('logout') }}" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="tickets-container">
+            {% if tickets %}
+                {% for ticket in tickets %}
+                <div class="ticket-card">
+                    <div class="ticket-header">
+                        <div class="ticket-number">
+                            <i class="fas fa-hashtag"></i> {{ ticket.ticket_number }}
+                        </div>
+                        <div class="ticket-status status-{{ ticket.status }}">
+                            {% if ticket.status == 'pending' %}
+                                <i class="fas fa-clock"></i> در انتظار بررسی
+                            {% elif ticket.status == 'approved' %}
+                                <i class="fas fa-check-circle"></i> تایید شده
+                            {% elif ticket.status == 'rejected' %}
+                                <i class="fas fa-times-circle"></i> رد شده
+                            {% elif ticket.status == 'closed' %}
+                                <i class="fas fa-lock"></i> بسته شده
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="ticket-body">
+                        <div class="ticket-subject">
+                            <i class="fas fa-tag"></i> {{ ticket.subject }}
+                        </div>
+                        
+                        <div class="ticket-info">
+                            <div class="info-item">
+                                <span class="info-label">نوع تیکت</span>
+                                <span class="info-value">
+                                    {% if ticket.ticket_type == 'purchase' %}
+                                        <i class="fas fa-shopping-cart"></i> خرید پلن
+                                    {% else %}
+                                        <i class="fas fa-life-ring"></i> پشتیبانی
+                                    {% endif %}
+                                </span>
+                            </div>
+                            
+                            {% if ticket.plan %}
+                            <div class="info-item">
+                                <span class="info-label">پلن</span>
+                                <span class="info-value">{{ ticket.plan.name }}</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if ticket.payment_amount %}
+                            <div class="info-item">
+                                <span class="info-label">مبلغ</span>
+                                <span class="info-value">{{ "{:,}".format(ticket.payment_amount) }} تومان</span>
+                            </div>
+                            {% endif %}
+                            
+                            {% if ticket.payment_method %}
+                            <div class="info-item">
+                                <span class="info-label">روش پرداخت</span>
+                                <span class="info-value">
+                                    {% if ticket.payment_method == 'card_to_card' %}
+                                        کارت به کارت
+                                    {% elif ticket.payment_method == 'sheba' %}
+                                        شبا
+                                    {% endif %}
+                                </span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        {% if ticket.message %}
+                        <div class="ticket-message">
+                            <strong>پیام:</strong><br>
+                            {{ ticket.message }}
+                        </div>
+                        {% endif %}
+
+                        <!-- فیش پرداخت -->
+                        {% if ticket.receipt_image %}
+                        <div class="receipt-preview">
+                            <h4><i class="fas fa-receipt"></i> فیش پرداخت</h4>
+                            <img src="{{ url_for('static', filename='../uploads/receipts/' + ticket.receipt_image.split('/')[-1]) }}" 
+                                 alt="فیش پرداخت"
+                                 onclick="window.open(this.src)">
+                        </div>
+                        {% endif %}
+
+                        <!-- پاسخ ادمین -->
+                        {% if ticket.admin_response %}
+                        <div class="admin-response">
+                            <h4><i class="fas fa-user-shield"></i> پاسخ پشتیبانی</h4>
+                            <p>{{ ticket.admin_response }}</p>
+                        </div>
+                        {% endif %}
+
+                        <!-- Timeline -->
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-icon"></div>
+                                <div class="timeline-content">
+                                    <strong>ثبت تیکت</strong>
+                                    <div class="timeline-date">{{ ticket.created_at.strftime('%Y/%m/%d %H:%M') }}</div>
+                                </div>
+                            </div>
+                            
+                            {% if ticket.updated_at and ticket.updated_at != ticket.created_at %}
+                            <div class="timeline-item">
+                                <div class="timeline-icon" style="background: #ffc107;"></div>
+                                <div class="timeline-content">
+                                    <strong>بروزرسانی</strong>
+                                    <div class="timeline-date">{{ ticket.updated_at.strftime('%Y/%m/%d %H:%M') }}</div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            {% if ticket.closed_at %}
+                            <div class="timeline-item">
+                                <div class="timeline-icon" style="background: #6c757d;"></div>
+                                <div class="timeline-content">
+                                    <strong>بسته شد</strong>
+                                    <div class="timeline-date">{{ ticket.closed_at.strftime('%Y/%m/%d %H:%M') }}</div>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>هیچ تیکتی ثبت نشده است</h3>
+                    <p>برای خرید پلن یا ارتباط با پشتیبانی، تیکت جدید ایجاد کنید</p>
+                    <a href="{{ url_for('view_plans') }}" class="btn-plans">
+                        <i class="fas fa-crown"></i>
+                        مشاهده پلن‌ها
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

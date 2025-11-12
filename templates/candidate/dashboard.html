@@ -6,6 +6,7 @@
     <title>داشبورد - پنل نماینده</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
 </head>
 <body>
     <div class="dashboard-wrapper">
@@ -24,6 +25,14 @@
                     <i class="fas fa-home"></i>
                     <span>داشبورد</span>
                 </a>
+                <a href="{{ url_for('view_plans') }}" class="menu-item">
+                    <i class="fas fa-tags"></i>
+                    <span>پلن‌های اشتراک</span>
+                </a>
+                <a href="{{ url_for('bot_management') }}" class="menu-item">
+                    <i class="fas fa-robot"></i>
+                    <span>مدیریت بات</span>
+                </a>
                 <a href="{{ url_for('profile') }}" class="menu-item">
                     <i class="fas fa-user-circle"></i>
                     <span>اطلاعات شخصی</span>
@@ -39,6 +48,42 @@
                 <a href="{{ url_for('headquarters') }}" class="menu-item">
                     <i class="fas fa-map-marker-alt"></i>
                     <span>ستادها و دفاتر</span>
+                </a>
+                <a href="{{ url_for('manage_channels') }}" class="menu-item">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <span>کانال‌ها و گروه‌ها</span>
+                </a>
+                <a href="{{ url_for('benchmark') }}" class="menu-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>مقایسه رقابتی</span>
+                    <span style="margin-right: auto; background: #f59e0b; color: white; padding: 2px 8px; border-radius: 10px; font-size: 9px;">جدید</span>
+                </a>
+                <a href="{{ url_for('referral_dashboard') }}" class="menu-item">
+                    <i class="fas fa-gift"></i>
+                    <span>دعوت دوستان</span>
+                    <span style="margin-right: auto; background: #10b981; color: white; padding: 2px 8px; border-radius: 10px; font-size: 9px;">🎁</span>
+                </a>
+                <a href="{{ url_for('vip_dashboard') }}" class="menu-item">
+                    <i class="fas fa-star"></i>
+                    <span>شهروند ماه</span>
+                    <span style="margin-right: auto; background: #ec4899; color: white; padding: 2px 8px; border-radius: 10px; font-size: 9px;">VIP</span>
+                </a>
+                <a href="{{ url_for('party_dashboard') }}" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>حزب و ائتلاف</span>
+                    <span style="margin-right: auto; background: #667eea; color: white; padding: 2px 8px; border-radius: 10px; font-size: 9px;">🏛️</span>
+                </a>
+                <a href="{{ url_for('analytics') }}" class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>آمار و تحلیل</span>
+                </a>
+                <a href="{{ url_for('broadcast') }}" class="menu-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>ارسال پیام انبوه</span>
+                </a>
+                <a href="{{ url_for('contributions') }}" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>مشارکت شهروندی</span>
                 </a>
                 <a href="{{ url_for('messages') }}" class="menu-item">
                     <i class="fas fa-envelope"></i>
@@ -91,6 +136,84 @@
                     {% endif %}
                 {% endwith %}
                 
+                <!-- بنرهای ارتقا و هشدار -->
+                {% if active_plan and latest_purchase %}
+                    {% set days_left = latest_purchase.days_remaining() %}
+                    
+                    {% if days_left <= 0 %}
+                    <div style="background: linear-gradient(135deg, #fee2e2, #fecaca); border: 3px solid #ef4444; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #dc2626;"></i>
+                            <div style="flex: 1;">
+                                <h3 style="margin: 0 0 8px 0; color: #991b1b;">⚠️ پلن شما منقضی شده است</h3>
+                                <p style="margin: 0 0 12px 0; color: #7f1d1d;">
+                                    برای ادامه استفاده از امکانات سیستم، لطفاً پلن خود را تمدید یا ارتقا دهید.
+                                </p>
+                                <a href="{{ url_for('view_plans') }}" class="btn btn-danger" style="display: inline-block;">
+                                    <i class="fas fa-sync"></i> تمدید یا ارتقای پلن
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% elif days_left < 7 %}
+                    <div style="background: linear-gradient(135deg, #fef3c7, #fde68a); border: 3px solid #f59e0b; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <i class="fas fa-clock" style="font-size: 48px; color: #d97706;"></i>
+                            <div style="flex: 1;">
+                                <h3 style="margin: 0 0 8px 0; color: #92400e;">⏰ پلن شما به زودی منقضی می‌شود</h3>
+                                <p style="margin: 0 0 12px 0; color: #78350f;">
+                                    تنها <strong>{{ days_left }}</strong> روز تا انقضای پلن شما باقی مانده است.
+                                </p>
+                                <a href="{{ url_for('view_plans') }}" class="btn btn-warning" style="display: inline-block; color: white;">
+                                    <i class="fas fa-sync"></i> تمدید پلن
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if plan_usage %}
+                        {% if plan_usage.messages.limit != 'نامحدود' and plan_usage.messages.percentage >= 90 %}
+                        <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                            <i class="fas fa-info-circle" style="color: #d97706;"></i>
+                            <strong>توجه:</strong> شما {{ plan_usage.messages.percentage|round|int }}% از سهمیه پیام خود را مصرف کرده‌اید.
+                            <a href="{{ url_for('view_plans') }}" style="color: #92400e; text-decoration: underline;">ارتقای پلن</a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if plan_usage.programs.limit != 'نامحدود' and plan_usage.programs.percentage >= 90 %}
+                        <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                            <i class="fas fa-info-circle" style="color: #d97706;"></i>
+                            <strong>توجه:</strong> شما {{ plan_usage.programs.percentage|round|int }}% از سهمیه برنامه‌ها را مصرف کرده‌اید.
+                            <a href="{{ url_for('view_plans') }}" style="color: #92400e; text-decoration: underline;">ارتقای پلن</a>
+                        </div>
+                        {% endif %}
+                        
+                        {% if plan_usage.headquarters.limit != 'نامحدود' and plan_usage.headquarters.percentage >= 90 %}
+                        <div style="background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                            <i class="fas fa-info-circle" style="color: #d97706;"></i>
+                            <strong>توجه:</strong> شما {{ plan_usage.headquarters.percentage|round|int }}% از سهمیه دفاتر را مصرف کرده‌اید.
+                            <a href="{{ url_for('view_plans') }}" style="color: #92400e; text-decoration: underline;">ارتقای پلن</a>
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <div style="background: linear-gradient(135deg, #fee2e2, #fecaca); border: 3px solid #ef4444; border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <i class="fas fa-shopping-cart" style="font-size: 48px; color: #dc2626;"></i>
+                            <div style="flex: 1;">
+                                <h3 style="margin: 0 0 8px 0; color: #991b1b;">🛒 شما پلن فعالی ندارید</h3>
+                                <p style="margin: 0 0 12px 0; color: #7f1d1d;">
+                                    برای استفاده از امکانات سیستم، لطفاً یک پلن خریداری کنید.
+                                </p>
+                                <a href="{{ url_for('view_plans') }}" class="btn btn-danger" style="display: inline-block;">
+                                    <i class="fas fa-tags"></i> مشاهده پلن‌ها و خرید
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                
                 <!-- Page Header -->
                 <div class="page-header">
                     <h2>خوش آمدید {{ candidate.full_name }} عزیز</h2>
@@ -101,6 +224,28 @@
                 
                 <!-- Stats Cards -->
                 <div class="stats-grid">
+                    <!-- ویجت وضعیت پلن -->
+                    {% if active_plan and latest_purchase %}
+                    <div class="stat-card" style="background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon" style="background: #3b82f6;">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-body">
+                            <h3 style="font-size: 16px; color: #1e40af;">{{ active_plan.name }}</h3>
+                            <p>پلن فعلی</p>
+                            <div style="margin-top: 10px;">
+                                {% set days_left = latest_purchase.days_remaining() %}
+                                <div style="font-size: 24px; font-weight: bold; color: {% if days_left > 7 %}#059669{% elif days_left > 0 %}#d97706{% else %}#dc2626{% endif %};">
+                                    {{ days_left }} روز
+                                </div>
+                                <div style="font-size: 12px; color: #64748b;">باقیمانده</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
                     <div class="stat-card">
                         <div class="stat-card-header">
                             <div class="stat-card-icon primary">
@@ -134,6 +279,21 @@
                         <div class="stat-card-body">
                             <h3>0</h3>
                             <p>کاربران بات</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" style="cursor: pointer;" onclick="window.location.href='{{ url_for('manage_channels') }}'">
+                        <div class="stat-card-header">
+                            <div class="stat-card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                <i class="fas fa-broadcast-tower"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-body">
+                            <h3>📢</h3>
+                            <p>مدیریت کانال‌ها</p>
+                            <div style="font-size: 12px; color: #667eea; margin-top: 5px;">
+                                کلیک کنید →
+                            </div>
                         </div>
                     </div>
                     
