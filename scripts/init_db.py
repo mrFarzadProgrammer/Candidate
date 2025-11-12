@@ -4,9 +4,10 @@
 import sys
 import os
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory to path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from database.models import db, Admin, Plan
+from database.models import db, Admin, Plan, Candidate
 from config.settings import DATABASE_URI, DEFAULT_PLANS
 from flask import Flask
 from werkzeug.security import generate_password_hash
@@ -60,6 +61,18 @@ def init_database():
             print("\n📋 لیست پلن‌ها:")
             for plan in Plan.query.all():
                 print(f"   • {plan.name} ({plan.code}) - {plan.price:,} تومان")
+        
+        # اختصاص پلن پایه به همه نمایندگان
+        print("\n🎁 در حال اختصاص پلن پایه به نمایندگان...")
+        base_plan = Plan.query.filter_by(code='START').first()
+        if base_plan:
+            candidates = Candidate.query.all()
+            for candidate in candidates:
+                if base_plan not in candidate.plans:
+                    candidate.plans.append(base_plan)
+                    print(f"   ✅ پلن پایه به {candidate.full_name} اختصاص داده شد")
+            db.session.commit()
+            print(f"✅ پلن پایه به {len(candidates)} نماینده اختصاص داده شد")
         
         print("\n✅ مقداردهی اولیه با موفقیت انجام شد!")
         print("\n🚀 برای راه‌اندازی سیستم:")
