@@ -3,6 +3,7 @@
 """
 import sys
 import os
+import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import (
     Application, CommandHandler, CallbackQueryHandler, MessageHandler, 
@@ -19,6 +20,10 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import create_engine
 from config.settings import DATABASE_URI
 from datetime import datetime
+
+# Setup logger
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 
 # تنظیم دیتابیس برای استفاده در بات
