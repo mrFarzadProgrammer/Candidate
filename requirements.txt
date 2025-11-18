@@ -46,10 +46,10 @@ pytest-flask==1.3.0            # Flask testing
 pytest-cov==4.1.0              # Coverage reporting
 locust==2.20.0                 # Load testing
 
-# AI & NLP (New)
-transformers==4.36.0           # Hugging Face transformers for AI models
-torch==2.1.2                   # PyTorch for ML
-hazm==0.10.0                   # Persian NLP toolkit
-sentencepiece==0.1.99          # Tokenization for transformers
+# AI & NLP (New) - Simplified for compatibility
+# transformers==4.36.0         # Commented out - heavy dependency
+# torch==2.1.2                 # Commented out - heavy dependency  
+# hazm==0.10.0                 # Commented out - conflicts with numpy
+sentencepiece==0.1.99          # Tokenization
 scikit-learn==1.3.2            # ML utilities & clustering
-numpy==1.26.2                  # Numerical computing
+numpy>=1.22.4,<2.0             # Numerical computing - flexible version
