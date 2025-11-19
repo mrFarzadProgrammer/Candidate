@@ -1,11 +1,11 @@
-๏ปฟ<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ุณุชุงุฏูุง ู ุฏูุงุชุฑ - ูพูู ูู…ุงÛูุฏู</title>
+    <title>ำสวฯๅว ๆ ฯÝวสั - ไแ ไใวํไฯๅ</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome/all.min.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
@@ -36,41 +36,41 @@
                 <div class="logo">
                     <i class="fas fa-user-tie" style="font-size: 40px;"></i>
                 </div>
-                <h2>ูพูู ูู…ุงÛูุฏู</h2>
+                <h2>ไแ ไใวํไฯๅ</h2>
                 <p>{{ candidate.full_name }}</p>
             </div>
             <nav class="sidebar-menu">
                 <a href="{{ url_for('dashboard') }}" class="menu-item">
                     <i class="fas fa-home"></i>
-                    <span>ุฏุงุดุจูุฑุฏ</span>
+                    <span>ฯวิศๆัฯ</span>
                 </a>
                 <a href="{{ url_for('view_plans') }}" class="menu-item">
                     <i class="fas fa-tags"></i>
-                    <span>ูพููโ€ูุงÛ ุงุดุชุฑุงฺฉ</span>
+                    <span>แไๅวํ วิสัว</span>
                 </a>
                 <a href="{{ url_for('profile') }}" class="menu-item">
                     <i class="fas fa-user-circle"></i>
-                    <span>ุงุทูุงุนุงุช ุดุฎุตÛ</span>
+                    <span>วุแวฺวส ิฮีํ</span>
                 </a>
                 <a href="{{ url_for('resume') }}" class="menu-item">
                     <i class="fas fa-file-alt"></i>
-                    <span>ุฑุฒูู…ู</span>
+                    <span>ัาๆใๅ</span>
                 </a>
                 <a href="{{ url_for('programs') }}" class="menu-item">
                     <i class="fas fa-bullhorn"></i>
-                    <span>ุจุฑูุงู…ูโ€ูุงÛ ุงูุชุฎุงุจุงุชÛ</span>
+                    <span>ศัไวใๅๅวํ วไสฮวศวสํ</span>
                 </a>
                 <a href="{{ url_for('headquarters') }}" class="menu-item active">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>ุณุชุงุฏูุง ู ุฏูุงุชุฑ</span>
+                    <span>ำสวฯๅว ๆ ฯÝวสั</span>
                 </a>
                 <a href="{{ url_for('messages') }}" class="menu-item">
                     <i class="fas fa-envelope"></i>
-                    <span>ูพÛุงู…โ€ูุงÛ ฺฉุงุฑุจุฑุงู</span>
+                    <span>ํวใๅวํ วัศัวไ</span>
                 </a>
                 <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span>ุฎุฑูุฌ</span>
+                    <span>ฮัๆฬ</span>
                 </a>
             </nav>
         </aside>
@@ -80,7 +80,7 @@
                     <button class="sidebar-toggle" id="sidebarToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1>ุณุชุงุฏูุง ู ุฏูุงุชุฑ</h1>
+                    <h1>ำสวฯๅว ๆ ฯÝวสั</h1>
                 </div>
                 <div class="topbar-right">
                     <div class="user-profile">
@@ -89,37 +89,37 @@
                         </div>
                         <div class="user-info">
                             <h4>{{ candidate.full_name }}</h4>
-                            <p>ูู…ุงÛูุฏู ุงูุชุฎุงุจุงุชÛ</p>
+                            <p>ไใวํไฯๅ วไสฮวศวสํ</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="content-area">
                 <div class="page-header">
-                    <h2>ู…ุฏÛุฑÛุช ุณุชุงุฏูุง</h2>
+                    <h2>ใฯํัํส ำสวฯๅว</h2>
                     <div class="breadcrumb">
-                        <a href="{{ url_for('dashboard') }}">ุฏุงุดุจูุฑุฏ</a>
+                        <a href="{{ url_for('dashboard') }}">ฯวิศๆัฯ</a>
                         <span>/</span>
-                        <span>ุณุชุงุฏูุง</span>
+                        <span>ำสวฯๅว</span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h3><i class="fas fa-plus-circle"></i> ุงูุฒูุฏู ุฏูุชุฑ</h3>
+                        <h3><i class="fas fa-plus-circle"></i> วÝาๆฯไ ฯÝสั</h3>
                     </div>
                     <div class="card-body">
                         <form method="POST" style="max-width: 800px;">
                             <div class="form-group">
-                                <label><i class="fas fa-building"></i> ูุงู… ุฏูุชุฑ *</label>
-                                <input type="text" name="name" required class="form-control" placeholder="ูุงู… ุฏูุชุฑ">
+                                <label><i class="fas fa-building"></i> ไวใ ฯÝสั *</label>
+                                <input type="text" name="name" required class="form-control" placeholder="ไวใ ฯÝสั">
                             </div>
                             <div class="form-group" style="margin-top: 15px;">
-                                <label><i class="fas fa-map-marker-alt"></i> ุขุฏุฑุณ *</label>
-                                <textarea name="address" required rows="3" class="form-control" placeholder="ุขุฏุฑุณ ฺฉุงู…ู"></textarea>
+                                <label><i class="fas fa-map-marker-alt"></i> ยฯัำ *</label>
+                                <textarea name="address" required rows="3" class="form-control" placeholder="ยฯัำ วใแ"></textarea>
                             </div>
                             <div style="margin-top: 20px;">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save"></i> ุฐุฎÛุฑู
+                                    <i class="fas fa-save"></i> ะฮํัๅ
                                 </button>
                             </div>
                         </form>
@@ -127,9 +127,9 @@
                 </div>
                 <div class="card" style="margin-top: 30px;">
                     <div class="card-header">
-                        <h3><i class="fas fa-list"></i> ูÛุณุช ุฏูุงุชุฑ</h3>
+                        <h3><i class="fas fa-list"></i> แํำส ฯÝวสั</h3>
                         <button onclick="showMap()" class="map-btn">
-                            <i class="fas fa-map"></i> ูู…ุงÛุด ุฑูÛ ููุดู
+                            <i class="fas fa-map"></i> ไใวํิ ัๆํ ไÞิๅ
                         </button>
                     </div>
                     <div class="card-body">
@@ -137,7 +137,7 @@
                         <div id="mapContainer" style="display: none;">
                             <div id="map"></div>
                             <button onclick="hideMap()" style="margin-top: 15px; padding: 10px 20px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer;">
-                                <i class="fas fa-times"></i> ุจุณุชู ููุดู
+                                <i class="fas fa-times"></i> ศำสไ ไÞิๅ
                             </button>
                         </div>
                         
@@ -154,7 +154,7 @@
                                         <form method="POST" action="{{ url_for('headquarters') }}">
                                             <input type="hidden" name="hq_id" value="{{ hq.id }}">
                                             <input type="hidden" name="action" value="delete">
-                                            <button type="submit" onclick="return confirm('ุญุฐู ุดูุฏุ')" class="btn" style="background: #ef4444; color: white;">
+                                            <button type="submit" onclick="return confirm('อะÝ ิๆฯฟ')" class="btn" style="background: #ef4444; color: white;">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -166,7 +166,7 @@
                         {% else %}
                         <div style="text-align: center; padding: 60px 20px;">
                             <i class="fas fa-map-marker-alt" style="font-size: 80px; opacity: 0.3;"></i>
-                            <h3>ุฏูุชุฑÛ ุซุจุช ูุดุฏู</h3>
+                            <h3>ฯÝสัํ หศส ไิฯๅ</h3>
                         </div>
                         {% endif %}
                     </div>
@@ -186,7 +186,7 @@
                 map = L.map('map').setView([32.4279, 53.6880], 6);
                 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: 'ยฉ OpenStreetMap contributors'
+                    attribution: 'ฉ OpenStreetMap contributors'
                 }).addTo(map);
                 
                 // Add markers for headquarters (if coordinates available)

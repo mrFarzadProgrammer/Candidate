@@ -1,11 +1,11 @@
-๏ปฟ<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ุจุฑูุงู…ูโ€ูุงÛ ุงูุชุฎุงุจุงุชÛ - ูพูู ูู…ุงÛูุฏู</title>
+    <title>ศัไวใๅๅวํ วไสฮวศวสํ - ไแ ไใวํไฯๅ</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome/all.min.css') }}">
     <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
 </head>
 <body>
@@ -15,41 +15,41 @@
                 <div class="logo">
                     <i class="fas fa-user-tie" style="font-size: 40px;"></i>
                 </div>
-                <h2>ูพูู ูู…ุงÛูุฏู</h2>
+                <h2>ไแ ไใวํไฯๅ</h2>
                 <p>{{ candidate.full_name }}</p>
             </div>
             <nav class="sidebar-menu">
                 <a href="{{ url_for('dashboard') }}" class="menu-item">
                     <i class="fas fa-home"></i>
-                    <span>ุฏุงุดุจูุฑุฏ</span>
+                    <span>ฯวิศๆัฯ</span>
                 </a>
                 <a href="{{ url_for('view_plans') }}" class="menu-item">
                     <i class="fas fa-tags"></i>
-                    <span>ูพููโ€ูุงÛ ุงุดุชุฑุงฺฉ</span>
+                    <span>แไๅวํ วิสัว</span>
                 </a>
                 <a href="{{ url_for('profile') }}" class="menu-item">
                     <i class="fas fa-user-circle"></i>
-                    <span>ุงุทูุงุนุงุช ุดุฎุตÛ</span>
+                    <span>วุแวฺวส ิฮีํ</span>
                 </a>
                 <a href="{{ url_for('resume') }}" class="menu-item">
                     <i class="fas fa-file-alt"></i>
-                    <span>ุฑุฒูู…ู</span>
+                    <span>ัาๆใๅ</span>
                 </a>
                 <a href="{{ url_for('programs') }}" class="menu-item active">
                     <i class="fas fa-bullhorn"></i>
-                    <span>ุจุฑูุงู…ูโ€ูุงÛ ุงูุชุฎุงุจุงุชÛ</span>
+                    <span>ศัไวใๅๅวํ วไสฮวศวสํ</span>
                 </a>
                 <a href="{{ url_for('headquarters') }}" class="menu-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>ุณุชุงุฏูุง ู ุฏูุงุชุฑ</span>
+                    <span>ำสวฯๅว ๆ ฯÝวสั</span>
                 </a>
                 <a href="{{ url_for('messages') }}" class="menu-item">
                     <i class="fas fa-envelope"></i>
-                    <span>ูพÛุงู…โ€ูุงÛ ฺฉุงุฑุจุฑุงู</span>
+                    <span>ํวใๅวํ วัศัวไ</span>
                 </a>
                 <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span>ุฎุฑูุฌ</span>
+                    <span>ฮัๆฬ</span>
                 </a>
             </nav>
         </aside>
@@ -59,7 +59,7 @@
                     <button class="sidebar-toggle" id="sidebarToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1>ุจุฑูุงู…ูโ€ูุงÛ ุงูุชุฎุงุจุงุชÛ</h1>
+                    <h1>ศัไวใๅๅวํ วไสฮวศวสํ</h1>
                 </div>
                 <div class="topbar-right">
                     <div class="user-profile">
@@ -68,37 +68,37 @@
                         </div>
                         <div class="user-info">
                             <h4>{{ candidate.full_name }}</h4>
-                            <p>ูู…ุงÛูุฏู ุงูุชุฎุงุจุงุชÛ</p>
+                            <p>ไใวํไฯๅ วไสฮวศวสํ</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="content-area">
                 <div class="page-header">
-                    <h2>ู…ุฏÛุฑÛุช ุจุฑูุงู…ูโ€ูุง</h2>
+                    <h2>ใฯํัํส ศัไวใๅๅว</h2>
                     <div class="breadcrumb">
-                        <a href="{{ url_for('dashboard') }}">ุฏุงุดุจูุฑุฏ</a>
+                        <a href="{{ url_for('dashboard') }}">ฯวิศๆัฯ</a>
                         <span>/</span>
-                        <span>ุจุฑูุงู…ูโ€ูุง</span>
+                        <span>ศัไวใๅๅว</span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h3><i class="fas fa-plus-circle"></i> ุงูุฒูุฏู ุจุฑูุงู…ู</h3>
+                        <h3><i class="fas fa-plus-circle"></i> วÝาๆฯไ ศัไวใๅ</h3>
                     </div>
                     <div class="card-body">
                         <form method="POST" style="max-width: 800px;">
                             <div class="form-group">
-                                <label><i class="fas fa-tag"></i> ุนููุงู *</label>
-                                <input type="text" name="title" required class="form-control" placeholder="ุนููุงู ุจุฑูุงู…ู">
+                                <label><i class="fas fa-tag"></i> ฺไๆวไ *</label>
+                                <input type="text" name="title" required class="form-control" placeholder="ฺไๆวไ ศัไวใๅ">
                             </div>
                             <div class="form-group" style="margin-top: 15px;">
-                                <label><i class="fas fa-align-right"></i> ุชูุถÛุญุงุช *</label>
-                                <textarea name="description" required rows="4" class="form-control" placeholder="ุดุฑุญ ุจุฑูุงู…ู"></textarea>
+                                <label><i class="fas fa-align-right"></i> สๆึํอวส *</label>
+                                <textarea name="description" required rows="4" class="form-control" placeholder="ิัอ ศัไวใๅ"></textarea>
                             </div>
                             <div style="margin-top: 20px;">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save"></i> ุฐุฎÛุฑู
+                                    <i class="fas fa-save"></i> ะฮํัๅ
                                 </button>
                             </div>
                         </form>
@@ -106,7 +106,7 @@
                 </div>
                 <div class="card" style="margin-top: 30px;">
                     <div class="card-header">
-                        <h3><i class="fas fa-list"></i> ูÛุณุช ุจุฑูุงู…ูโ€ูุง</h3>
+                        <h3><i class="fas fa-list"></i> แํำส ศัไวใๅๅว</h3>
                     </div>
                     <div class="card-body">
                         {% if programs %}
@@ -122,7 +122,7 @@
                                         <form method="POST" action="{{ url_for('programs') }}">
                                             <input type="hidden" name="program_id" value="{{ program.id }}">
                                             <input type="hidden" name="action" value="delete">
-                                            <button type="submit" onclick="return confirm('ุญุฐู ุดูุฏุ')" class="btn" style="background: #ef4444; color: white;">
+                                            <button type="submit" onclick="return confirm('อะÝ ิๆฯฟ')" class="btn" style="background: #ef4444; color: white;">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -134,7 +134,7 @@
                         {% else %}
                         <div style="text-align: center; padding: 60px 20px;">
                             <i class="fas fa-bullhorn" style="font-size: 80px; opacity: 0.3;"></i>
-                            <h3>ุจุฑูุงู…ูโ€ุงÛ ุซุจุช ูุดุฏู</h3>
+                            <h3>ศัไวใๅวํ หศส ไิฯๅ</h3>
                         </div>
                         {% endif %}
                     </div>

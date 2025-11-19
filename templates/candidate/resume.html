@@ -1,11 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رزومه - پنل نماینده</title>
+    <title>����� - ��� �������</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome/all.min.css') }}">
     <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
 </head>
 <body>
@@ -15,41 +15,41 @@
                 <div class="logo">
                     <i class="fas fa-user-tie" style="font-size: 40px;"></i>
                 </div>
-                <h2>پنل نماینده</h2>
+                <h2>��� �������</h2>
                 <p>{{ candidate.full_name }}</p>
             </div>
             <nav class="sidebar-menu">
                 <a href="{{ url_for('dashboard') }}" class="menu-item">
                     <i class="fas fa-home"></i>
-                    <span>داشبورد</span>
+                    <span>�������</span>
                 </a>
                 <a href="{{ url_for('view_plans') }}" class="menu-item">
                     <i class="fas fa-tags"></i>
-                    <span>پلن‌های اشتراک</span>
+                    <span>������ ����ǘ</span>
                 </a>
                 <a href="{{ url_for('profile') }}" class="menu-item">
                     <i class="fas fa-user-circle"></i>
-                    <span>اطلاعات شخصی</span>
+                    <span>������� ����</span>
                 </a>
                 <a href="{{ url_for('resume') }}" class="menu-item active">
                     <i class="fas fa-file-alt"></i>
-                    <span>رزومه</span>
+                    <span>�����</span>
                 </a>
                 <a href="{{ url_for('programs') }}" class="menu-item">
                     <i class="fas fa-bullhorn"></i>
-                    <span>برنامه‌های انتخاباتی</span>
+                    <span>��������� ���������</span>
                 </a>
                 <a href="{{ url_for('headquarters') }}" class="menu-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>ستادها و دفاتر</span>
+                    <span>������ � �����</span>
                 </a>
                 <a href="{{ url_for('messages') }}" class="menu-item">
                     <i class="fas fa-envelope"></i>
-                    <span>پیام‌های کاربران</span>
+                    <span>������� �������</span>
                 </a>
                 <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
                     <i class="fas fa-sign-out-alt"></i>
-                    <span>خروج</span>
+                    <span>����</span>
                 </a>
             </nav>
         </aside>
@@ -59,7 +59,7 @@
                     <button class="sidebar-toggle" id="sidebarToggle">
                         <i class="fas fa-bars"></i>
                     </button>
-                    <h1>رزومه</h1>
+                    <h1>�����</h1>
                 </div>
                 <div class="topbar-right">
                     <div class="user-profile">
@@ -68,37 +68,37 @@
                         </div>
                         <div class="user-info">
                             <h4>{{ candidate.full_name }}</h4>
-                            <p>نماینده انتخاباتی</p>
+                            <p>������� ���������</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="content-area">
                 <div class="page-header">
-                    <h2>مدیریت رزومه</h2>
+                    <h2>������ �����</h2>
                     <div class="breadcrumb">
-                        <a href="{{ url_for('dashboard') }}">داشبورد</a>
+                        <a href="{{ url_for('dashboard') }}">�������</a>
                         <span>/</span>
-                        <span>رزومه</span>
+                        <span>�����</span>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h3><i class="fas fa-plus-circle"></i> افزودن رزومه جدید</h3>
+                        <h3><i class="fas fa-plus-circle"></i> ������ ����� ����</h3>
                     </div>
                     <div class="card-body">
                         <form method="POST" style="max-width: 800px;">
                             <div class="form-group">
-                                <label><i class="fas fa-briefcase"></i> عنوان *</label>
-                                <input type="text" name="title" required class="form-control" placeholder="مثال: دکترای مدیریت">
+                                <label><i class="fas fa-briefcase"></i> ����� *</label>
+                                <input type="text" name="title" required class="form-control" placeholder="����: Ϙ���� ������">
                             </div>
                             <div class="form-group" style="margin-top: 15px;">
-                                <label><i class="fas fa-align-right"></i> توضیحات *</label>
-                                <textarea name="description" required rows="4" class="form-control" placeholder="جزئیات"></textarea>
+                                <label><i class="fas fa-align-right"></i> ������� *</label>
+                                <textarea name="description" required rows="4" class="form-control" placeholder="������"></textarea>
                             </div>
                             <div style="margin-top: 20px;">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save"></i> ذخیره
+                                    <i class="fas fa-save"></i> �����
                                 </button>
                             </div>
                         </form>
@@ -106,7 +106,7 @@
                 </div>
                 <div class="card" style="margin-top: 30px;">
                     <div class="card-header">
-                        <h3><i class="fas fa-list"></i> لیست رزومه‌ها</h3>
+                        <h3><i class="fas fa-list"></i> ���� �������</h3>
                     </div>
                     <div class="card-body">
                         {% if resumes %}
@@ -122,7 +122,7 @@
                                         <form method="POST" action="{{ url_for('resume') }}">
                                             <input type="hidden" name="resume_id" value="{{ resume.id }}">
                                             <input type="hidden" name="action" value="delete">
-                                            <button type="submit" onclick="return confirm('حذف شود؟')" class="btn" style="background: #ef4444; color: white;">
+                                            <button type="submit" onclick="return confirm('��� ��Ͽ')" class="btn" style="background: #ef4444; color: white;">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                         </form>
@@ -134,7 +134,7 @@
                         {% else %}
                         <div style="text-align: center; padding: 60px 20px;">
                             <i class="fas fa-file-alt" style="font-size: 80px; opacity: 0.3;"></i>
-                            <h3>رزومه‌ای ثبت نشده</h3>
+                            <h3>������� ��� ����</h3>
                         </div>
                         {% endif %}
                     </div>
