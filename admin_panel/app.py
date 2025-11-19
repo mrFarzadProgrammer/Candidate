@@ -2,6 +2,12 @@
 پنل مدیریت سوپر ادمین
 مدیریت نماینده‌ها، پلن‌ها و راه‌اندازی بات‌ها
 """
+import sys
+import os
+
+# Add parent directory to path FIRST
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from utils.db_utils import safe_commit
 from utils.validators import Validator, validate_form_data
@@ -10,11 +16,6 @@ import logging
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from datetime import datetime, timedelta
-import sys
-import os
-
-# Add parent directory to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from database.models import (db, Admin, Candidate, Plan, BotInstance, 
                             PlanPurchase, ConsultationRequest, Ticket, Payment)
