@@ -252,19 +252,63 @@ def edit_candidate(candidate_id):
 @app.route('/candidate/<int:candidate_id>/delete', methods=['POST'])
 @login_required
 def delete_candidate(candidate_id):
-    """حذف نماینده"""
-    candidate = Candidate.query.get_or_404(candidate_id)
-    full_name = candidate.full_name
-    
-    # حذف بات‌های مرتبط
-    BotInstance.query.filter_by(candidate_id=candidate_id).delete()
-    
-    # حذف نماینده
-    db.session.delete(candidate)
-    safe_commit(db, "Database commit failed")
-    
-    flash(f'نماینده {full_name} با موفقیت حذف شد', 'success')
-    return redirect(url_for('candidates'))
+    """حذف نماینده و تمام اطلاعات مرتبط"""
+    try:
+        candidate = Candidate.query.get_or_404(candidate_id)
+        full_name = candidate.full_name
+        
+        # Import necessary models for cascade deletion
+        from database.models import (
+            BotInstance, PlanPurchase, ConsultationRequest, 
+            Ticket, Payment, CitizenContribution, CandidateRanking,
+            TrialPeriod, ReferralProgram, ReferralReward, MonthlyTopCitizen,
+            VIPInteraction, LiveEvent, PartyMembership, CoalitionMembership,
+            DataExportLog, BetaTester, BotChannel, ScheduledPost,
+            BroadcastMessage, Poll, AutoReply
+        )
+        
+        # حذف تمام رکوردهای وابسته به candidate
+        # (رکوردهایی که در relationship cascade='all, delete-orphan' ندارند)
+        BotInstance.query.filter_by(candidate_id=candidate_id).delete()
+        PlanPurchase.query.filter_by(candidate_id=candidate_id).delete()
+        ConsultationRequest.query.filter_by(candidate_id=candidate_id).delete()
+        Ticket.query.filter_by(candidate_id=candidate_id).delete()
+        Payment.query.filter_by(candidate_id=candidate_id).delete()
+        CitizenContribution.query.filter_by(candidate_id=candidate_id).delete()
+        CandidateRanking.query.filter_by(candidate_id=candidate_id).delete()
+        TrialPeriod.query.filter_by(candidate_id=candidate_id).delete()
+        ReferralProgram.query.filter_by(candidate_id=candidate_id).delete()
+        ReferralReward.query.filter_by(referred_candidate_id=candidate_id).delete()
+        MonthlyTopCitizen.query.filter_by(candidate_id=candidate_id).delete()
+        VIPInteraction.query.filter_by(candidate_id=candidate_id).delete()
+        LiveEvent.query.filter_by(candidate_id=candidate_id).delete()
+        PartyMembership.query.filter_by(candidate_id=candidate_id).delete()
+        CoalitionMembership.query.filter_by(candidate_id=candidate_id).delete()
+        DataExportLog.query.filter_by(candidate_id=candidate_id).delete()
+        BetaTester.query.filter_by(candidate_id=candidate_id).delete()
+        BotChannel.query.filter_by(candidate_id=candidate_id).delete()
+        ScheduledPost.query.filter_by(candidate_id=candidate_id).delete()
+        BroadcastMessage.query.filter_by(candidate_id=candidate_id).delete()
+        Poll.query.filter_by(candidate_id=candidate_id).delete()
+        AutoReply.query.filter_by(candidate_id=candidate_id).delete()
+        
+        # حذف رکوردهای referred_by (نمایندگانی که این candidate آنها را معرفی کرده)
+        Candidate.query.filter_by(referred_by=candidate_id).update({Candidate.referred_by: None})
+        
+        # حذف از جدول many-to-many (candidate_plans)
+        candidate.plans = []
+        
+        # حذف نماینده (relationships با cascade خودشان حذف می‌شوند)
+        db.session.delete(candidate)
+        safe_commit(db, "خطا در حذف نماینده از دیتابیس")
+        
+        flash(f'نماینده {full_name} و تمام اطلاعات مرتبط با موفقیت حذف شدند', 'success')
+        return redirect(url_for('candidates'))
+        
+    except Exception as e:
+        logging.error(f"Error deleting candidate {candidate_id}: {str(e)}")
+        flash(f'خطا در حذف نماینده: {str(e)}', 'danger')
+        return redirect(url_for('candidates'))
 
 
 @app.route('/plans')
