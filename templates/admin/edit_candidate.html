@@ -18,8 +18,10 @@
             </div>
             <nav class="sidebar-menu">
                 <a href="{{ url_for('dashboard') }}" class="menu-item"><i class="fas fa-chart-line"></i><span>داشبورد</span></a>
-                <a href="{{ url_for('candidates') }}" class="menu-item active"><i class="fas fa-users"></i><span>نمایندهها</span></a>
-                <a href="{{ url_for('plans') }}" class="menu-item"><i class="fas fa-tags"></i><span>پلنها</span></a>
+                <a href="{{ url_for('candidates') }}" class="menu-item active"><i class="fas fa-users"></i><span>نمایندگان</span></a>
+                <a href="{{ url_for('plans') }}" class="menu-item"><i class="fas fa-tags"></i><span>پلن‌ها</span></a>
+                <a href="{{ url_for('subscriptions') }}" class="menu-item"><i class="fas fa-shopping-cart"></i><span>اشتراک‌ها</span></a>
+                <a href="{{ url_for('referral_rewards') }}" class="menu-item"><i class="fas fa-gift"></i><span>پاداش‌های معرفی</span></a>
                 <a href="{{ url_for('logout') }}" class="menu-item"><i class="fas fa-sign-out-alt"></i><span>خروج</span></a>
             </nav>
         </aside>
