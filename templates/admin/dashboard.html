@@ -1,177 +1,92 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>داشبورد - پنل مدیریت انتخابات</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome/all.min.css') }}">
-    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
-</head>
-<body>
-    <div class="dashboard-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo">
-                    <i class="fas fa-vote-yea" style="font-size: 40px;"></i>
-                </div>
-                <h2>پنل مدیریت</h2>
-                <p>سامانه بات‌های انتخاباتی</p>
+{% extends 'admin/layout.html' %}
+{% block title %}داشبورد - پنل مدیریت انتخابات{% endblock %}
+
+{% block body %}
+<div class="dashboard-wrapper">
+    {% include 'admin/sidebar.html' %}
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1>داشبورد</h1>
             </div>
-            
-            <nav class="sidebar-menu">
-                <a href="{{ url_for('dashboard') }}" class="menu-item active">
-                    <i class="fas fa-chart-line"></i>
-                    <span>داشبورد</span>
-                </a>
-                <a href="{{ url_for('candidates') }}" class="menu-item">
-                    <i class="fas fa-users"></i>
-                    <span>نمایندگان</span>
-                </a>
-                <a href="{{ url_for('plans') }}" class="menu-item">
-                    <i class="fas fa-tags"></i>
-                    <span>پلن‌ها</span>
-                </a>
-                <a href="{{ url_for('subscriptions') }}" class="menu-item">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>اشتراک‌ها</span>
-                </a>
-                <a href="{{ url_for('referral_rewards') }}" class="menu-item">
-                    <i class="fas fa-gift"></i>
-                    <span>پاداش‌های معرفی</span>
-                </a>
-                <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>خروج</span>
-                </a>
-            </nav>
-        </aside>
-        
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Topbar -->
-            <div class="topbar">
-                <div class="topbar-left">
-                    <button class="sidebar-toggle" id="sidebarToggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1>داشبورد</h1>
-                </div>
-                <div class="topbar-right">
-                    <div class="user-profile">
-                        <div class="user-avatar">
-                            {{ session.admin_username[0]|upper }}
-                        </div>
-                        <div class="user-info">
-                            <h4>{{ session.admin_username }}</h4>
-                            <p>مدیر سیستم</p>
-                        </div>
+            <div class="topbar-right">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        {{ session.admin_username[0]|upper }}
+                    </div>
+                    <div class="user-info">
+                        <h4>{{ session.admin_username }}</h4>
+                        <p>مدیر سیستم</p>
                     </div>
                 </div>
             </div>
-            
-            <!-- Content Area -->
-            <div class="content-area">
-                <!-- Flash Messages -->
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; background: {% if category == 'success' %}#10b981{% elif category == 'error' %}#ef4444{% else %}#3b82f6{% endif %}; color: white;">
-                                <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-                
-                <!-- Page Header -->
-                <div class="page-header">
-                    <h2>خوش آمدید به پنل مدیریت</h2>
-                    <div class="breadcrumb">
-                        <span>داشبورد</span>
+        </div>
+        <div class="content-area">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}" style="margin-bottom: 20px; padding: 15px; border-radius: 8px; background: {% if category == 'success' %}#10b981{% elif category == 'error' %}#ef4444{% else %}#3b82f6{% endif %}; color: white;">
+                            <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <!-- Stats Cards: Full Row -->
+            <div class="stats-grid" style="display: flex; flex-direction: row; gap: 32px; margin-bottom: 32px;">
+                <div class="stat-card" style="flex:1;">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon primary">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-body">
+                        <h3>{{ stats.total_candidates }}</h3>
+                        <p>تعداد نماینده‌ها</p>
                     </div>
                 </div>
-                
-                <!-- Election Quotes Carousel -->
-                <div class="quotes-carousel">
-                    <div class="quote-slide">
-                        <p class="quote-text" id="quoteText">
-                            میزان رأی ملت است
-                        </p>
-                        <p class="quote-author" id="quoteAuthor">
-                            — امام خمینی (ره)
-                        </p>
+                <div class="stat-card" style="flex:1;">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon success">
+                            <i class="fas fa-robot"></i>
+                        </div>
                     </div>
-                    <div class="carousel-indicators">
-                        <span class="indicator active" data-index="0"></span>
-                        <span class="indicator" data-index="1"></span>
-                        <span class="indicator" data-index="2"></span>
-                        <span class="indicator" data-index="3"></span>
-                        <span class="indicator" data-index="4"></span>
-                        <span class="indicator" data-index="5"></span>
-                        <span class="indicator" data-index="6"></span>
-                        <span class="indicator" data-index="7"></span>
-                        <span class="indicator" data-index="8"></span>
-                        <span class="indicator" data-index="9"></span>
+                    <div class="stat-card-body">
+                        <h3>{{ stats.total_bots }}</h3>
+                        <p>بات‌های فعال</p>
                     </div>
                 </div>
-                
-                <!-- Stats Cards -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-card-header">
-                            <div class="stat-card-icon primary">
-                                <i class="fas fa-users"></i>
-                            </div>
-                        </div>
-                        <div class="stat-card-body">
-                            <h3>{{ stats.total_candidates }}</h3>
-                            <p>تعداد نماینده‌ها</p>
+                <div class="stat-card" style="flex:1;">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon warning">
+                            <i class="fas fa-star"></i>
                         </div>
                     </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-card-header">
-                            <div class="stat-card-icon success">
-                                <i class="fas fa-robot"></i>
-                            </div>
-                        </div>
-                        <div class="stat-card-body">
-                            <h3>{{ stats.total_bots }}</h3>
-                            <p>بات‌های فعال</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-card-header">
-                            <div class="stat-card-icon warning">
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                        <div class="stat-card-body">
-                            <h3>{{ stats.total_plans }}</h3>
-                            <p>پلن‌های موجود</p>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="stat-card-header">
-                            <div class="stat-card-icon danger">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                        </div>
-                        <div class="stat-card-body">
-                            <h3>{{ stats.active_plans }}</h3>
-                            <p>پلن‌های فعال</p>
-                        </div>
+                    <div class="stat-card-body">
+                        <h3>{{ stats.total_plans }}</h3>
+                        <p>پلن‌های موجود</p>
                     </div>
                 </div>
-                
-                <!-- Recent Activity -->
+                <div class="stat-card" style="flex:1;">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon danger">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-body">
+                        <h3>{{ stats.active_plans }}</h3>
+                        <p>پلن‌های فعال</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Recent Activity: Full Row -->
+            <div>
                 <div class="card">
-                    <div class="card-header">
-                        <h3>فعالیت‌های اخیر</h3>
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="margin: 0;">فعالیت‌های اخیر</h3>
                         <a href="{{ url_for('candidates') }}" class="btn btn-primary">
                             <i class="fas fa-plus"></i>
                             نماینده جدید
@@ -240,96 +155,11 @@
             </div>
         </div>
     </div>
+</div>
+{% endblock %}
     
     <!-- JavaScript for Carousel -->
-    <script>
-        const quotes = [
-            {
-                text: "میزان رأی ملت است",
-                author: "— امام خمینی (ره)"
-            },
-            {
-                text: "انتخابات، نماد مردم‌سالاری دینی است",
-                author: "— آیت‌الله خامنه‌ای"
-            },
-            {
-                text: "در جمهوری اسلامی، حکومت متکی به آرای عمومی است",
-                author: "— امام خمینی (ره)"
-            },
-            {
-                text: "انتخابات در کشور ما یک حرکت نمایشی نیست؛ پایه‌ی نظام ما همین انتخابات است",
-                author: "— آیت‌الله خامنه‌ای"
-            },
-            {
-                text: "همه باید در انتخابات شرکت کنند؛ شرکت در انتخابات یک وظیفه شرعی و ملی است",
-                author: "— امام خمینی (ره)"
-            },
-            {
-                text: "حضور مردم در انتخابات، مایه‌ی اقتدار نظام است",
-                author: "— آیت‌الله خامنه‌ای"
-            },
-            {
-                text: "اگر مردم در صحنه نباشند، کشور آسیب می‌بیند",
-                author: "— امام خمینی (ره)"
-            },
-            {
-                text: "جمهوری اسلامی قوامش به حضور مردم است",
-                author: "— آیت‌الله خامنه‌ای"
-            },
-            {
-                text: "انتخابات، تجلی اراده ملت است",
-                author: "— امام خمینی (ره)"
-            },
-            {
-                text: "انتخابات، هدیه‌ی اسلام به ملت ماست",
-                author: "— آیت‌الله خامنه‌ای"
-            }
-        ];
-        
-        let currentQuote = 0;
-        
-        function showQuote(index) {
-            document.getElementById('quoteText').textContent = quotes[index].text;
-            document.getElementById('quoteAuthor').textContent = quotes[index].author;
-            
-            // Update indicators
-            document.querySelectorAll('.indicator').forEach((indicator, i) => {
-                indicator.classList.toggle('active', i === index);
-            });
-        }
-        
-        function nextQuote() {
-            currentQuote = (currentQuote + 1) % quotes.length;
-            showQuote(currentQuote);
-        }
-        
-        // Auto-rotate quotes every 5 seconds
-        setInterval(nextQuote, 5000);
-        
-        // Click on indicators
-        document.querySelectorAll('.indicator').forEach(indicator => {
-            indicator.addEventListener('click', () => {
-                currentQuote = parseInt(indicator.dataset.index);
-                showQuote(currentQuote);
-            });
-        });
-        
-        // Sidebar Toggle for Mobile
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebar = document.querySelector('.sidebar');
-        
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-            });
-            
-            // Close sidebar when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
-                    sidebar.classList.remove('active');
-                }
-            });
-        }
+
     </script>
 </body>
 </html>

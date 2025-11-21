@@ -1,7 +1,9 @@
+# توکن بات تلگرام (برای ارسال پیام)
+import os
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE')
 """
 تنظیمات پروژه
 """
-import os
 from pathlib import Path
 
 # مسیر پروژه

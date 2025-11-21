@@ -281,9 +281,52 @@
                     <i class="fas fa-map-marker-alt"></i>
                     <span>ستادها و دفاتر</span>
                 </a>
+                <a href="{{ url_for('manage_channels') }}" class="menu-item">
+                    <i class="fas fa-broadcast-tower"></i>
+                    <span>کانال‌ها و گروه‌ها</span>
+                </a>
+                <a href="{{ url_for('benchmark') }}" class="menu-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>مقایسه رقابتی</span>
+                    <span style="margin-right: auto; background: #f59e0b; color: white; padding: 2px 8px; border-radius: 10px; font-size: 9px;">جدید</span>
+                </a>
+                <a href="{{ url_for('referral_dashboard') }}" class="menu-item">
+                    <i class="fas fa-gift"></i>
+                    <span>دعوت دوستان</span>
+                    <span style="margin-right: auto; background: #10b981; color: white; padding: 2px 8px; border-radius: 10px; font-size: 9px;">🎁</span>
+                </a>
+                <a href="{{ url_for('vip_dashboard') }}" class="menu-item">
+                    <i class="fas fa-star"></i>
+                    <span>شهروند ماه</span>
+                    <span style="margin-right: auto; background: #ec4899; color: white; padding: 2px 8px; border-radius: 10px; font-size: 9px;">VIP</span>
+                </a>
+                <a href="{{ url_for('party_dashboard') }}" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>حزب و ائتلاف</span>
+                    <span style="margin-right: auto; background: #667eea; color: white; padding: 2px 8px; border-radius: 10px; font-size: 9px;">🏛️</span>
+                </a>
+                <a href="{{ url_for('analytics') }}" class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>آمار و تحلیل</span>
+                </a>
+                <a href="{{ url_for('broadcast') }}" class="menu-item">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>ارسال پیام انبوه</span>
+                </a>
+                <a href="{{ url_for('contributions') }}" class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>مشارکت شهروندی</span>
+                </a>
                 <a href="{{ url_for('messages') }}" class="menu-item">
                     <i class="fas fa-envelope"></i>
                     <span>پیام‌های کاربران</span>
+                    {% if unread_messages > 0 %}
+                    <span style="margin-right: auto; background: #ef4444; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">{{ unread_messages }}</span>
+                    {% endif %}
+                </a>
+                <a href="{{ url_for('polls') }}" class="menu-item">
+                    <i class="fas fa-poll"></i>
+                    <span>نظرسنجی</span>
                 </a>
                 <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;">
                     <i class="fas fa-sign-out-alt"></i>

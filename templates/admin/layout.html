@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}پنل مدیریت انتخابات{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome/all.min.css') }}">
+    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
+</head>
+<body>
+    {% block body %}{% endblock %}
+</body>
+</html>

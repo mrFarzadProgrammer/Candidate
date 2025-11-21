@@ -90,6 +90,7 @@ class Candidate(db.Model):
     last_name = db.Column(db.String(100))
     phone = db.Column(db.String(20))
     email = db.Column(db.String(100))
+    telegram_id = db.Column(db.String(64), nullable=True)  # آیدی تلگرام نماینده
     education = db.Column(db.String(200))
     province = db.Column(db.String(50))
     city = db.Column(db.String(50))

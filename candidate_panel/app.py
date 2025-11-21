@@ -1,7 +1,3 @@
-"""
-پنل اختصاصی نماینده
-مدیریت اطلاعات شخصی، رزومه، برنامه‌ها، ستادها
-"""
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
@@ -316,7 +312,8 @@ def profile():
             flash('اطلاعات با موفقیت به‌روزرسانی شد', 'success')
             return redirect(url_for('profile'))
     
-    return render_template('candidate/profile.html', candidate=candidate)
+    unread_messages = Message.query.filter_by(candidate_id=candidate.id, is_read=False).count()
+    return render_template('candidate/profile.html', candidate=candidate, unread_messages=unread_messages)
 
 
 @app.route('/resume', methods=['GET', 'POST'])
@@ -344,7 +341,8 @@ def resume():
         flash('آیتم رزومه اضافه شد', 'success')
         return redirect(url_for('resume'))
     
-    return render_template('candidate/resume.html', candidate=candidate, resumes=resumes)
+    unread_messages = Message.query.filter_by(candidate_id=candidate.id, is_read=False).count()
+    return render_template('candidate/resume.html', candidate=candidate, resumes=resumes, unread_messages=unread_messages)
 
 
 @app.route('/programs', methods=['GET', 'POST'])
@@ -380,7 +378,8 @@ def programs():
         flash('برنامه جدید اضافه شد', 'success')
         return redirect(url_for('programs'))
     
-    return render_template('candidate/programs.html', candidate=candidate, programs=programs)
+    unread_messages = Message.query.filter_by(candidate_id=candidate.id, is_read=False).count()
+    return render_template('candidate/programs.html', candidate=candidate, programs=programs, unread_messages=unread_messages)
 
 
 @app.route('/headquarters', methods=['GET', 'POST'])
@@ -420,7 +419,8 @@ def headquarters():
         flash('ستاد جدید اضافه شد', 'success')
         return redirect(url_for('headquarters'))
     
-    return render_template('candidate/headquarters.html', candidate=candidate, headquarters=hqs)
+    unread_messages = Message.query.filter_by(candidate_id=candidate.id, is_read=False).count()
+    return render_template('candidate/headquarters.html', candidate=candidate, headquarters=hqs, unread_messages=unread_messages)
 
 
 @app.route('/bot', methods=['GET', 'POST'])
@@ -466,6 +466,7 @@ def bot_management():
     programs = Program.query.filter_by(candidate_id=candidate.id).all()
     headquarters = Headquarters.query.filter_by(candidate_id=candidate.id).all()
     
+    unread_messages = Message.query.filter_by(candidate_id=candidate.id, is_read=False).count()
     return render_template('candidate/bot.html', 
                          candidate=candidate, 
                          bot_info=bot_info,
@@ -580,13 +581,15 @@ def messages():
         stats['satisfaction_rate'] = 50
     
     # استفاده از template جدید با AI features
+    unread_messages = Message.query.filter_by(candidate_id=candidate.id, is_read=False).count()
     return render_template('candidate/messages_ai.html', 
                          candidate=candidate, 
                          messages=messages_list,
                          stats=stats,
                          category_filter=category_filter,
                          priority_filter=priority_filter,
-                         read_filter=read_filter)
+                         read_filter=read_filter,
+                         unread_messages=unread_messages)
 
 
 @app.route('/message/<int:message_id>/read', methods=['POST'])
@@ -1939,7 +1942,7 @@ def benchmark():
     active_purchase = PlanPurchase.query.filter_by(
         candidate_id=candidate_id,
         is_active=True
-    ).first()
+    ).order_by(PlanPurchase.end_date.desc()).first()
     
     current_plan = active_purchase.plan if active_purchase else None
     
@@ -1952,13 +1955,15 @@ def benchmark():
     else:
         potential_growth = 0
     
+    unread_messages = Message.query.filter_by(candidate_id=candidate.id, is_read=False).count()
     return render_template('candidate/benchmark.html',
                          candidate=candidate,
                          comparison=comparison,
                          current_plan=current_plan,
                          all_plans=all_plans,
                          ranking=ranking,
-                         potential_growth=potential_growth)
+                         potential_growth=potential_growth,
+                         unread_messages=unread_messages)
 
 
 @app.route('/benchmark/refresh')
@@ -2094,10 +2099,10 @@ def vip_award():
 @secure_route()
 def vip_schedule_meeting():
     """زمان‌بندی جلسه VIP"""
-    from candidate_panel.vip_utils import schedule_vip_interaction
+    from candidate_panel.vip_utils import schedule_vip_meeting
     
     candidate_id = session.get('candidate_id')
-    citizen_telegram_id = request.form.get('citizen_telegram_id', type=int)
+    citizen_telegram_id = request.form.get('citizen_telegram_id')
     interaction_type = request.form.get('interaction_type')
     title = request.form.get('title')
     description = request.form.get('description')
@@ -2851,8 +2856,6 @@ def event_statistics(event_id):
                          statistics=statistics)
 
 
-if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
-    
-    app.run(debug=True, port=5001, host='0.0.0.0')
+# --- Run Flask app for candidate panel ---
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5001, debug=True)

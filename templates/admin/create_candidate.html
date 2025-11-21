@@ -1,53 +1,32 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ایجاد نماینده جدید - پنل مدیریت</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
-    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
-</head>
-<body>
+{% extends 'admin/layout.html' %}
+{% block title %}ایجاد نماینده جدید - پنل مدیریت{% endblock %}
+{% block body %}
 <div class="dashboard-wrapper">
-<aside class="sidebar">
-<div class="sidebar-header">
-<div class="logo"><i class="fas fa-vote-yea" style="font-size: 40px;"></i></div>
-<h2>پنل مدیریت</h2>
-<p>سامانه بات‌های انتخاباتی</p>
-</div>
-<nav class="sidebar-menu">
-<a href="{{ url_for('dashboard') }}" class="menu-item"><i class="fas fa-chart-line"></i><span>داشبورد</span></a>
-<a href="{{ url_for('candidates') }}" class="menu-item active"><i class="fas fa-users"></i><span>نمایندگان</span></a>
-<a href="{{ url_for('plans') }}" class="menu-item"><i class="fas fa-tags"></i><span>پلن‌ها</span></a>
-<a href="{{ url_for('subscriptions') }}" class="menu-item"><i class="fas fa-shopping-cart"></i><span>اشتراک‌ها</span></a>
-<a href="{{ url_for('referral_rewards') }}" class="menu-item"><i class="fas fa-gift"></i><span>پاداش‌های معرفی</span></a>
-<a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i><span>خروج</span></a>
-</nav>
-</aside>
-<div class="main-content">
-<div class="topbar">
-<div class="topbar-left"><h1>ایجاد نماینده جدید</h1></div>
-<div class="topbar-right">
-<div class="user-profile"><i class="fas fa-user-circle"></i><span>{{ session.admin_username }}</span></div>
-</div>
-</div>
-<div class="content-area">
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }}">{{ message }}</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
-<div class="card">
-<div class="card-header">
-<h2><i class="fas fa-user-plus"></i> اطلاعات نماینده</h2>
-</div>
-<div class="card-body">
-<form method="POST" class="form-modern">
-<h3 style="color:#667eea;margin:0 0 20px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;"><i class="fas fa-user-circle"></i> اطلاعات شخصی</h3>
-<div class="form-row">
-<div class="form-group">
+    {% include 'admin/sidebar.html' %}
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-left"><h1>ایجاد نماینده جدید</h1></div>
+            <div class="topbar-right">
+                <div class="user-profile"><i class="fas fa-user-circle"></i><span>{{ session.admin_username }}</span></div>
+            </div>
+        </div>
+        <div class="content-area">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-user-plus"></i> اطلاعات نماینده</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST" class="form-modern">
+                        <h3 style="color:#667eea;margin:0 0 20px;padding-bottom:10px;border-bottom:2px solid #e2e8f0;"><i class="fas fa-user-circle"></i> اطلاعات شخصی</h3>
+                        <div class="form-row">
+                            <div class="form-group">
 <label for="full_name"><i class="fas fa-user"></i> نام *</label>
 <input type="text" id="full_name" name="full_name" class="form-control" placeholder="مثال: علی" required>
 </div>
@@ -65,6 +44,11 @@
 <div class="form-group">
 <label for="email"><i class="fas fa-envelope"></i> ایمیل</label>
 <input type="email" id="email" name="email" class="form-control" placeholder="email@example.com" style="direction:ltr;text-align:left;">
+
+<div class="form-group">
+    <label for="telegram_id"><i class="fab fa-telegram"></i> آیدی تلگرام</label>
+    <input type="text" id="telegram_id" name="telegram_id" class="form-control" placeholder="مثال: mytelegramid" style="direction:ltr;text-align:left;">
+</div>
 </div>
 </div>
 <div class="form-row">
@@ -113,4 +97,4 @@
 </div>
 </div>
 </body>
-</html>
+{% endblock %}

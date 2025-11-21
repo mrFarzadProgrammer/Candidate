@@ -1,46 +1,23 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لیست نمایندهها</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-admin.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/fontawesome/all.min.css') }}">
-    <script src="{{ url_for('static', filename='js/persian-to-english-numbers.js') }}"></script>
-</head>
-<body>
+{% extends 'admin/layout.html' %}
+{% block title %}لیست نماینده‌ها - پنل مدیریت انتخابات{% endblock %}
+{% block body %}
     <div class="dashboard-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <div class="logo"><i class="fas fa-vote-yea"></i></div>
-                <h2>پنل مدیریت</h2>
-                <p>سامانه باتهای انتخاباتی</p>
-            </div>
-            <nav class="sidebar-menu">
-                <a href="{{ url_for('dashboard') }}" class="menu-item"><i class="fas fa-chart-line"></i><span>داشبورد</span></a>
-                <a href="{{ url_for('candidates') }}" class="menu-item active"><i class="fas fa-users"></i><span>نمایندگان</span></a>
-                <a href="{{ url_for('plans') }}" class="menu-item"><i class="fas fa-tags"></i><span>پلن‌ها</span></a>
-                <a href="{{ url_for('subscriptions') }}" class="menu-item"><i class="fas fa-shopping-cart"></i><span>اشتراک‌ها</span></a>
-                <a href="{{ url_for('referral_rewards') }}" class="menu-item"><i class="fas fa-gift"></i><span>پاداش‌های معرفی</span></a>
-                <a href="{{ url_for('logout') }}" class="menu-item"><i class="fas fa-sign-out-alt"></i><span>خروج</span></a>
-            </nav>
-        </aside>
-        <main class="main-content">
-            <header class="topbar">
+        {% include 'admin/sidebar.html' %}
+        <div class="main-content">
+            <div class="topbar">
                 <div class="topbar-left">
                     <button class="sidebar-toggle"><i class="fas fa-bars"></i></button>
-                    <h1>لیست نمایندهها</h1>
+                    <h1>لیست نماینده‌ها</h1>
                 </div>
                 <div class="topbar-right">
                     <div class="user-profile"><i class="fas fa-user-circle"></i><span>مدیر سیستم</span></div>
                 </div>
-            </header>
+            </div>
             <div class="content-area">
                 <div class="page-header">
-                    <h2><i class="fas fa-users"></i> مدیریت نمایندهها ({{ candidates|length }} نفر)</h2>
+                    <h2><i class="fas fa-users"></i> مدیریت نماینده‌ها ({{ candidates|length }} نفر)</h2>
                     <a href="{{ url_for('create_candidate') }}" class="btn btn-primary"><i class="fas fa-plus"></i> افزودن نماینده</a>
                 </div>
-                
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
@@ -48,7 +25,6 @@
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
-                
                 {% if candidates %}
                 <!-- Search Box -->
                 <div class="card" style="margin-bottom:20px;">
@@ -59,7 +35,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <!-- Table -->
                 <div class="card">
                     <div class="table-responsive">
@@ -156,7 +131,7 @@
                     <div class="empty-icon" style="font-size:80px;color:#e5e7eb;margin-bottom:20px;">
                         <i class="fas fa-users-slash"></i>
                     </div>
-                    <h3 style="color:#475569;margin-bottom:10px;">هیچ نمایندهای ثبت نشده</h3>
+                    <h3 style="color:#475569;margin-bottom:10px;">هیچ نماینده‌ای ثبت نشده</h3>
                     <p style="color:#94a3b8;margin-bottom:30px;">برای شروع اولین نماینده خود را اضافه کنید</p>
                     <a href="{{ url_for('create_candidate') }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> افزودن نماینده
@@ -164,23 +139,20 @@
                 </div>
                 {% endif %}
             </div>
-        </main>
+        </div>
     </div>
     <script>
         document.querySelector('.sidebar-toggle').addEventListener('click', function() {
             document.querySelector('.sidebar').classList.toggle('active');
         });
-        
         // Search functionality
         document.getElementById('searchInput').addEventListener('keyup', function() {
             const searchText = this.value.toLowerCase();
             const table = document.getElementById('candidatesTable');
             const rows = table.getElementsByTagName('tr');
-            
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
                 const text = row.textContent.toLowerCase();
-                
                 if (text.includes(searchText)) {
                     row.style.display = '';
                 } else {
@@ -189,5 +161,4 @@
             }
         });
     </script>
-</body>
-</html>
+{% endblock %}

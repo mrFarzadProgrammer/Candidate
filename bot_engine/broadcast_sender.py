@@ -7,6 +7,12 @@ import time
 import logging
 from datetime import datetime, timedelta
 import requests
+from telegram import Bot
+try:
+    from config.settings import TELEGRAM_BOT_TOKEN
+except ImportError:
+    TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', 'YOUR_BOT_TOKEN_HERE')
+    logging.warning('TELEGRAM_BOT_TOKEN could not be imported from config.settings. Using fallback value.')
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -283,6 +289,22 @@ def start_broadcast_scheduler():
     while True:
         schedule.run_pending()
         time.sleep(1)
+
+
+def send_broadcast_message(telegram_ids, message_type, message_text, file):
+    bot = Bot(token=TELEGRAM_BOT_TOKEN)
+    for telegram_id in telegram_ids:
+        try:
+            if message_type == 'text':
+                bot.send_message(chat_id=telegram_id, text=message_text)
+            elif message_type == 'photo' and file:
+                file.stream.seek(0)
+                bot.send_photo(chat_id=telegram_id, photo=file.stream, caption=message_text)
+            elif message_type == 'document' and file:
+                file.stream.seek(0)
+                bot.send_document(chat_id=telegram_id, document=file.stream, caption=message_text)
+        except Exception as e:
+            logging.warning(f'خطا در ارسال پیام به {telegram_id}: {e}')
 
 
 if __name__ == '__main__':

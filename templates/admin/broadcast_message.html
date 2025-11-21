@@ -1,0 +1,48 @@
+{% extends 'admin/layout.html' %}
+{% block title %}ارسال پیام به نماینده‌ها - پنل مدیریت{% endblock %}
+{% block body %}
+<div class="dashboard-wrapper">
+    {% include 'admin/sidebar.html' %}
+    <div class="main-content">
+        <div class="topbar">
+            <div class="topbar-left">
+                <h1>ارسال پیام به نماینده‌ها</h1>
+            </div>
+        </div>
+        <div class="content-area">
+            <div class="container">
+                <h2 class="mb-4">ارسال پیام به نماینده‌ها</h2>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>نوع پیام:</label>
+                        <select name="message_type" class="form-control" required>
+                            <option value="text">متن</option>
+                            <option value="photo">عکس</option>
+                            <option value="document">فایل</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>متن پیام:</label>
+                        <textarea name="message_text" class="form-control" rows="4" placeholder="متن پیام را وارد کنید..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>فایل (اختیاری):</label>
+                        <input type="file" name="file" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>ارسال به:</label>
+                        <select name="recipients" class="form-control" multiple>
+                            <option value="all">همه نماینده‌ها</option>
+                            {% for candidate in candidates %}
+                            <option value="{{ candidate.id }}">{{ candidate.full_name }} ({{ candidate.telegram_id or 'بدون آیدی' }})</option>
+                            {% endfor %}
+                        </select>
+                        <small>برای ارسال به همه، گزینه "همه نماینده‌ها" را انتخاب کنید.</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">ارسال پیام</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

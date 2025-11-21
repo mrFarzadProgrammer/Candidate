@@ -123,6 +123,29 @@
             </div>
             
             <!-- Content Area -->
+                            <!-- Election Quotes Carousel -->
+                            <div class="quotes-carousel">
+                                <div class="quote-slide">
+                                    <p class="quote-text" id="quoteText">
+                                        میزان رأی ملت است
+                                    </p>
+                                    <p class="quote-author" id="quoteAuthor">
+                                        — امام خمینی (ره)
+                                    </p>
+                                </div>
+                                <div class="carousel-indicators">
+                                    <span class="indicator active" data-index="0"></span>
+                                    <span class="indicator" data-index="1"></span>
+                                    <span class="indicator" data-index="2"></span>
+                                    <span class="indicator" data-index="3"></span>
+                                    <span class="indicator" data-index="4"></span>
+                                    <span class="indicator" data-index="5"></span>
+                                    <span class="indicator" data-index="6"></span>
+                                    <span class="indicator" data-index="7"></span>
+                                    <span class="indicator" data-index="8"></span>
+                                    <span class="indicator" data-index="9"></span>
+                                </div>
+                            </div>
             <div class="content-area">
                 <!-- Flash Messages -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -415,6 +438,79 @@
     </div>
     
     <!-- JavaScript -->
+        <!-- JavaScript for Carousel -->
+        <script>
+            const quotes = [
+                {
+                    text: "میزان رأی ملت است",
+                    author: "— امام خمینی (ره)"
+                },
+                {
+                    text: "انتخابات، نماد مردم‌سالاری دینی است",
+                    author: "— آیت‌الله خامنه‌ای"
+                },
+                {
+                    text: "در جمهوری اسلامی، حکومت متکی به آرای عمومی است",
+                    author: "— امام خمینی (ره)"
+                },
+                {
+                    text: "انتخابات در کشور ما یک حرکت نمایشی نیست؛ پایه‌ی نظام ما همین انتخابات است",
+                    author: "— آیت‌الله خامنه‌ای"
+                },
+                {
+                    text: "همه باید در انتخابات شرکت کنند؛ شرکت در انتخابات یک وظیفه شرعی و ملی است",
+                    author: "— امام خمینی (ره)"
+                },
+                {
+                    text: "حضور مردم در انتخابات، مایه‌ی اقتدار نظام است",
+                    author: "— آیت‌الله خامنه‌ای"
+                },
+                {
+                    text: "اگر مردم در صحنه نباشند، کشور آسیب می‌بیند",
+                    author: "— امام خمینی (ره)"
+                },
+                {
+                    text: "جمهوری اسلامی قوامش به حضور مردم است",
+                    author: "— آیت‌الله خامنه‌ای"
+                },
+                {
+                    text: "انتخابات، تجلی اراده ملت است",
+                    author: "— امام خمینی (ره)"
+                },
+                {
+                    text: "انتخابات، هدیه‌ی اسلام به ملت ماست",
+                    author: "— آیت‌الله خامنه‌ای"
+                }
+            ];
+        
+            let currentQuote = 0;
+        
+            function showQuote(index) {
+                document.getElementById('quoteText').textContent = quotes[index].text;
+                document.getElementById('quoteAuthor').textContent = quotes[index].author;
+            
+                // Update indicators
+                document.querySelectorAll('.indicator').forEach((indicator, i) => {
+                    indicator.classList.toggle('active', i === index);
+                });
+            }
+        
+            function nextQuote() {
+                currentQuote = (currentQuote + 1) % quotes.length;
+                showQuote(currentQuote);
+            }
+        
+            // Auto-rotate quotes every 5 seconds
+            setInterval(nextQuote, 5000);
+        
+            // Click on indicators
+            document.querySelectorAll('.indicator').forEach(indicator => {
+                indicator.addEventListener('click', () => {
+                    currentQuote = parseInt(indicator.dataset.index);
+                    showQuote(currentQuote);
+                });
+            });
+        </script>
     <script>
         // Sidebar Toggle for Mobile
         const sidebarToggle = document.getElementById('sidebarToggle');

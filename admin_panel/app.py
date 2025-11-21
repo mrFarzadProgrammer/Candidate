@@ -22,9 +22,9 @@ from database.models import (db, Admin, Candidate, Plan, BotInstance,
 from config.settings import ADMIN_SECRET_KEY, DATABASE_URI
 from bot_engine.bot_manager import BotManager
 
-# Get absolute paths for templates and static
+from flask_migrate import Migrate
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates', 'admin')
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 app = Flask(__name__, 
@@ -35,6 +35,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+migrate = Migrate(app, db)
 
 # Setup Security Headers با تنظیمات admin
 SecurityHeaders.init_app(app, custom_headers=ADMIN_HEADERS)
@@ -80,7 +81,7 @@ def login():
         else:
             flash('نام کاربری یا رمز عبور اشتباه است', 'danger')
     
-    return render_template('login.html')
+    return render_template('admin/login.html')
 
 
 @app.route('/dashboard')
@@ -97,7 +98,7 @@ def dashboard():
         'active_plans': Plan.query.filter(Plan.price > 0).count()
     }
     
-    return render_template('dashboard.html',
+    return render_template('admin/dashboard.html',
                          candidates=candidates,
                          stats=stats)
 
@@ -107,7 +108,7 @@ def dashboard():
 def candidates():
     """لیست نماینده‌ها"""
     candidates = Candidate.query.all()
-    return render_template('candidates.html', candidates=candidates)
+    return render_template('admin/candidates.html', candidates=candidates)
 
 
 @app.route('/candidate/create', methods=['GET', 'POST'])
@@ -125,6 +126,7 @@ def create_candidate():
         province = request.form.get('province')
         city = request.form.get('city')
         district = request.form.get('district')
+        telegram_id = request.form.get('telegram_id')
         
         # بررسی تکراری نبودن نام کاربری
         existing = Candidate.query.filter_by(username=username).first()
@@ -143,7 +145,8 @@ def create_candidate():
             education=education,
             province=province,
             city=city,
-            district=district
+            district=district,
+            telegram_id=telegram_id
         )
         
         db.session.add(candidate)
@@ -160,7 +163,7 @@ def create_candidate():
         
         return redirect(url_for('candidates'))
     
-    return render_template('create_candidate.html')
+    return render_template('admin/create_candidate.html')
 
 
 @app.route('/candidate/<int:candidate_id>/bot-setup', methods=['GET', 'POST'])
@@ -209,7 +212,7 @@ def setup_bot(candidate_id):
         
         return redirect(url_for('candidates'))
     
-    return render_template('setup_bot.html', candidate=candidate)
+    return render_template('admin/setup_bot.html', candidate=candidate)
 
 
 @app.route('/candidate/<int:candidate_id>/edit', methods=['GET', 'POST'])
@@ -228,6 +231,7 @@ def edit_candidate(candidate_id):
         city = request.form.get('city')
         district = request.form.get('district')
         password = request.form.get('password')
+        telegram_id = request.form.get('telegram_id')
         
         candidate.full_name = full_name
         candidate.last_name = last_name
@@ -237,6 +241,7 @@ def edit_candidate(candidate_id):
         candidate.province = province
         candidate.city = city
         candidate.district = district
+        candidate.telegram_id = telegram_id
         
         # اگر رمز عبور جدید وارد شده، آن را بروز کن
         if password:
@@ -247,7 +252,7 @@ def edit_candidate(candidate_id):
         return redirect(url_for('candidates'))
     
     plans = Plan.query.all()
-    return render_template('edit_candidate.html', candidate=candidate, plans=plans)
+    return render_template('admin/edit_candidate.html', candidate=candidate, plans=plans)
 
 
 @app.route('/candidate/<int:candidate_id>/delete', methods=['POST'])
@@ -317,7 +322,7 @@ def delete_candidate(candidate_id):
 def plans():
     """مدیریت پلن‌ها"""
     plans = Plan.query.all()
-    return render_template('plans.html', plans=plans)
+    return render_template('admin/plans.html', plans=plans)
 
 
 @app.route('/plans/create', methods=['POST'])
@@ -502,7 +507,7 @@ def subscriptions():
     purchases = PlanPurchase.query.order_by(PlanPurchase.purchase_date.desc()).all()
     consultations = ConsultationRequest.query.filter_by(status='pending').order_by(ConsultationRequest.created_at.desc()).all()
     
-    return render_template('subscriptions.html', purchases=purchases, consultations=consultations)
+    return render_template('admin/subscriptions.html', purchases=purchases, consultations=consultations)
 
 
 @app.route('/consultation/<int:consultation_id>/update', methods=['POST'])
@@ -635,7 +640,7 @@ def grant_free_plan(id):
     
     # GET - نمایش فرم
     plans = Plan.query.filter_by(is_active=True).all()
-    return render_template('grant_free.html', candidate=candidate, plans=plans)
+    return render_template('admin/grant_free.html', candidate=candidate, plans=plans)
 
 
 @app.route('/candidate/<int:id>/extend-plan', methods=['POST'])
@@ -688,7 +693,7 @@ def tickets():
         'rejected': Ticket.query.filter_by(status='rejected').count(),
     }
     
-    return render_template('tickets.html', 
+    return render_template('admin/tickets.html', 
                          tickets=tickets, 
                          stats=stats,
                          status_filter=status_filter)
@@ -831,6 +836,39 @@ def approve_referral_reward(reward_id):
         flash('❌ خطا در تایید پاداش', 'danger')
     
     return redirect(url_for('referral_rewards'))
+
+
+@app.route('/broadcast', methods=['GET', 'POST'])
+@login_required
+def broadcast_message():
+    from database.models import Candidate
+    from bot_engine.broadcast_sender import send_broadcast_message
+    candidates = Candidate.query.filter(Candidate.telegram_id.isnot(None)).all()
+    # جمع‌آوری آمار مشابه داشبورد
+    from database.models import BotInstance, Plan
+    stats = {
+        'total_candidates': Candidate.query.count(),
+        'total_bots': BotInstance.query.count(),
+        'total_plans': Plan.query.count(),
+        'active_plans': Plan.query.filter(Plan.price > 0).count()
+    }
+    if request.method == 'POST':
+        message_type = request.form.get('message_type')
+        message_text = request.form.get('message_text')
+        recipients = request.form.getlist('recipients')
+        file = request.files.get('file')
+        # انتخاب همه نماینده‌ها
+        if 'all' in recipients:
+            recipient_ids = [c.id for c in candidates]
+        else:
+            recipient_ids = [int(r) for r in recipients]
+        selected_candidates = [c for c in candidates if c.id in recipient_ids]
+        telegram_ids = [c.telegram_id for c in selected_candidates if c.telegram_id]
+        # ارسال پیام
+        send_broadcast_message(telegram_ids, message_type, message_text, file)
+        flash(f'پیام به {len(telegram_ids)} نماینده ارسال شد.', 'success')
+        return redirect(url_for('broadcast_message'))
+    return render_template('admin/broadcast_message.html', candidates=candidates, stats=stats)
 
 
 if __name__ == '__main__':

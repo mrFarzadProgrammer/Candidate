@@ -1,0 +1,16 @@
+<!-- This is a shared sidebar for all admin pages. Update menu items as needed for new features. -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <div class="logo"><i class="fas fa-vote-yea" style="font-size: 40px;"></i></div>
+        <h2>پنل مدیریت</h2>
+        <p>سامانه بات‌های انتخاباتی</p>
+    </div>
+    <nav class="sidebar-menu">
+        <a href="{{ url_for('dashboard') }}" class="menu-item{% if request.endpoint == 'dashboard' %} active{% endif %}"><i class="fas fa-chart-line"></i><span>داشبورد</span></a>
+        <a href="{{ url_for('candidates') }}" class="menu-item{% if request.endpoint == 'candidates' %} active{% endif %}"><i class="fas fa-users"></i><span>نمایندگان</span></a>
+        <a href="{{ url_for('plans') }}" class="menu-item{% if request.endpoint == 'plans' %} active{% endif %}"><i class="fas fa-tags"></i><span>پلن‌ها</span></a>
+        <a href="{{ url_for('subscriptions') }}" class="menu-item{% if request.endpoint == 'subscriptions' %} active{% endif %}"><i class="fas fa-shopping-cart"></i><span>اشتراک‌ها</span></a>
+        <a href="{{ url_for('broadcast_message') }}" class="menu-item{% if request.endpoint == 'broadcast_message' %} active{% endif %}"><i class="fas fa-paper-plane"></i><span>ارسال پیام به نماینده‌ها</span></a>
+        <a href="{{ url_for('logout') }}" class="menu-item" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i><span>خروج</span></a>
+    </nav>
+</aside>
